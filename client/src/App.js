@@ -1,27 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route } from 'react-router-dom'; 
 import './App.css';
-import TestingProxy from './components/experimental/testingproxy';
+
+import CorporateUI from './components/CorporateUI';
+
+// import logo from './logo.svg';
+// import TestingProxy from './components/experimental/testingproxy';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <TestingProxy />
-      </header>
-    </div>
+    <BrowserRouter>
+      <Route path="/business" component={CorporateUI} />
+    </BrowserRouter>
   );
 }
 

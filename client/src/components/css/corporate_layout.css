@@ -1,0 +1,46 @@
+:root {
+  --pageMinWidth: 350px;
+  --headerNavigationHeight: 50px;
+  --sidebarNavigationWdith: 75px;
+  --headerNavigationBgColor: white;
+  --sidebarNavigationBgColor: white;
+  --mainBgColor: rgb(245, 245, 245);
+  --headerNavigationZIndex: 10000;
+  --sidebarNavigationZIndex: 9980;
+}
+
+.header-navigation {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: var(--headerNavigationZIndex);
+  width: 100%;
+  height: var(--headerNavigationHeight);
+  background-color: var(--headerNavigationBgColor);
+}
+
+.sidebar-navigation {
+  position: fixed;
+  top: var(--headerNavigationHeight);
+  left: 0px;
+  width: var(--sidebarNavigationWdith);
+  height: calc(100vh - var(--headerNavigationHeight));
+  z-index: 9999;
+  overflow-y: auto;
+  background-color: var(--sidebarNavigationBgColor);
+}
+
+.sidebar-navigation a {
+  text-decoration: none;
+  color: black;
+}
+
+.main-content {
+  min-height: 100vh;
+  padding: var(--headerNavigationHeight) 0px 0px var(--sidebarNavigationWdith);
+  background-color: var(--mainBgColor);
+}
+
+.shadow--basic {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}

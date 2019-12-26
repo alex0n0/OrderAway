@@ -9,13 +9,15 @@
     "axios": "^0.19.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "scss": "node-sass --watch ./src/components/scss -o ./src/components/css --output-style expanded"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +34,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "node-sass": "^4.13.0"
+  }
 }
