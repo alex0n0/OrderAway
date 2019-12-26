@@ -1,0 +1,33 @@
+.main-container-header {
+  position: fixed;
+  z-index: 9980;
+  top: var(--headerNavigationHeight);
+  left: 0px;
+  width: 100%;
+  padding: 0px 0px 0px var(--sidebarNavigationWdith);
+  background-color: var(--mainBgColor);
+}
+
+.main-container-sidebar {
+  position: fixed;
+  z-index: 0;
+  top: calc(var(--headerNavigationHeight) + 150px);
+  left: 0px;
+  width: 100%;
+  padding: 0px 0px 0px var(--sidebarNavigationWdith);
+}
+
+.main-container-sidebar .somebox {
+  width: 200px;
+  height: calc(100vh - var(--headerNavigationHeight) - 150px - 16px);
+  overflow-y: auto;
+}
+
+.cardcontainer {
+  padding-left: 216px !important;
+}
+
+.cardcontainer .menucollection {
+  position: relative;
+  padding-top: 100px !important;
+}

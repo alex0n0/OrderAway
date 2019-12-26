@@ -1,22 +1,10 @@
 import React from 'react';
-import '../../css/corporate_layout.css';
-
-// class BusinessLayout extends React.Component {
-//     render() {
-//         return(
-//             <>
-//                 {this.props.children}
-//             </>
-//         );
-//     }
-// }
-
-// export default BusinessLayout;
+import '../../css/baselayouts_corporate.css';
 
 export default function CorporateLayout(props) {
     return (
         <>
-            <header className="header-navigation overflowWrapper shadow--basic">
+            <header className="corporate header-navigation overflowWrapper shadow--basic">
                 <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
                     <button className="button--transparent h-100 px-4 mr-auto">COMPANY</button>
                     <button className="button--transparent h-100 pr-4">
@@ -26,7 +14,7 @@ export default function CorporateLayout(props) {
                     </button>
                 </div>
             </header>
-            <section className="sidebar-navigation">
+            <section className="corporate sidebar-navigation">
                 <div>
                     {/* <a href="/business" className="button--transparent w-100 flex-column py-3">
                         <i className="material-icons">home</i>
@@ -51,7 +39,7 @@ export default function CorporateLayout(props) {
                 </div>
             </section>
             <div className="overflowWrapper">
-                <main className="main-content">
+                <main className="corporate main-content">
                     <div className="pageMinWidth min-h-100 py-3 px-3">
                         {props.children}
                     </div>

@@ -1,6 +1,7 @@
 import React from 'react';
-import '../../css/corporate_layout.css';
-import './index.css';
+import '../../../css/baselayouts_corporate.css';
+import '../../../css/corporate_menubuilder.css';
+import MenuItemCorporate from '../../../elements/menuitem/Corporate';
 
 class MenuBuilder extends React.Component {
     render() {
@@ -53,6 +54,8 @@ class MenuBuilder extends React.Component {
 
                 <div className="container cardcontainer pt-5">
                     <div className="row mx-0 menucollection">
+                        {/* MENU ITEM START */}
+                        {/* MENU ITEM */}
                         <div className="col-12 col-md-6 col-lg-4 p-3">
                             <button className="w-100 bg-secondary p-0 border-0 overflow-hidden">
                                 <div className="w-100 position-relative overflow-hidden">
@@ -76,9 +79,14 @@ class MenuBuilder extends React.Component {
                                 </div>
                             </button>
                         </div>
-                     
+
+                        {/* MENU ITEM */}
+                        <div className="col-12 col-md-6 col-lg-4 p-3">
+                            <MenuItemCorporate />
+                        </div>
 
 
+                        {/* MENU ITEM END */}
 
 
                     </div>

@@ -1,6 +1,6 @@
 .main-container-header {
     position: fixed;
-    z-index: 9990;
+    z-index: 9980;
     top: var(--headerNavigationHeight);
     left: 0px;
     width: 100%;
@@ -25,12 +25,10 @@
     overflow-y: auto;
 }
 
-
-
 .cardcontainer {
     padding-left: 216px !important;
-}
-.cardcontainer .menucollection {
-    position: relative;
-    padding-top: 100px !important;
+    .menucollection {
+        position: relative;
+        padding-top: 100px !important;
+    }
 }

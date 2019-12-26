@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "scss": "node-sass --watch ./src/components/scss -o ./src/components/css --output-style expanded"
+    "scss": "node-sass --watch ./src/components/css -o ./src/components/css --output-style expanded"
   },
   "eslintConfig": {
     "extends": "react-app"

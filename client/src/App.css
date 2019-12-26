@@ -36,10 +36,6 @@
     min-width: var(--pageMinWidth);
 }
 
-.min-h-100 {
-    min-height: 100%;
-}
-
 .overflowWrapper {
     overflow-x: hidden;
 }
@@ -50,4 +46,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* .button--transparent:focus {
+    outline: none;
+} */
+
+.shadow--basic {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }

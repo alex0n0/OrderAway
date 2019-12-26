@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import CorporateLayout from '../layouts/CorporateLayout';
+import CorporateLayout from '../../baselayouts/CorporateLayout';
 import MenuSelector from './MenuSelector';
 import MenuBuilder from './MenuBuilder';
 
