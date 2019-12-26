@@ -9,10 +9,10 @@ class CorporateUIComponent extends React.Component {
     render() {
         return (
             <>
-                <Route exact path="/business/home">
+                <Route exact path="/corporate">
                     <CorporateLayout>
                         <h1>business UI home</h1>
-                        <div className="container bg-white">
+                        <div className="container-xl bg-white border">
                             <p>asdf</p>
                             <p>asdf</p>
                             <p>asdf</p>
@@ -24,12 +24,12 @@ class CorporateUIComponent extends React.Component {
                         </div>
                     </CorporateLayout>
                 </Route>
-                <Route exact path="/business/menu">
+                <Route exact path="/corporate/menu">
                     <CorporateLayout>
                         <MenuSelector />
                     </CorporateLayout>
                 </Route>
-                <Route exact path="/business/menu/builder">
+                <Route exact path="/corporate/menu/builder">
                     <CorporateLayout>
                         <MenuBuilder />
                     </CorporateLayout>
