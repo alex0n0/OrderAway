@@ -3,7 +3,7 @@ import React from 'react';
 class MenuSelector extends React.Component {
     render() {
         return (
-            <>
+            <div className="py-3 px-3 border border-danger">
                 <div className="container">
                     <h6>Menu Selector</h6>
                     <div className="row m-0">
@@ -14,17 +14,17 @@ class MenuSelector extends React.Component {
                             <button className="button--transparent rounded bg-primary px-3 py-1 font-14 color-white-09">+ New Menu</button>
                             <button className="button--transparent rounded bg-primary px-3 py-1 mr-2 font-14 color-white-09">Duplicate Menu</button>
 
-                            <div className="w-100"/>
+                            <div className="w-100" />
 
                             <button className="button--transparent rounded bg-primary px-3 py-1 mr-2 font-14 color-white-09">Rename Menu</button>
                             <button className="button--transparent rounded bg-primary px-3 py-1 mr-2 font-14 color-white-09">Delete Menu</button>
                             <button className="button--transparent rounded bg-primary px-3 py-1 mr-2 font-14 color-white-09">Menu Builder</button>
-                            
-                            <div className="w-100"/>
+
+                            <div className="w-100" />
 
                             <button className="button--transparent rounded bg-primary px-3 py-1 mr-2 font-14 color-white-09">Publish</button>
 
-                            <div className="w-100"/>
+                            <div className="w-100" />
 
                             <p className="text-danger font-12 m-0">A published menu can not be edited</p>
                         </div>
@@ -48,7 +48,7 @@ class MenuSelector extends React.Component {
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 }

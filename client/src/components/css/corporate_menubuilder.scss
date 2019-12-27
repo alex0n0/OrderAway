@@ -1,28 +1,30 @@
-.main-container-header {
+:root {
+    --corporateMainContentSidebarNavigationWidth: 200px;    
+}
+.main-content-header {
     position: fixed;
-    z-index: 9980;
     top: var(--headerNavigationHeight);
-    left: 0px;
-    width: 100%;
+    left: calc(var(--corporateSidebarNavigationWidth) + var(--corporateMainContentSidebarNavigationWidth));
 
-    padding: 0px 0px 0px var(--sidebarNavigationWdith);
+    width: calc(100% - var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
     background-color: var(--mainBgColor);
 }
 
-.main-container-sidebar {
+.main-content-sidebar {
     position: fixed;
+    top: var(--corporateHeaderNavigationHeight);
+    left: var(--corporateSidebarNavigationWidth);
     z-index: 0;
-    top: calc(var(--headerNavigationHeight) + 150px);
-    left: 0px;
-    width: 100%;
 
-    padding: 0px 0px 0px var(--sidebarNavigationWdith);
-}
-
-.main-container-sidebar .somebox {
-    width: 200px;
-    height: calc(100vh - var(--headerNavigationHeight) - 150px - 16px);
+    width: var(--corporateMainContentSidebarNavigationWidth);
+    height: calc(100% - var(--corporateHeaderNavigationHeight));
     overflow-y: auto;
+
+    background-color: var(--customerSidebarNavigationBgColor);
+
+    button {
+        color: white;
+    }
 }
 
 .cardcontainer {

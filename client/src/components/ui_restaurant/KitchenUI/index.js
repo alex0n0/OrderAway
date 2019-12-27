@@ -6,98 +6,59 @@ class KitchenUI extends React.Component {
     render() {
         return (
             <CorporateLayout>
-                <div className="container-fluid">
-                    <div className="row mx-n1">
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
-                        </div>
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-1">
-                            <OrderItem />
+                <div className="py-3 px-3 bg-dark">
+                    <div className="container-fluid">
+                        <div className="row mx-n3">
+                            {/* ORDER ITEMS START */}
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+                            {/* ORDER ITEM */}
+                            <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2">
+                                <OrderItem />
+                            </div>
+
+                            {/* ORDER ITEMS END */}
                         </div>
                     </div>
                 </div>
-
             </CorporateLayout>
         );
     }

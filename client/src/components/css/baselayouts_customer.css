@@ -29,11 +29,10 @@
 }
 
 :root {
-  --pageMinWidth: 350px;
-  --customerHeaderNavigationZIndex: 9990;
-  --customerSidebarNavigationZIndex: 10000;
+  --customerHeaderNavigationZIndex: 10000;
+  --customerSidebarNavigationZIndex: 9990;
   --customerHeaderNavigationHeight: 80px;
-  --customerSidebarNavigationWdith: 200px;
+  --customerSidebarNavigationWidth: 200px;
   --customerHeaderNavigationBgColor: rgb(61, 61, 61);
   --customerSidebarNavigationBgColor: rgb(61, 61, 61);
   --customerMainBgColor: linear-gradient(75deg, rgb(225, 225, 225), rgb(95, 95, 95));
@@ -68,10 +67,10 @@ body.sidebar-open {
 .customer.sidebar-navigation {
   position: fixed;
   top: var(--customerHeaderNavigationHeight);
-  left: calc(0px - var(--customerSidebarNavigationWdith));
-  width: var(--customerSidebarNavigationWdith);
-  height: calc(100vh - var(--customerHeaderNavigationHeight));
+  left: calc(0px - var(--customerSidebarNavigationWidth));
   z-index: var(--customerSidebarNavigationZIndex);
+  width: var(--customerSidebarNavigationWidth);
+  height: calc(100vh - var(--customerHeaderNavigationHeight));
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -105,6 +104,6 @@ body.sidebar-open {
 
 @media (min-width: 576px) {
   .customer.main-content {
-    padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWdith);
+    padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWidth);
   }
 }

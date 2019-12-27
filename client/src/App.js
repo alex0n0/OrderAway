@@ -8,7 +8,8 @@ import KitchenUI from './components/ui_restaurant/KitchenUI';
 // import ServerUI from './components/ui_restaurant/ServerUI';
 
 // import logo from './logo.svg';
-// import TestingProxy from './components/experimental/testingproxy';
+// import TestingProxy from './components/zzz/testingproxy';
+import BreakpointIndicator from './components/zzz/breakpointindicator';
 
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
         {/* <Route path="/chef" render={() => (<h1>chef</h1>)}/>
         <Route path="/server" render={() => (<h1>server</h1>)} /> */}
       </BrowserRouter>
-      <div className="position-fixed" style={{bottom: "0px", right: "0px", opacity: "0.7"}}>
+
+      {/* <div className="position-fixed" style={{bottom: "0px", right: "0px", opacity: "0.7"}}>
         <p className="d-block d-sm-none bg-dark text-light py-0 px-2 text-nowrap"><b>(0px &raquo; mobile sm)</b></p>
         <p className="d-none d-sm-block d-md-none bg-danger text-light py-0 px-2 text-nowrap"><b>sm (576px &raquo; mobile
                 lg)</b></p>
@@ -30,7 +32,8 @@ function App() {
         <p className="d-none d-lg-block d-xl-none bg-success text-light py-0 px-2 text-nowrap"><b>lg (992px &raquo;
                 laptop)</b></p>
         <p className="d-none d-xl-block bg-primary text-light py-0 px-2 text-nowrap"><b>xl (1200px &raquo; desktop)</b></p>
-      </div>
+      </div> */}
+      <BreakpointIndicator/>
     </>
   );
 }

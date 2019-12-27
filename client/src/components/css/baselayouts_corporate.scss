@@ -23,10 +23,8 @@ $break-xl: 1200px;
 }
 
 :root {
-    --pageMinWidth: 350px;
-
-    --corporateHeaderNavigationHeight: 50px;
-    --corporateSidebarNavigationWdith: 75px;
+    --corporateHeaderNavigationHeight: 80px;
+    --corporateSidebarNavigationWidth: 75px;
 
     --corporateHeaderNavigationBgColor: white;
     --corporateSidebarNavigationBgColor: white;
@@ -52,7 +50,7 @@ $break-xl: 1200px;
     position: fixed;
     top: var(--corporateHeaderNavigationHeight);
     left: 0px;
-    width: var(--corporateSidebarNavigationWdith);
+    width: var(--corporateSidebarNavigationWidth);
     height: calc(100vh - var(--corporateHeaderNavigationHeight));
     z-index: var(--corporateSidebarNavigationZIndex);
     overflow-y: auto;
@@ -67,9 +65,7 @@ $break-xl: 1200px;
 
 .corporate.main-content {
     min-height: 100vh;
-
-    padding: var(--corporateHeaderNavigationHeight) 0px 0px var(--corporateSidebarNavigationWdith);
+    padding: var(--corporateHeaderNavigationHeight) 0px 0px var(--corporateSidebarNavigationWidth);
 
     background-color: var(--corporateMainBgColor);
 }
-

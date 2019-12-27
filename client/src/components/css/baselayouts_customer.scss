@@ -53,15 +53,11 @@ $break-xl: 1200px;
 }
 
 :root {
-    --pageMinWidth: 350px;
-
-    // --customerHeaderNavigationZIndex: 10000;
-    // --customerSidebarNavigationZIndex: 9990;
-    --customerHeaderNavigationZIndex: 9990;
-    --customerSidebarNavigationZIndex: 10000;
+    --customerHeaderNavigationZIndex: 10000;
+    --customerSidebarNavigationZIndex: 9990;
 
     --customerHeaderNavigationHeight: 80px;
-    --customerSidebarNavigationWdith: 200px;
+    --customerSidebarNavigationWidth: 200px;
 
     --customerHeaderNavigationBgColor: rgb(61, 61, 61);
     --customerSidebarNavigationBgColor: rgb(61, 61, 61);
@@ -93,18 +89,16 @@ body {
     button {
         color: white;
     }
-
-
 }
 
 .customer.sidebar-navigation {
     position: fixed;
     top: var(--customerHeaderNavigationHeight);
-    // left: 0px;
-    left: calc(0px - var(--customerSidebarNavigationWdith));
-    width: var(--customerSidebarNavigationWdith);
-    height: calc(100vh - var(--customerHeaderNavigationHeight));
+    left: calc(0px - var(--customerSidebarNavigationWidth));
     z-index: var(--customerSidebarNavigationZIndex);
+
+    width: var(--customerSidebarNavigationWidth);
+    height: calc(100vh - var(--customerHeaderNavigationHeight));
     overflow-y: auto;
 
     display: flex;
@@ -126,24 +120,18 @@ body {
         left: 0px;
     }
 
-
     button.active {
         background-color: rgb(3, 161, 235) !important;
     }
-
-
 }
 
 .customer.main-content {
     min-height: 100vh;
-
     padding: var(--customerHeaderNavigationHeight) 0px 0px 0px;;
 
-    // background-color: var(--customerMainBgColor);
     background: var(--customerMainBgColor);
 
     @include break-sm {
-        padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWdith);
+        padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWidth);
     }
 }
-

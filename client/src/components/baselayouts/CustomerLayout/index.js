@@ -5,6 +5,7 @@ class CustomerLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            menu: this.props.menu,
             sidebarOpen: false
         }
     }
@@ -14,7 +15,10 @@ class CustomerLayout extends React.Component {
             ...this.state,
             sidebarOpen: !this.state.sidebarOpen
         });
+    }
 
+    handleSidebarOptionClick = (i) => {
+        this.props.handleSidebarOptionClick(i);
     }
 
     render() {
@@ -26,55 +30,50 @@ class CustomerLayout extends React.Component {
         }
         return (
             <>
-                <header className="customer header-navigation overflowWrapper">
+                <header className="customer header-navigation overflowWrapper shadow--dark">
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
                         <button className="button--transparent h-100 px-4 d-flex d-sm-none" onClick={this.handleSidebarToggle}>
                             <i className="material-icons">menu</i>
                         </button>
                         <div className="h-100 px-0 px-sm-4 py-3 mr-auto">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="100%" width="auto"/>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="100%" width="auto" />
                         </div>
-                        {/* <p className="m-0 mr-auto color-white-09 px-0 px-sm-4 text-nowrap overflow-hidden">RESTAURANT NAME</p> */}
                         <button className="button--transparent h-100 px-4">
                             <i className="material-icons">language</i>
                         </button>
                         <button className="button--transparent h-100 px-4">
-                            {/* <div className="mr-1 mr-md-2 rounded-circle bg-danger" style={{ height: "35px", width: "35px" }}></div> */}
-                            {/* <i className="material-icons">help</i> */}
                             <i className="material-icons">help_outline</i>
                         </button>
                     </div>
                 </header>
-                <section className={this.state.sidebarOpen ? "customer sidebar-navigation open": "customer sidebar-navigation"}>
+                <section className={this.state.sidebarOpen ? "customer sidebar-navigation shadow--dark open" : "customer sidebar-navigation shadow--dark"}>
                     <div className="px-2 pt-3 mb-auto">
-                        <button className="button--transparent bg-secondary w-100 flex-column py-2 my-3 active">
-                            <p className="m-0 font-18">Pizza</p>
-                        </button>
-                        <button className="button--transparent bg-secondary w-100 flex-column py-2 my-3">
-                            <p className="m-0 font-18">Seafood</p>
-                        </button>
-                        <button className="button--transparent bg-secondary w-100 flex-column py-2 my-3">
-                            <p className="m-0 font-18">Pasta</p>
-                        </button>
-                        <button className="button--transparent bg-secondary w-100 flex-column py-2 mb-3">
-                            <p className="m-0 font-18">Dessert</p>
-                        </button>
+                        {this.state.menu.map((curr, i) => {
+                            return (
+                                <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent bg-secondary w-100 flex-column py-2 my-3 active" : "button--transparent bg-secondary w-100 flex-column py-2 my-3"}
+                                    key={i}
+                                    onClick={() => { this.handleSidebarOptionClick(i) }}
+                                >
+                                    <p className="m-0"><b>{curr.category.toUpperCase()}</b></p>
+                                </button>
+                            );
+                        })}
                     </div>
                     <div className="px-2 mt-5">
                         <button className="button--transparent bg-warning w-100 flex-column py-2 mb-2 color-black">
-                            <p className="m-0 font-18">Bill</p>
+                            <p className="m-0"><b>BILL</b></p>
                         </button>
                     </div>
                 </section>
                 <div className="overflowWrapper">
-                    <main className="customer main-content">
-                        <div className="pageMinWidth min-h-100 px-3">
+                    <main className="customer main-content pageMinWidth">
+                        <div className="px-3">
                             {this.props.children}
                         </div>
                     </main>
                 </div>
-                {this.state.sidebarOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleSidebarToggle}></div>):"" }
-                
+                {this.state.sidebarOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleSidebarToggle}></div>) : ""}
+
             </>
         );
     }

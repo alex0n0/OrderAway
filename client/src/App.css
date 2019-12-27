@@ -1,3 +1,7 @@
+:root {
+    --pageMinWidth: 350px;
+}
+
 .color-white { color: white ; }
 .color-white-09 { color: rgba(255, 255, 255, 0.9) ; }
 .color-white-08 { color: rgba(255, 255, 255, 0.8) ; }
@@ -54,9 +58,10 @@
 
 .shadow--basic {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    /* background-color: rgb(35, 239, 12); */
+}
+.shadow--dark {
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
 }
 .shadow--black {
     box-shadow: 0 0 20px 10px rgba(0, 0, 0, 1);
-    /* background-color: rgb(35, 239, 12); */
 }

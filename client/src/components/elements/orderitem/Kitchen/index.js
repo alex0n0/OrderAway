@@ -3,7 +3,7 @@ import React from 'react';
 export default function OrderItem() {
     return (
         <>
-            <div className="h-100 w-100 bg-secondary color-white" style={{ border: "5px solid white" }}>
+            <div className="h-100 w-100 bg-secondary color-white" style={{ border: "1px solid white" }}>
                 <div className="bg-dark d-flex align-items-center px-3 py-2">
                     <div className="d-flex flex-column mr-auto">
                         <p className="m-0 font-18 mr-2"><b>Table 22</b></p>
@@ -32,8 +32,8 @@ export default function OrderItem() {
                     </div>
                     {/* ORDER ITEMS END */}
                 </div>
-                <div className="px-3 pb-3 ">
-                    <button className="button--transparent bg-white py-2 w-100">DONE</button>
+                <div className="px-2 pb-2">
+                    <button className="button--transparent bg-white py-2 w-100"><b>DONE</b></button>
                 </div>
             </div>
         </>
