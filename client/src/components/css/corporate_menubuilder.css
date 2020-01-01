@@ -1,19 +1,26 @@
 :root {
   --corporateMainContentSidebarNavigationWidth: 200px;
+  --mainContentHeaderZIndex: 9970;
 }
 
-.main-content-header {
-  position: fixed;
-  top: var(--headerNavigationHeight);
-  left: calc(var(--corporateSidebarNavigationWidth) + var(--corporateMainContentSidebarNavigationWidth));
-  width: calc(100% - var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-  background-color: var(--mainBgColor);
+.menubuilder .container-fluid {
+  max-width: 1500px !important;
 }
 
-.main-content-sidebar {
+.menubuilder .container--outer {
+  padding: 0px 0px 0px 0px;
+}
+
+@media (min-width: 576px) {
+  .menubuilder .container--outer {
+    padding: 0px 0px 0px var(--corporateMainContentSidebarNavigationWidth);
+  }
+}
+
+.menubuilder .main-content-sidebar {
   position: fixed;
   top: var(--corporateHeaderNavigationHeight);
-  left: var(--corporateSidebarNavigationWidth);
+  left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
   z-index: 0;
   width: var(--corporateMainContentSidebarNavigationWidth);
   height: calc(100% - var(--corporateHeaderNavigationHeight));
@@ -21,15 +28,36 @@
   background-color: var(--customerSidebarNavigationBgColor);
 }
 
-.main-content-sidebar button {
+@media (min-width: 576px) {
+  .menubuilder .main-content-sidebar {
+    left: var(--corporateSidebarNavigationWidth);
+  }
+}
+
+.menubuilder .main-content-sidebar button {
   color: white;
 }
 
-.cardcontainer {
-  padding-left: 216px !important;
+.menubuilder .main-content-sidebar button.active {
+  background-color: #03a1eb !important;
 }
 
-.cardcontainer .menucollection {
-  position: relative;
-  padding-top: 100px !important;
+.menubuilder .main-content-header {
+  position: fixed;
+  top: var(--headerNavigationHeight);
+  left: var(--corporateSidebarNavigationWidth);
+  z-index: var(--mainContentHeaderZIndex);
+  width: calc(100% - var(--corporateSidebarNavigationWidth));
+  background-color: var(--corporateMainBgColor);
+}
+
+@media (min-width: 576px) {
+  .menubuilder .main-content-header {
+    left: calc(var(--corporateSidebarNavigationWidth) + var(--corporateMainContentSidebarNavigationWidth));
+    width: calc(100% - var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
+  }
+}
+
+.menubuilder .main-content-content {
+  padding-top: 120px;
 }

@@ -36,6 +36,7 @@
   --customerHeaderNavigationBgColor: rgb(61, 61, 61);
   --customerSidebarNavigationBgColor: rgb(61, 61, 61);
   --customerMainBgColor: linear-gradient(75deg, rgb(225, 225, 225), rgb(95, 95, 95));
+  --customerMainBgColor: linear-gradient(75deg, rgb(109, 109, 109), rgb(56, 56, 56));
 }
 
 body.sidebar-open {

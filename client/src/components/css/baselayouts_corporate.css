@@ -2,8 +2,10 @@
   --corporateHeaderNavigationHeight: 80px;
   --corporateSidebarNavigationWidth: 75px;
   --corporateHeaderNavigationBgColor: white;
+  --corporateHeaderNavigationBgColorDark: black;
   --corporateSidebarNavigationBgColor: white;
   --corporateMainBgColor: rgb(245, 245, 245);
+  --corporateMainBgColorDark: rgb(50, 50, 50);
   --corporateHeaderNavigationZIndex: 10000;
   --corporateSidebarNavigationZIndex: 9990;
 }
@@ -18,6 +20,14 @@
   background-color: var(--corporateHeaderNavigationBgColor);
 }
 
+.corporate.header-navigation.darkTheme {
+  background-color: var(--corporateHeaderNavigationBgColorDark);
+}
+
+.corporate.header-navigation.darkTheme button {
+  color: white !important;
+}
+
 .corporate.sidebar-navigation {
   position: fixed;
   top: var(--corporateHeaderNavigationHeight);
@@ -26,7 +36,23 @@
   height: calc(100vh - var(--corporateHeaderNavigationHeight));
   z-index: var(--corporateSidebarNavigationZIndex);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   background-color: var(--corporateSidebarNavigationBgColor);
+}
+
+.corporate.sidebar-navigation.darkTheme {
+  border-right: 1px solid black;
+  background-color: var(--corporateMainBgColorDark);
+}
+
+.corporate.sidebar-navigation.darkTheme button {
+  color: white;
+}
+
+.corporate.sidebar-navigation button.active {
+  background-color: #03a1eb !important;
+  color: white;
 }
 
 .corporate.sidebar-navigation a {
@@ -38,4 +64,8 @@
   min-height: 100vh;
   padding: var(--corporateHeaderNavigationHeight) 0px 0px var(--corporateSidebarNavigationWidth);
   background-color: var(--corporateMainBgColor);
+}
+
+.corporate.main-content.darkTheme {
+  background-color: var(--corporateMainBgColorDark);
 }

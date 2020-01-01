@@ -5,7 +5,6 @@ class CustomerLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            menu: this.props.menu,
             sidebarOpen: false
         }
     }
@@ -28,6 +27,21 @@ class CustomerLayout extends React.Component {
             document.body.classList.remove('sidebar-open');
             // document.body.style.overflowY = "auto";
         }
+
+        var sidebarOptionsArr = [];
+        if (this.props.menu.length !== 0) {
+            sidebarOptionsArr = this.props.menu.map((curr, i) => {
+                return (
+                    <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent bg-secondary w-100 flex-column py-2 my-3 active" : "button--transparent bg-secondary w-100 flex-column py-2 my-3"}
+                        key={i}
+                        onClick={() => { this.handleSidebarOptionClick(i) }}
+                    >
+                        <p className="m-0"><b>{curr.category.toUpperCase()}</b></p>
+                    </button>
+                );
+            })
+        }
+
         return (
             <>
                 <header className="customer header-navigation overflowWrapper shadow--dark">
@@ -48,16 +62,11 @@ class CustomerLayout extends React.Component {
                 </header>
                 <section className={this.state.sidebarOpen ? "customer sidebar-navigation shadow--dark open" : "customer sidebar-navigation shadow--dark"}>
                     <div className="px-2 pt-3 mb-auto">
-                        {this.state.menu.map((curr, i) => {
-                            return (
-                                <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent bg-secondary w-100 flex-column py-2 my-3 active" : "button--transparent bg-secondary w-100 flex-column py-2 my-3"}
-                                    key={i}
-                                    onClick={() => { this.handleSidebarOptionClick(i) }}
-                                >
-                                    <p className="m-0"><b>{curr.category.toUpperCase()}</b></p>
-                                </button>
-                            );
-                        })}
+                        {/* SIDEBAR OPTIONS START */}
+                        {
+                            sidebarOptionsArr
+                        }
+                        {/* SIDEBAR OPTIONS END */}
                     </div>
                     <div className="px-2 mt-5">
                         <button className="button--transparent bg-warning w-100 flex-column py-2 mb-2 color-black">

@@ -16,13 +16,7 @@ $break-xl: 1200px;
     @media(min-width: $break-xl) { @content; }
 }
 
-:root {
-    --corporateMainContentSidebarNavigationWidth: 200px;
-    --mainContentHeaderZIndex: 9970;
-}
-
-
-.menubuilder {
+.menuselector {
     .container-fluid {
         max-width: 1500px !important;
     }
@@ -37,7 +31,6 @@ $break-xl: 1200px;
     .main-content-sidebar {
         position: fixed;
         top: var(--corporateHeaderNavigationHeight);
-        // left: var(--corporateSidebarNavigationWidth);
         left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
         z-index: 0;
     
@@ -50,23 +43,16 @@ $break-xl: 1200px;
         @include break-sm {
             left: var(--corporateSidebarNavigationWidth);
         }
-    
-        button {
-            color: white;
-        }
-    
-        button.active {
-            background-color: rgb(3, 161, 235) !important;
-        }
     }
 
     .main-content-header {
         position: fixed;
         top: var(--headerNavigationHeight);
-        left: var(--corporateSidebarNavigationWidth);
+        left: calc(var(--corporateSidebarNavigationWidth));
         z-index: var(--mainContentHeaderZIndex);
     
         width: calc(100% - var(--corporateSidebarNavigationWidth));
+
         background-color: var(--corporateMainBgColor); // apply this later
 
         @include break-sm {
@@ -74,9 +60,53 @@ $break-xl: 1200px;
             width: calc(100% - var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
         }
     }
-    
+
     .main-content-content {
         padding-top: 120px;
+
+        button.button--transparent {
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            &.active {
+                border-color: rgb(3, 161, 235) !important;
+                background-color: rgb(3, 161, 235) !important;
+            }
+            &.published {
+                background-color: transparent !important;
+                border-color: rgb(168, 38, 228);
+                .background {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    width: 150%;
+                    padding-top: 300%;
+
+                    background: linear-gradient(0deg, blue, red);
+                    animation-name: gradientmagic;
+                    animation-duration: 5s;
+                    animation-iteration-count: infinite;
+                    animation-timing-function: linear;
+
+                    // border: 1px solid white;
+                    z-index: 5;
+                }
+            }
+        }
     }
+    
 }
 
+@keyframes gradientmagic {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}

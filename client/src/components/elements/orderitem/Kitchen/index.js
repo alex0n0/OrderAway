@@ -1,72 +1,56 @@
 import React from 'react';
+import moment from 'moment';
+import './index.css';
 
-export default function OrderItem() {
-    return (
-        <>
-            <div className="h-100 w-100 bg-secondary color-white" style={{ border: "1px solid white" }}>
-                <div className="bg-dark d-flex align-items-center px-3 py-2">
-                    <div className="d-flex flex-column mr-auto">
-                        <p className="m-0 font-18 mr-2"><b>Table 22</b></p>
-                        <p className="m-0 color-white-06">11:20<small>AM</small></p>
-                    </div>
-                    <p className="m-0 font-12 color-white-06 mr-2">4 min ago</p>
-                    <div className="m-0 rounded-circle shadow-black" style={{ height: "10px", width: "10px", backgroundColor: "lime" }}></div>
-                </div>
-                <div className="pt-3 pl-1">
-                    {/* ORDER ITEMS START */}
-                    {/* ORDER ITEM */}
-                    <div className="d-flex align-items-center pl-1 mb-3" style={{ borderLeft: "5px solid lime" }}>
-                        <div className="col p-0 pl-2">
-                            <p className="m-0 font-12 color-white-06">Menu 3</p>
-                            <p className="m-0 font-16 d-block">Fried chicken burger w/ sirarcha mayo</p>
+class OrderItem extends React.Component {
+
+    render() {
+        var timeFrom = moment(this.props.orderItem.orderTime, "X").from(moment(this.props.currTime));
+        var millisFrom = moment(this.props.currTime).format('x') - moment(this.props.orderItem.orderTime, "X").format('x');
+        var isLate = false;
+        if (millisFrom / 60000 > 10) {
+            isLate = true;
+        }
+        return (
+            <>
+                <div className="orderitem h-100 w-100 bg-secondary color-white d-flex flex-column" style={{ border: "1px solid white" }}>
+                    <div className="bg-dark d-flex flex-column px-3 py-2">
+                        <div className="d-flex align-items-center justify-content-end">
+                            <p className="m-0 font-12 color-white-06 mr-2">{timeFrom}</p>
+                            <div className={isLate ? "m-0 rounded-circle shadow-black indicator--dot late" : "m-0 rounded-circle shadow-black indicator--dot"}></div>
                         </div>
-                        <p className="m-0 font-20 pl-2" style={{ flex: "0 0 68px" }}><span className="color-white-06">&times;</span><b>999</b></p>
-                    </div>
-                    {/* ORDER ITEM */}
-                    <div className="d-flex align-items-center pl-1 mb-3" style={{ borderLeft: "5px solid lime" }}>
-                        <div className="col p-0 pl-2">
-                            <p className="m-0 font-12 color-white-06">Menu 3</p>
-                            <p className="m-0 font-16 d-block">Smoked Ribs (500g)</p>
+                        <div className="d-flex align-items-center">
+                            <p className="m-0 font-22 mr-auto"><b>Table {this.props.orderItem.tableNumber}</b></p>
+                            <p className="m-0 color-white-06">{moment(this.props.orderItem.orderTime, "X").format("hh:mm")}&nbsp;<small>{moment(this.props.orderItem.orderTime, "X").format("A")}</small></p>
                         </div>
-                        <p className="m-0 font-20 pl-2" style={{ flex: "0 0 68px" }}><span className="color-white-06">&times;</span><b>2</b></p>
                     </div>
-                    {/* ORDER ITEMS END */}
+                    <div className="pt-3 pl-1 flex-grow-1">
+                        {/* ORDER ITEMS START */}
+                        {/* ORDER ITEM */}
+                        {
+                            this.props.orderItem.items.map((curr, i) => {
+                                return (
+                                    <div className={isLate ? "d-flex align-items-center pl-1 mb-3 indicator--border late" : "d-flex align-items-center pl-1 mb-3 indicator--border"}
+                                        key={i}
+                                    >
+                                        <div className="col p-0 pl-2 overflow-hidden">
+                                            <p className="m-0 font-12 color-white-06 text-truncate">Menu {curr.id}&nbsp;&middot;&nbsp;{curr.category.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
+                                            <p className="m-0 font-16 d-block">{curr.title.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
+                                        </div>
+                                        <p className="col-auto p-0 m-0 font-20 pl-2" style={{ flex: "0 0 68px" }}><span className="color-white-06">&times;</span><b>{curr.quantity}</b></p>
+                                    </div>
+                                );
+                            })
+                        }
+                        {/* ORDER ITEMS END */}
+                    </div>
+                    <div className="px-2 pb-2">
+                        <button className="button--transparent bg-white py-2 w-100" onClick={this.props.handleClickDone}><b>DONE</b></button>
+                    </div>
                 </div>
-                <div className="px-2 pb-2">
-                    <button className="button--transparent bg-white py-2 w-100"><b>DONE</b></button>
-                </div>
-            </div>
-        </>
-    );
+            </>
+        );
+    }
 }
-// class OrderItem extends React.Component {
-//     render() {
-//         return (
-//             <>
-//                 <div className="h-100 w-100 bg-secondary color-white">
-//                     <div className="bg-dark d-flex align-items-center px-3 py-2">
-//                         <p className="m-0 font-18 mr-2">Table 22</p>
-//                         <p className="m-0 color-white-06 mr-auto">11:20<small>AM</small></p>
-//                         {/* <div className="m-0 rounded-circle shadow-black" style={{height: "10px", width: "10px", backgroundColor: "rgb(35, 239, 12)"}}></div> */}
-//                         <div className="m-0 rounded-circle shadow-black" style={{ height: "10px", width: "10px", backgroundColor: "rgb(255, 0, 0)" }}></div>
-//                     </div>
-//                     <div className="py-3">
-//                         {/* ORDER ITEMS START */}
-//                         {/* ORDER ITEM */}
-//                         <div class="d-flex align-items-center pl-1 mb-3" style={{ borderLeft: "5px solid red" }}>
-//                             <div className="col p-0 pl-2">
-//                                 <p className="m-0 font-12 color-white-06">Menu 3</p>
-//                                 <p className="m-0 font-18 mr-3 d-block">Fried chicken burger w/ sirarcha mayo</p>
-//                             </div>
-//                             <p className="m-0 font-30 border pl-2" style={{flex: "0 0 100px"}}><span className="color-white-06">&times;</span>&nbsp;<b>999</b></p>
-//                         </div>
-//                         {/* ORDER ITEMS END */}
-//                     </div>
-//                 </div>
-//             </>
-//         );
-//     }
 
-// }
-
-// export default OrderItem;
+export default OrderItem;

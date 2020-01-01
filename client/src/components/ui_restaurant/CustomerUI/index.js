@@ -1,17 +1,29 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
+import axios from 'axios';
+
 import CustomerLayout from '../../baselayouts/CustomerLayout';
 import MenuItemCustomer from '../../elements/menuitem/Customer';
 
-import menu from '../../zzz/menu';
 class CustomerUIComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      menu: menu,
-      sidebarMenuActiveIndex: 0
+      menu: [],
+      sidebarMenuActiveIndex: -1
     }
+  }
+
+  componentDidMount() {
+    axios.get("/api/customer")
+      .then(response => {
+        console.log(response.data.menu);
+        this.setState({
+          menu: response.data.menu,
+          sidebarMenuActiveIndex: response.data.menu.length === 0 ? -1 : 0
+        });
+      });
   }
 
   handleSidebarOptionClick = (i) => {
@@ -22,6 +34,17 @@ class CustomerUIComponent extends React.Component {
   }
 
   render() {
+    var menuItemsArr = [];
+    if (this.state.menu.length !== 0) {
+      menuItemsArr = this.state.menu[this.state.sidebarMenuActiveIndex].menuItems.map((curr, i) => {
+        curr.category = this.state.menu[this.state.sidebarMenuActiveIndex].category;
+        return (
+          <div key={i} className="col-12 col-xs-sm-6 col-sm-12 col-sm-md-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 col-xxxl-1 py-3">
+            <MenuItemCustomer menuItem={curr} />
+          </div>
+        )
+      });
+    }
     return (
       <>
         <Route exact path="/customer">
@@ -29,33 +52,14 @@ class CustomerUIComponent extends React.Component {
             <div className="container-fluid py-3">
               <div className="row">
                 {/* MENU ITEM START */}
-
-                {/* MENU ITEM */}
                 {
-                  this.state.menu[this.state.sidebarMenuActiveIndex].menuItems.map((curr, i) => 
-                    (
-                      <div key={i} className="col-12 col-xs-sm-6 col-sm-12 col-sm-md-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 col-xxxl-1 py-3">
-                        <MenuItemCustomer menuItem={curr}/>
-                      </div>
-                    )
-                  )
+                  menuItemsArr
                 }
-
                 {/* MENU ITEM END */}
               </div>
             </div>
           </CustomerLayout>
         </Route>
-        {/* <Route exact path="/business/menu">
-          <CorporateLayout>
-            <MenuSelector />
-          </CorporateLayout>
-        </Route>
-        <Route exact path="/business/menu/builder">
-          <CorporateLayout>
-            <MenuBuilder />
-          </CorporateLayout>
-        </Route> */}
       </>
     );
   }

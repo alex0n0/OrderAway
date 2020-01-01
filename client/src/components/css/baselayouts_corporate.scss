@@ -27,8 +27,10 @@ $break-xl: 1200px;
     --corporateSidebarNavigationWidth: 75px;
 
     --corporateHeaderNavigationBgColor: white;
+    --corporateHeaderNavigationBgColorDark: black;
     --corporateSidebarNavigationBgColor: white;
     --corporateMainBgColor: rgb(245, 245, 245);
+    --corporateMainBgColorDark: rgb(50, 50, 50);
 
     --corporateHeaderNavigationZIndex: 10000;
     --corporateSidebarNavigationZIndex: 9990;
@@ -44,6 +46,12 @@ $break-xl: 1200px;
 
     background-color: var(--corporateHeaderNavigationBgColor);
 
+    &.darkTheme {
+        background-color: var(--corporateHeaderNavigationBgColorDark);
+        button {
+            color: white !important;
+        }
+    }
 }
 
 .corporate.sidebar-navigation {
@@ -55,7 +63,23 @@ $break-xl: 1200px;
     z-index: var(--corporateSidebarNavigationZIndex);
     overflow-y: auto;
 
+    display: flex;
+    flex-direction: column;
+
     background-color: var(--corporateSidebarNavigationBgColor);
+
+    &.darkTheme {
+        border-right: 1px solid black;
+        background-color: var(--corporateMainBgColorDark);
+        button {
+            color: white;
+        }
+    }
+
+    button.active {
+        background-color: rgb(3, 161, 235) !important;
+        color: white;
+    }
 
     a {
         text-decoration: none;
@@ -68,4 +92,9 @@ $break-xl: 1200px;
     padding: var(--corporateHeaderNavigationHeight) 0px 0px var(--corporateSidebarNavigationWidth);
 
     background-color: var(--corporateMainBgColor);
+
+    &.darkTheme {
+        background-color: var(--corporateMainBgColorDark);
+    }
 }
+
