@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const uuidv4 = require('uuid/v4');
 
 const fakedb = require("./server_fakedb");
@@ -7,6 +8,7 @@ const fakedb = require("./server_fakedb");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 
@@ -15,9 +17,6 @@ app.use(express.json());
 
 
 
-app.get("/", function (req, res) {
-    res.send("<h1>hello world</h1>");
-});
 
 
 // ////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +179,9 @@ app.get("/testingproxy", function (req, res) {
 });
 
 
-
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, 'client/build'));
+});
 
 
 
