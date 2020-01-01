@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const uuidv4 = require('uuid/v4');
+const moment = require('moment');
 
 const fakedb = require("./server_fakedb");
 
@@ -139,7 +140,13 @@ app.get("/api/customer", function (req, res) {
 // /////////////////////////////////////////////////////////////////////////////////
 app.get("/api/kitchen", function (req, res) {
     // res.json({orders: []}); // - SUCCESSFULLY PASSED EMPTY ARRAY TEST
-    res.json({ orders: fakedb.orders });
+    var currTime = moment();
+    var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+    var orders = fakedb.orders;
+    var filteredOrders = orders.filter(curr => {
+        return parseInt(curr.orderTime) >= parseInt(todayStart.format("X"));
+    });
+    res.json({ orders: filteredOrders });
 });
 app.post("/api/kitchen/create", function (req, res) {
     var menuItem = req.body.menuItem
@@ -168,7 +175,13 @@ app.put("/api/kitchen/done", function (req, res) {
     if (foundOrderItemIndex !== -1) {
         fakedb.orders.splice(foundOrderItemIndex, 1);
     }
-    res.json(fakedb.orders);
+    var currTime = moment();
+    var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+    var orders = fakedb.orders;
+    var filteredOrders = orders.filter(curr => {
+        return parseInt(curr.orderTime) >= parseInt(todayStart.format("X"));
+    });
+    res.json({ orders: filteredOrders });
 });
 // ////////////////////////////////////////////////////////////////////////////////////
 
@@ -179,8 +192,8 @@ app.get("/testingproxy", function (req, res) {
 });
 
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, 'client/build'));
+app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });
 
 

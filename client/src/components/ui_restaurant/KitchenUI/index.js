@@ -48,7 +48,7 @@ class KitchenUI extends React.Component {
             .then(response => {
                 this.setState({
                     ...this.state,
-                    orders: response.data
+                    orders: response.data.orders
                 });
             });
     }

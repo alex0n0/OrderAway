@@ -10,12 +10,13 @@ class CorporateLayout extends React.Component {
             <>
                 <header className={this.props.darkTheme ? "corporate header-navigation overflowWrapper shadow--basic darkTheme" : "corporate header-navigation overflowWrapper shadow--basic"}>
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
-                        <button className="button--transparent h-100 px-4 mr-auto">COMPANY</button>
+                        <button className="button--transparent h-100 px-4 mr-auto">ZZZ</button>
                         <button className="button--transparent h-100 pr-4">
                             <div className="mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center" style={{ height: "48px", width: "48px" }}>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="auto" width="70%" />
+                                {/* <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="auto" width="70%" /> */}
                             </div>
-                            <p className="m-0 mr-1 d-none d-md-block">Hungry Jack's</p>
+                            {/* <p className="m-0 mr-1 d-none d-md-block">Hungry Jack's</p> */}
+                            <p className="m-0 mr-1 d-none d-md-block">Restaurant</p>
                             <i className="material-icons">keyboard_arrow_down</i>
                         </button>
                     </div>
