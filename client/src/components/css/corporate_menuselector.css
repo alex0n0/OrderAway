@@ -16,10 +16,9 @@
   position: fixed;
   top: var(--corporateHeaderNavigationHeight);
   left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-  z-index: 0;
+  z-index: var(--mainContentSidebarZIndex);
   width: var(--corporateMainContentSidebarNavigationWidth);
   height: calc(100% - var(--corporateHeaderNavigationHeight));
-  overflow-y: auto;
   background-color: var(--customerSidebarNavigationBgColor);
 }
 
@@ -27,6 +26,10 @@
   .menuselector .main-content-sidebar {
     left: var(--corporateSidebarNavigationWidth);
   }
+}
+
+.menuselector .main-content-sidebar.open {
+  left: var(--corporateSidebarNavigationWidth);
 }
 
 .menuselector .main-content-header {

@@ -9,6 +9,7 @@ class MenuSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            sidebarCategoryOpen: false,
             menus: [],
 
 
@@ -30,6 +31,7 @@ class MenuSelector extends React.Component {
         this.handleInputUpdateMenuTitle.bind(this);
         this.handleInputCreateNewMenu.bind(this);
     }
+
 
     componentDidMount() {
         axios.get("/api/allmenus")
@@ -57,6 +59,13 @@ class MenuSelector extends React.Component {
                     menuPublishedId: menuPublishedId
                 });
             });
+    }
+
+    handleButtonSidebarToggleClick = () => {
+        this.setState({
+            ...this.state,
+            sidebarCategoryOpen: !this.state.sidebarCategoryOpen
+        });
     }
 
     handleMenuOptionClick = (curr, i) => { // (i) can prune later
@@ -181,7 +190,7 @@ class MenuSelector extends React.Component {
                     }
                 } else if (this.state.menuActive) {
                     if (curr.id === this.state.menuActive.id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";   
+                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
                     }
                 }
                 // if (this.state.menuActive && this.state.menuPublished) {
@@ -242,7 +251,15 @@ class MenuSelector extends React.Component {
             <div className="menuselector container--outer">
 
                 {/* SIDEBAR */}
-                <section className="main-content-sidebar d-flex flex-column">
+                {/* <section className="main-content-sidebar d-flex flex-column"> */}
+                <section className={this.state.sidebarCategoryOpen ? "main-content-sidebar d-flex flex-column open" : "main-content-sidebar d-flex flex-column"}>
+                    <button
+                        className="button--transparent flex-column p-3 color-white bg-dark d-flex d-sm-none"
+                        style={{ position: "absolute", bottom: "0px", right: "0px", transform: "translate(100%, 0%)" }}
+                        onClick={this.handleButtonSidebarToggleClick}
+                    >
+                        <i className="material-icons">menu</i>
+                    </button>
                     <div className="px-2 mb-auto">
                         <div className="d-flex py-2">
                             <input className="w-100 border-0 px-2" placeholder="Rename" value={this.state.inputEditMenuTitle} onChange={this.handleInputUpdateMenuTitle} />
@@ -332,6 +349,7 @@ class MenuSelector extends React.Component {
                             }
                             {/* MENUS START */}
                         </div>
+                        <div className="container py-5"></div>
                     </section>
                 </div>
             </div >

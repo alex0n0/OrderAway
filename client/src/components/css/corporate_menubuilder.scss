@@ -18,7 +18,8 @@ $break-xl: 1200px;
 
 :root {
     --corporateMainContentSidebarNavigationWidth: 200px;
-    --mainContentHeaderZIndex: 9970;
+    --mainContentHeaderZIndex: 9950;
+    --mainContentSidebarZIndex: 9970;
 }
 
 
@@ -37,17 +38,21 @@ $break-xl: 1200px;
     .main-content-sidebar {
         position: fixed;
         top: var(--corporateHeaderNavigationHeight);
-        // left: var(--corporateSidebarNavigationWidth);
         left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-        z-index: 0;
+        // left: var(--corporateSidebarNavigationWidth);
+        z-index: var(--mainContentSidebarZIndex);
     
         width: var(--corporateMainContentSidebarNavigationWidth);
         height: calc(100% - var(--corporateHeaderNavigationHeight));
-        overflow-y: auto;
+        // overflow-y: auto;
     
         background-color: var(--customerSidebarNavigationBgColor);
 
         @include break-sm {
+            left: var(--corporateSidebarNavigationWidth);
+        }
+
+        &.open {
             left: var(--corporateSidebarNavigationWidth);
         }
     

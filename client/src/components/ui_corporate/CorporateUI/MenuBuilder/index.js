@@ -15,10 +15,12 @@ class MenuBuilder extends React.Component {
             menuDetails: {},
             sidebarCategoryActiveIndex: -1,
             sidebarCategoryActiveId: -1,
+            sidebarCategoryOpen: false,
             menuItemActiveIndex: -1,
             menuItemActiveId: -1,
             inputRenameCategory: "",
             inputCreateNewCategory: "",
+
         }
         this.handleInputCreateNewCategory.bind(this);
     }
@@ -36,6 +38,13 @@ class MenuBuilder extends React.Component {
                     inputRenameCategory: response.data.menuDetails.menu.length !== 0 ? response.data.menuDetails.menu[0].category : "",
                 });
             });
+    }
+
+    handleButtonSidebarToggleClick = () => {
+        this.setState({
+            ...this.state,
+            sidebarCategoryOpen: !this.state.sidebarCategoryOpen
+        });
     }
 
     handleSidebarCategoryOptionClick = (categoryId) => {
@@ -156,7 +165,7 @@ class MenuBuilder extends React.Component {
             } else {
                 stateObj.inputRenameCategory = this.state.menuDetails.menu[0].category;
             }
-            
+
             this.setState(stateObj);
         }
     }
@@ -164,7 +173,7 @@ class MenuBuilder extends React.Component {
     // ///////////////////////////////////////////////////////////////////////////////////////////////
 
     handleButtonCreateNewMenuItem = () => {
-        var tempMenuDetails = {...this.state.menuDetails};
+        var tempMenuDetails = { ...this.state.menuDetails };
         var categoryIndex = this.state.menuDetails.menu.findIndex(curr => {
             return curr.id === this.state.sidebarCategoryActiveId;
         });
@@ -235,13 +244,13 @@ class MenuBuilder extends React.Component {
     }
 
     handleButtonSaveMenu = () => {
-        axios.put("/api/menubuilder/" + this.state.menuDetails.id + "/save", {id: this.state.menuDetails.id, menu: this.state.menuDetails.menu})
-        .then(response => {
-            this.setState({
-                ...this.state,
-                menuDetails: response.data.menuDetails
+        axios.put("/api/menubuilder/" + this.state.menuDetails.id + "/save", { id: this.state.menuDetails.id, menu: this.state.menuDetails.menu })
+            .then(response => {
+                this.setState({
+                    ...this.state,
+                    menuDetails: response.data.menuDetails
+                });
             });
-        });
     }
 
     randomId = (length) => {
@@ -291,8 +300,15 @@ class MenuBuilder extends React.Component {
         }
         return (
             <div className="menubuilder " >
-                <section className="main-content-sidebar d-flex flex-column">
-                    <div className="d-flex">
+                <section className={this.state.sidebarCategoryOpen ? "main-content-sidebar d-flex flex-column open":"main-content-sidebar d-flex flex-column"}>
+                    <button
+                        className="button--transparent flex-column p-3 color-white bg-dark d-flex d-sm-none"
+                        style={{ position: "absolute", bottom: "0px", right: "0px", transform: "translate(100%, 0%)" }}
+                        onClick={this.handleButtonSidebarToggleClick}
+                    >
+                        <i className="material-icons">menu</i>
+                    </button>
+                    <div className="d-flex justify-content-between" style={{ position: "relative" }}>
                         <Link to="/corporate/menu" style={{ textDecoration: "none" }}>
                             <div className="button--transparent flex-column p-3 color-white" >
                                 <i className="material-icons">keyboard_arrow_left</i>
@@ -389,6 +405,7 @@ class MenuBuilder extends React.Component {
                             }
                             {/* MENU ITEM END */}
                         </div>
+                        <div className="container py-5"></div>
                     </section>
                 </div>
             </div>

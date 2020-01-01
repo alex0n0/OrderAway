@@ -1,6 +1,7 @@
 :root {
   --corporateMainContentSidebarNavigationWidth: 200px;
-  --mainContentHeaderZIndex: 9970;
+  --mainContentHeaderZIndex: 9950;
+  --mainContentSidebarZIndex: 9970;
 }
 
 .menubuilder .container-fluid {
@@ -21,10 +22,9 @@
   position: fixed;
   top: var(--corporateHeaderNavigationHeight);
   left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-  z-index: 0;
+  z-index: var(--mainContentSidebarZIndex);
   width: var(--corporateMainContentSidebarNavigationWidth);
   height: calc(100% - var(--corporateHeaderNavigationHeight));
-  overflow-y: auto;
   background-color: var(--customerSidebarNavigationBgColor);
 }
 
@@ -32,6 +32,10 @@
   .menubuilder .main-content-sidebar {
     left: var(--corporateSidebarNavigationWidth);
   }
+}
+
+.menubuilder .main-content-sidebar.open {
+  left: var(--corporateSidebarNavigationWidth);
 }
 
 .menubuilder .main-content-sidebar button {

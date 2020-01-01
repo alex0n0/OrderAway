@@ -32,15 +32,19 @@ $break-xl: 1200px;
         position: fixed;
         top: var(--corporateHeaderNavigationHeight);
         left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-        z-index: 0;
+        z-index: var(--mainContentSidebarZIndex);
     
         width: var(--corporateMainContentSidebarNavigationWidth);
         height: calc(100% - var(--corporateHeaderNavigationHeight));
-        overflow-y: auto;
+        // overflow-y: auto;
     
         background-color: var(--customerSidebarNavigationBgColor);
 
         @include break-sm {
+            left: var(--corporateSidebarNavigationWidth);
+        }
+
+        &.open {
             left: var(--corporateSidebarNavigationWidth);
         }
     }
