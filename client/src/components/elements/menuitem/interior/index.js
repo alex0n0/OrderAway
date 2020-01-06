@@ -7,15 +7,15 @@ import './index.css';
 class MenuItemInterior extends React.Component {
 
     handleButtonClickOrder = (menuItemData) => {
-        // menuItemData.orderTime = moment().format("HH:mm");
-        menuItemData.orderTime = moment().format("X");
         menuItemData.quantity = 1;
-        menuItemData.tableNumber = 1;
         axios.post("/api/kitchen/create", {
+            restaurantId: this.props.restaurantId,
+            tableNumber: 1,
+            orderTime: parseInt(moment().format("X")),
             menuItem: menuItemData
         })
         .then(response => {
-            // console.log(response.data);
+            console.log(response.data);
         });
     }
     render() {
@@ -32,9 +32,7 @@ class MenuItemInterior extends React.Component {
                 </div>
                 <div className="bg-white flex-grow-1 d-flex flex-column">
                     <div className="px-3 pt-2 d-flex flex-column flex-grow-1">
-                        <p className="m-0 text-left"><b>{this.props.menuItem.title.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</b></p>
-                        {/* {Math.floor(Math.random() * 2) > 0 ? (<p className="m-0 text-left font-14 mb-auto">Nutty and sweet</p>) : (<p className="m-0 text-left font-14 mb-auto">Nutty and sweet and some other shit goes here hopefully this is long enough</p>)} */}
-                        {/* <p className="m-0 text-left font-14 mb-auto">{toSentenceCase(this.props.menuItem.description)}</p> */}
+                        <p className="m-0 text-left"><b>{this.props.menuItem.menuItemTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</b></p>
                         <p className="m-0 text-left font-14 mb-auto">{this.props.menuItem.description.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
                         <div className="d-flex align-items-center pt-2 pb-2">
                             <p className="m-0 text-left font-14 ml-auto"><b>${this.props.menuItem.price.toFixed(2)}</b></p>

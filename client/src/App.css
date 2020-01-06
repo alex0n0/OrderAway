@@ -56,9 +56,9 @@
     filter: brightness(0.6);
 }
 
-/* .button--transparent:focus {
+.button--transparent:focus {
     outline: none;
-} */
+}
 
 .shadow--basic {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);

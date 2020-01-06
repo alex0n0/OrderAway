@@ -10,6 +10,7 @@ class CustomerUIComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      restaurantId: undefined,
       menu: [],
       sidebarMenuActiveIndex: -1
     }
@@ -18,8 +19,8 @@ class CustomerUIComponent extends React.Component {
   componentDidMount() {
     axios.get("/api/customer")
       .then(response => {
-        console.log(response.data.menu);
         this.setState({
+          restaurantId: response.data.restaurant._id,
           menu: response.data.menu,
           sidebarMenuActiveIndex: response.data.menu.length === 0 ? -1 : 0
         });
@@ -37,10 +38,10 @@ class CustomerUIComponent extends React.Component {
     var menuItemsArr = [];
     if (this.state.menu.length !== 0) {
       menuItemsArr = this.state.menu[this.state.sidebarMenuActiveIndex].menuItems.map((curr, i) => {
-        curr.category = this.state.menu[this.state.sidebarMenuActiveIndex].category;
+        curr.category = this.state.menu[this.state.sidebarMenuActiveIndex].categoryTitle;
         return (
           <div key={i} className="col-12 col-xs-sm-6 col-sm-12 col-sm-md-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 col-xxxl-1 py-3">
-            <MenuItemCustomer menuItem={curr} />
+            <MenuItemCustomer menuItem={curr} restaurantId={this.state.restaurantId}/>
           </div>
         )
       });

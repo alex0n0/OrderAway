@@ -69,3 +69,25 @@
 .corporate.main-content.darkTheme {
   background-color: var(--corporateMainBgColorDark);
 }
+
+.corporate.main-content .startIndicator {
+  position: absolute;
+  top: 0px;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.corporate.main-content .startIndicator.startIndicator--oldest {
+  left: 0px;
+  transform: translateX(-60%) rotate(180deg);
+}
+
+.corporate.main-content .startIndicator.startIndicator--newest {
+  right: 0px;
+  transform: translateX(60%) rotate(180deg);
+}

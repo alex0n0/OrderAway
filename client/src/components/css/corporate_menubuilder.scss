@@ -18,6 +18,12 @@ $break-xl: 1200px;
 
 :root {
     --corporateMainContentSidebarNavigationWidth: 200px;
+    // @include break-sm {
+        
+    //     padding: 0px 0px 0px var(--corporateMainContentSidebarNavigationWidth);
+    // }
+
+
     --mainContentHeaderZIndex: 9950;
     --mainContentSidebarZIndex: 9970;
 }
@@ -29,7 +35,7 @@ $break-xl: 1200px;
     }
 
     .container--outer {
-        padding: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 20px;
         @include break-sm {
             padding: 0px 0px 0px var(--corporateMainContentSidebarNavigationWidth);
         }
@@ -39,17 +45,20 @@ $break-xl: 1200px;
         position: fixed;
         top: var(--corporateHeaderNavigationHeight);
         left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
-        // left: var(--corporateSidebarNavigationWidth);
         z-index: var(--mainContentSidebarZIndex);
-    
-        width: var(--corporateMainContentSidebarNavigationWidth);
+
+        
+        width: calc(var(--corporateMainContentSidebarNavigationWidth) + 20px);
         height: calc(100% - var(--corporateHeaderNavigationHeight));
-        // overflow-y: auto;
+        overflow: hidden;
     
         background-color: var(--customerSidebarNavigationBgColor);
 
+        transition: 0.2s left;
+        
         @include break-sm {
             left: var(--corporateSidebarNavigationWidth);
+            width: var(--corporateMainContentSidebarNavigationWidth);
         }
 
         &.open {
@@ -63,15 +72,37 @@ $break-xl: 1200px;
         button.active {
             background-color: rgb(3, 161, 235) !important;
         }
+
+        .sidebarcontents {
+            height: 100%;
+            overflow-y: auto;
+            flex: 1 1 auto;
+        }
+
+        .sidebarexpand {
+            flex: 0 0 20px;
+            width: 20px;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+
+            .sidewaystext{
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                transform: rotate(180deg);
+                display: flex;
+                align-items: center;
+            }
+        }
     }
 
     .main-content-header {
         position: fixed;
         top: var(--headerNavigationHeight);
-        left: var(--corporateSidebarNavigationWidth);
+        left: calc(var(--corporateSidebarNavigationWidth) + 20px);
         z-index: var(--mainContentHeaderZIndex);
     
-        width: calc(100% - var(--corporateSidebarNavigationWidth));
+        width: calc(100% - var(--corporateSidebarNavigationWidth) - 20px);
         background-color: var(--corporateMainBgColor); // apply this later
 
         @include break-sm {

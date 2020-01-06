@@ -12,6 +12,7 @@ class KitchenUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            restaurantId: undefined,
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 0,
             orders: [],
@@ -24,9 +25,14 @@ class KitchenUI extends React.Component {
     componentDidMount() {
         axios.get("/api/kitchen")
             .then(response => {
+                var tempOrders = response.data.orders;
+                tempOrders.forEach(curr => {
+                    curr.buttonDoneIsDisabled = false;
+                })
                 this.setState({
                     ...this.state,
-                    orders: response.data.orders
+                    restaurantId: response.data.restaurantId,
+                    orders: tempOrders
                 });
 
                 this.interval = setInterval(() => {
@@ -44,12 +50,43 @@ class KitchenUI extends React.Component {
 
 
     handleClickDone = (orderItem) => {
-        axios.put("/api/kitchen/done", { orderItem: orderItem })
+        var tempOrders = [...this.state.orders];
+        tempOrders.forEach(curr => {
+            curr.buttonDoneIsDisabled = false;
+        })
+        var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
+            return curr._id === orderItem._id;
+        });
+        tempOrders[orderItemToRemoveIndex].buttonDoneIsDisabled = true;
+        this.setState({
+            ...this.state,
+            orders: tempOrders
+        });
+
+        axios.put("/api/kitchen/done", { orderId: orderItem._id })
             .then(response => {
-                this.setState({
-                    ...this.state,
-                    orders: response.data.orders
+                var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
+                    return curr._id === orderItem._id;
                 });
+
+                if (response.data.order) {
+                    if (orderItemToRemoveIndex !== -1) {
+                        tempOrders.splice(orderItemToRemoveIndex, 1);
+                        this.setState({
+                            ...this.state,
+                            orders: tempOrders
+                        });
+                    }
+                } else {
+                    if (orderItemToRemoveIndex !== -1) {
+                        tempOrders[orderItemToRemoveIndex].buttonDoneIsDisabled = false;
+                        this.setState({
+                            ...this.state,
+                            orders: tempOrders
+                        });
+                    }
+
+                }
             });
     }
 
@@ -65,9 +102,12 @@ class KitchenUI extends React.Component {
         if (this.state.orders.length !== 0) {
             ordersArr = this.state.orders.map((curr, i) => {
                 return (
-                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2"
+                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2 position-relative"
                         key={i}
                     >
+                        {i === 0 && this.state.orders.length !== 1 ? (<p className="startIndicator startIndicator--oldest m-0 h-100">OLDEST</p>) : ""}
+                        {i === this.state.orders.length - 1 && this.state.orders.length !== 1 ? (<p className="startIndicator startIndicator--newest m-0 h-100">NEWEST</p>) : ""}
+
                         <OrderItem currTime={this.state.currTime} orderItem={curr} handleClickDone={() => { this.handleClickDone(curr) }} />
                     </div>
                 )
@@ -76,8 +116,10 @@ class KitchenUI extends React.Component {
         return (
             <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick}>
                 <div className="py-3 px-3">
+
                     <div className="container-fluid">
                         <div className="row mx-n3">
+
                             {/* ORDER ITEMS START */}
                             {/* ORDER ITEM */}
                             {

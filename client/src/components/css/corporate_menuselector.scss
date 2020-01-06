@@ -22,7 +22,7 @@ $break-xl: 1200px;
     }
 
     .container--outer {
-        padding: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 20px;
         @include break-sm {
             padding: 0px 0px 0px var(--corporateMainContentSidebarNavigationWidth);
         }
@@ -34,28 +34,53 @@ $break-xl: 1200px;
         left: calc(var(--corporateSidebarNavigationWidth) - var(--corporateMainContentSidebarNavigationWidth));
         z-index: var(--mainContentSidebarZIndex);
     
-        width: var(--corporateMainContentSidebarNavigationWidth);
+        width: calc(var(--corporateMainContentSidebarNavigationWidth) + 20px);
         height: calc(100% - var(--corporateHeaderNavigationHeight));
-        // overflow-y: auto;
     
         background-color: var(--customerSidebarNavigationBgColor);
 
+        transition: 0.2s left;
+        
         @include break-sm {
             left: var(--corporateSidebarNavigationWidth);
+            width: var(--corporateMainContentSidebarNavigationWidth);
         }
 
         &.open {
             left: var(--corporateSidebarNavigationWidth);
         }
+
+        .sidebarcontents {
+            height: 100%;
+            overflow-y: auto;
+            flex: 1 1 auto;
+        }
+
+        .sidebarexpand {
+            flex: 0 0 20px;
+            width: 20px;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+
+            .sidewaystext{
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                transform: rotate(180deg);
+                display: flex;
+                align-items: center;
+            }
+        }
+
     }
 
     .main-content-header {
         position: fixed;
         top: var(--headerNavigationHeight);
-        left: calc(var(--corporateSidebarNavigationWidth));
+        left: calc(var(--corporateSidebarNavigationWidth) + 20px);
         z-index: var(--mainContentHeaderZIndex);
     
-        width: calc(100% - var(--corporateSidebarNavigationWidth));
+        width: calc(100% - var(--corporateSidebarNavigationWidth) - 20px);
 
         background-color: var(--corporateMainBgColor); // apply this later
 

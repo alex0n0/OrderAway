@@ -32,11 +32,11 @@ class CustomerLayout extends React.Component {
         if (this.props.menu.length !== 0) {
             sidebarOptionsArr = this.props.menu.map((curr, i) => {
                 return (
-                    <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent bg-secondary w-100 flex-column py-2 my-3 active" : "button--transparent bg-secondary w-100 flex-column py-2 my-3"}
+                    <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent bg-secondary w-100  py-2 my-3 active" : "button--transparent bg-secondary w-100 py-2 my-3"}
                         key={i}
                         onClick={() => { this.handleSidebarOptionClick(i) }}
                     >
-                        <p className="m-0"><b>{curr.category.toUpperCase()}</b></p>
+                        <p className="m-0 text-truncate"><b>{curr.categoryTitle.toUpperCase()}</b></p>
                     </button>
                 );
             })

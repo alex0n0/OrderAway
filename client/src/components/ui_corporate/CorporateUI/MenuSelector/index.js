@@ -9,6 +9,7 @@ class MenuSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            restaurantId: undefined,
             sidebarCategoryOpen: false,
             menus: [],
 
@@ -16,10 +17,10 @@ class MenuSelector extends React.Component {
             menuActive: undefined,
             menuPublished: undefined,
 
-
             menuActiveIndex: -1,
+            menuActiveId: undefined,
             menuPublishedIndex: -1, // ammend this so it links to the id of the menu instead of the index position
-            menuPublishedId: -1,
+            menuPublishedId: undefined,
 
 
 
@@ -30,33 +31,26 @@ class MenuSelector extends React.Component {
         }
         this.handleInputUpdateMenuTitle.bind(this);
         this.handleInputCreateNewMenu.bind(this);
+        this.handleButtonUpdateMenuTitle.bind(this);
+        this.handleButtonCreateNewMenu.bind(this);
     }
 
 
     componentDidMount() {
         axios.get("/api/allmenus")
             .then(response => {
-                var menuPublishedId = -1;
-                menuPublishedId = response.data.allmenus.findIndex(curr => {
-                    return curr.published === true;
+                var menuPublishedIndex = response.data.restaurantMenus.findIndex(curr => {
+                    return curr.isPublished === true;
                 });
-                var menuPublished = menuPublishedId !== -1 ? response.data.allmenus[menuPublishedId] : undefined;
+                var menuPublishedId = menuPublishedIndex !== -1 ? response.data.restaurantMenus[menuPublishedIndex]._id : undefined;
+                var menuPublished = menuPublishedIndex !== -1 ? response.data.restaurantMenus[menuPublishedIndex] : undefined;
 
-                // published active at start
-                // this.setState({
-                //     ...this.state,
-                //     menus: response.data.allmenus,
-                //     menuActive: menuPublished,
-                //     menuPublished: menuPublished,
-                //     menuPublishedId: menuPublishedId,
-                //     inputEditMenuTitle: menuPublishedId !== -1 ? response.data.allmenus[menuPublishedId].title: ""
-                // });
-                // nothing active at start
                 this.setState({
                     ...this.state,
-                    menus: response.data.allmenus,
-                    menuPublished: menuPublished,
-                    menuPublishedId: menuPublishedId
+                    restaurantId: response.data.restaurant._id,
+                    menus: response.data.restaurantMenus,
+                    menuPublishedId: menuPublishedId,
+                    menuPublished: menuPublished
                 });
             });
     }
@@ -67,15 +61,18 @@ class MenuSelector extends React.Component {
             sidebarCategoryOpen: !this.state.sidebarCategoryOpen
         });
     }
-
-    handleMenuOptionClick = (curr, i) => { // (i) can prune later
+    handleMenuOptionClick = (curr, i) => {
         this.setState({
             ...this.state,
+            menuActiveIndex: i,
+            menuActiveId: curr._id,
             menuActive: curr,
-            menuActiveIndex: i, // can prune later
-            inputEditMenuTitle: curr.title
+            inputEditMenuTitle: curr.menuTitle
         });
     }
+
+
+
 
     handleInputUpdateMenuTitle = (e) => {
         this.setState({
@@ -84,19 +81,33 @@ class MenuSelector extends React.Component {
         });
     }
     handleButtonUpdateMenuTitle = (e) => {
+        e.preventDefault();
+        var tempMenus = [...this.state.menus];
         this.setState({
             ...this.state,
             buttonEditMenuTitleDisabled: true
         });
-        axios.put("/api/allmenus/rename", { id: this.state.menuActive.id, title: this.state.inputEditMenuTitle.trim() })
+
+        var uploadObj = {
+            menuId: this.state.menuActive._id,
+            menuTitle: this.state.inputEditMenuTitle.trim()
+        };
+        axios.put("/api/allmenus/rename", uploadObj)
             .then(response => {
+                tempMenus.forEach(curr => {
+                    if (curr._id === uploadObj.menuId) {
+                        curr.menuTitle = uploadObj.menuTitle;
+                    }
+                });
                 this.setState({
                     ...this.state,
-                    menus: response.data.allmenus,
+                    menus: tempMenus,
                     buttonEditMenuTitleDisabled: false
                 });
             })
     }
+
+
 
     handleInputCreateNewMenu = (e) => {
         this.setState({
@@ -104,18 +115,23 @@ class MenuSelector extends React.Component {
             inputCreateNewMenu: e.currentTarget.value
         });
     }
+    handleButtonCreateNewMenu = (e) => {
+        e.preventDefault();
+        var tempMenus = [...this.state.menus];
 
-    handleButtonCreateNewMenu = () => {
         this.setState({
             ...this.state,
             buttonCreateNewMenuDisabled: true
         });
 
-        axios.post("/api/allmenus/create", { title: this.state.inputCreateNewMenu.trim() })
+        var uploadObj = { restaurantId: this.state.restaurantId, menuTitle: this.state.inputCreateNewMenu.trim() };
+
+        axios.post("/api/allmenus/create", uploadObj)
             .then(response => {
+                tempMenus.push(response.data.menu);
                 this.setState({
                     ...this.state,
-                    menus: response.data.allmenus,
+                    menus: tempMenus,
                     inputCreateNewMenu: "",
                     buttonCreateNewMenuDisabled: false
                 });
@@ -123,48 +139,101 @@ class MenuSelector extends React.Component {
     }
 
 
+
+
+
+
+
     handleButtonDeleteMenu = () => {
-        axios.put("/api/allmenus/delete", { id: this.state.menuActive.id })
+        var tempMenus = [...this.state.menus];
+        var uploadObj = {
+            restaurantId: this.state.restaurantId,
+            menuId: this.state.menuActive._id
+        };
+        axios.put("/api/allmenus/delete", uploadObj)
             .then(response => {
+                tempMenus = tempMenus.filter(curr => {
+                    if (curr._id === uploadObj.menuId) {
+                        return false;
+                    }
+                    return true;
+                });
                 this.setState({
                     ...this.state,
-                    menus: response.data.allmenus,
+                    menus: tempMenus,
                     menuActive: undefined,
                     menuActiveIndex: -1,
                     inputEditMenuTitle: ""
                 });
             });
     }
+
+
+
+
+
+
     handleButtonPublishMenu = () => {
-        axios.put("/api/allmenus/publish", { id: this.state.menuActive.id })
+        var tempMenus = [...this.state.menus];
+        var uploadObj = {
+            restaurantId: this.state.restaurantId,
+            menuId: this.state.menuActive._id,
+            currentlyPublishedMenuId: this.state.menuPublishedId
+        };
+
+        axios.put("/api/allmenus/publish", uploadObj)
             .then(response => {
-                var menuPublishedId = -1;
-                menuPublishedId = response.data.allmenus.findIndex(curr => {
-                    return curr.published === true;
+                var newPublishedMenu = response.data.newPublishedMenu;
+                var oldPublishedMenu = response.data.oldPublishedMenu;
+                tempMenus.forEach(curr => {
+                    if (curr._id === newPublishedMenu._id) {
+                        curr.isPublished = true;
+                    }
+                    else if (oldPublishedMenu && curr._id === oldPublishedMenu._id) {
+                        curr.isPublished = false;
+                    }
                 });
-                var menuPublished = menuPublishedId !== -1 ? response.data.allmenus[menuPublishedId] : undefined;
 
                 this.setState({
                     ...this.state,
-                    menus: response.data.allmenus,
-                    menuPublished: menuPublished,
-                    menuPublishedId: menuPublishedId,
+                    menus: tempMenus,
+                    menuPublished: newPublishedMenu,
+                    menuPublishedId: newPublishedMenu._id,
                 });
             });
     }
+
+
+
+
 
     handleButtonDuplicateMenu = () => {
-        axios.post("/api/allmenus/duplicate", {
-            id: this.state.menuActive.id,
-            title: this.state.menuActive.title
-        })
+        var tempMenus = [...this.state.menus];
+        var menuToDuplicate = { ...this.state.menuActive }
+        var uploadObj = {
+            restaurantId: this.state.restaurantId,
+            menuTitle: menuToDuplicate.menuTitle
+        };
+
+        axios.post("/api/allmenus/duplicate", uploadObj)
             .then(response => {
-                this.setState({
-                    ...this.state,
-                    menus: response.data.allmenus
-                });
+                console.log(response.data);
+                if (response.data.dbMenu) {
+                    var newMenuIndex = tempMenus.findIndex(curr => {
+                        return curr._id === menuToDuplicate._id;
+                    });
+                    console.log(newMenuIndex);
+                    if (newMenuIndex !== -1) {
+                        tempMenus.splice(newMenuIndex + 1, 0, response.data.dbMenu);
+                        this.setState({
+                            ...this.state,
+                            menus: tempMenus
+                        });
+                    }
+                }
             });
     }
+
 
 
 
@@ -176,44 +245,24 @@ class MenuSelector extends React.Component {
             menusArr = this.state.menus.map((curr, i) => {
                 var buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09";
                 if (this.state.menuActive && this.state.menuPublished) {
-                    if (curr.id === this.state.menuActive.id && curr.id === this.state.menuPublished.id) {
+                    if (curr._id === this.state.menuActive._id && curr._id === this.state.menuPublished._id) {
                         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published active";
                     }
-                    else if (curr.id === this.state.menuPublished.id) {
+                    else if (curr._id === this.state.menuPublished._id) {
                         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
-                    } else if (curr.id === this.state.menuActive.id) {
+                    } else if (curr._id === this.state.menuActive._id) {
                         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
                     }
                 } else if (this.state.menuPublished) {
-                    if (curr.id === this.state.menuPublished.id) {
+                    if (curr._id === this.state.menuPublished._id) {
                         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
                     }
                 } else if (this.state.menuActive) {
-                    if (curr.id === this.state.menuActive.id) {
+                    if (curr._id === this.state.menuActive._id) {
                         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
                     }
                 }
-                // if (this.state.menuActive && this.state.menuPublished) {
-                //     if (curr.id === this.state.menuActive.id && curr.id === this.state.menuPublished.id) {
-                //         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published active"
-                //     }
-                //     else if (curr.id === this.state.menuPublished.id) {
-                //         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published"
-                //     }
-                //     else if (curr.id === this.state.menuActive.id) {
-                //         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active"
-                //     }
-                // }
-                // else if (this.state.published) {
-                //     if (curr.id === this.state.menuPublished.id) {
-                //         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published"
-                //     }
-                // }
-                // else if (this.state.menuActive) {
-                //     if (curr.id === this.state.menuActive.id) {
-                //         buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active"
-                //     }
-                // }
+
                 return (
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-3"
                         key={i}
@@ -223,7 +272,7 @@ class MenuSelector extends React.Component {
                             style={{ wordBreak: "break-all" }}
                             onClick={() => { this.handleMenuOptionClick(curr, i) }}
                         >
-                            <p className="m-0 position-relative text-left" style={{ zIndex: 9 }}>{curr.title.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
+                            <p className="m-0 position-relative text-left" style={{ zIndex: 9 }}>{curr.menuTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
                             <div className="background"></div>
                         </button>
                     </div>
@@ -239,7 +288,7 @@ class MenuSelector extends React.Component {
             editButtonDisabled = false;
             publishButtonDisabled = false;
             if (this.state.menuPublished !== undefined) {
-                if (this.state.menuActive.id === this.state.menuPublished.id) {
+                if (this.state.menuActive._id === this.state.menuPublished._id) {
                     deleteButtonDisabled = true;
                     editButtonDisabled = true;
                     publishButtonDisabled = true;
@@ -252,70 +301,83 @@ class MenuSelector extends React.Component {
 
                 {/* SIDEBAR */}
                 {/* <section className="main-content-sidebar d-flex flex-column"> */}
-                <section className={this.state.sidebarCategoryOpen ? "main-content-sidebar d-flex flex-column open" : "main-content-sidebar d-flex flex-column"}>
-                    <button
-                        className="button--transparent flex-column p-3 color-white bg-dark d-flex d-sm-none"
-                        style={{ position: "absolute", bottom: "0px", right: "0px", transform: "translate(100%, 0%)" }}
-                        onClick={this.handleButtonSidebarToggleClick}
-                    >
-                        <i className="material-icons">menu</i>
-                    </button>
-                    <div className="px-2 mb-auto">
-                        <div className="d-flex py-2">
-                            <input className="w-100 border-0 px-2" placeholder="Rename" value={this.state.inputEditMenuTitle} onChange={this.handleInputUpdateMenuTitle} />
+                <section className={this.state.sidebarCategoryOpen ? "main-content-sidebar d-flex open" : "main-content-sidebar d-flex"}>
+                    <div className="sidebarcontents">
+                        <div className="px-2 mb-auto">
+                            <div className="py-2">
+                                <form className="d-flex h-100 w-100">
+                                    <input className="w-100 border-0 px-2" placeholder="Rename" value={this.state.inputEditMenuTitle} onChange={this.handleInputUpdateMenuTitle} />
 
-                            <button
-                                className="button--transparent bg-danger p-2 text-white"
-                                disabled={this.state.inputEditMenuTitle.trim().length === 0 || this.state.buttonEditMenuTitleDisabled || this.state.menuActive === undefined ? true : false}
-                                onClick={this.handleButtonUpdateMenuTitle}
-                            >
-                                <i className="material-icons">edit</i>
-                            </button>
-                        </div>
-                        <div className="py-2">
-                            <button
-                                className="button--transparent justify-content-center bg-danger p-2 w-100 color-white"
-                                // disabled={this.state.menuActiveIndex === this.state.menuPublishedIndex || this.state.menuActiveIndex === -1 ? true : false}
-                                disabled={deleteButtonDisabled}
-                                onClick={this.handleButtonDeleteMenu}
-                            >
-                                <i className="material-icons">delete</i>&nbsp;DELETE
-                            </button>
-                        </div>
-                        <div className="py-2">
-                            {
-                                editButtonDisabled ?
-                                    (<button disabled className="button--transparent justify-content-center bg-danger p-2 w-100 color-white">
-                                        <i className="material-icons">edit</i>&nbsp;EDIT
-                                    </button>)
-                                    :
-                                    (<Link to={"/corporate/menu/builder/" + this.state.menuActive.id}
-                                        style={{ textDecoration: "none" }}
+                                    <button
+                                        className="button--transparent bg-danger p-2 text-white"
+                                        disabled={this.state.inputEditMenuTitle.trim().length === 0 || this.state.buttonEditMenuTitleDisabled || this.state.menuActive === undefined ? true : false}
+                                        onClick={this.handleButtonUpdateMenuTitle}
                                     >
-                                        <button className="button--transparent justify-content-center bg-danger p-2 w-100 h-100 color-white">
+                                        <i className="material-icons">edit</i>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div className="py-2">
+                                {
+                                    editButtonDisabled ?
+                                        (<button disabled className="button--transparent justify-content-center bg-danger p-2 w-100 color-white">
                                             <i className="material-icons">edit</i>&nbsp;EDIT
+                                        </button>)
+                                        :
+                                        (<Link to={"/corporate/menu/builder/" + this.state.menuActive._id}
+                                            style={{ textDecoration: "none" }}
+                                        >
+                                            <button className="button--transparent justify-content-center bg-danger p-2 w-100 h-100 color-white">
+                                                <i className="material-icons">edit</i>&nbsp;EDIT
+                                            </button>
+                                        </Link>)
+                                }
+                            </div>
+
+                            <div className="py-2">
+                                <button
+                                    className="button--transparent justify-content-center bg-danger p-2 w-100 color-white"
+                                    disabled={publishButtonDisabled}
+                                    onClick={this.handleButtonPublishMenu}
+                                >
+                                    <i className="material-icons">save</i>&nbsp;PUBLISH
                                 </button>
-                                    </Link>)
+                            </div>
+
+                            <div className="py-2">
+                                <button
+                                    className="button--transparent justify-content-center bg-danger p-2 w-100 color-white"
+                                    disabled={deleteButtonDisabled}
+                                    onClick={this.handleButtonDeleteMenu}
+                                >
+                                    <i className="material-icons">delete</i>&nbsp;DELETE
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="sidebarexpand d-sm-none">
+                        <button
+                            className="button--transparent h-100 w-100"
+                            onClick={this.handleButtonSidebarToggleClick}
+                        >
+                            {this.state.sidebarCategoryOpen ?
+                                (<p className="sidewaystext font-14 color-white-06">COLLAPSE<i className="material-icons font-20">keyboard_arrow_up</i></p>)
+                                :
+                                (<p className="sidewaystext font-14 color-white-06">EXPAND<i className="material-icons font-20">keyboard_arrow_down</i></p>)
                             }
-                        </div>
-                        <div className="py-2">
-                            <button
-                                className="button--transparent justify-content-center bg-danger p-2 w-100 color-white"
-                                disabled={publishButtonDisabled}
-                                onClick={this.handleButtonPublishMenu}
-                            >
-                                <i className="material-icons">save</i>&nbsp;PUBLISH
-                            </button>
-                        </div>
+                        </button>
                     </div>
                 </section>
 
                 {/* HEADER */}
                 <section className="main-content-header pt-3">
                     <div className="container-fluid">
-                        <div className="row m-0 mt-3 overflow-hidden shadow-sm bg-white py-3 flex-nowrap">
-                            <div className="col col-md-6 col-lg-3">
-                                <div className="d-flex">
+                        <div className="row m-0 mt-3 overflow-hidden shadow-sm bg-white py-3 flex-nowrap px-2 px-lg-0">
+                            <div className="col col-md-6 col-lg-3 px-2 px-lg-3">
+                                <form className="d-flex">
                                     <input className="w-100 border-dark px-2" placeholder="Create" value={this.state.inputCreateNewMenu} onChange={this.handleInputCreateNewMenu} />
                                     <button className="button--transparent bg-danger p-2 color-white"
                                         disabled={this.state.inputCreateNewMenu.trim().length === 0 || this.state.buttonCreateNewMenuDisabled ? true : false}
@@ -323,9 +385,9 @@ class MenuSelector extends React.Component {
                                     >
                                         <i className="material-icons">add</i>
                                     </button>
-                                </div>
+                                </form>
                             </div>
-                            <div className="col-auto col-md-6 col-lg-3 pl-0 pl-sm-3">
+                            <div className="col-auto col-md-6 col-lg-3 px-2 px-lg-3">
                                 <button
                                     className="button--transparent justify-content-center bg-danger p-2 w-100 color-white"
                                     disabled={this.state.menuActive === undefined ? true : false}
@@ -352,6 +414,9 @@ class MenuSelector extends React.Component {
                         <div className="container py-5"></div>
                     </section>
                 </div>
+                {this.state.sidebarCategoryOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleButtonSidebarToggleClick} style={{
+                    zIndex: "9960"
+                }}></div>) : ""}
             </div >
         );
     }
