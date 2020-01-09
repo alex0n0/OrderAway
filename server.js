@@ -45,7 +45,8 @@ require("./api-routes")(app);
 
 
 
-mongoose.connect("mongodb://localhost/zzzbcsproj3", { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect("mongodb://localhost/zzzbcsproj3", { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds047468.mlab.com:47468/heroku_2ll1xfxt", { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
 
 
 
