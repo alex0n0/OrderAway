@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import axios from 'axios';
+// import socketIOClient from 'socket.io-client';
 
 import CorporateLayout from '../../baselayouts/CorporateLayout';
 import OrderItem from '../../elements/orderitem/Kitchen';
@@ -12,36 +13,72 @@ class KitchenUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            restaurantId: undefined,
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 0,
             orders: [],
-            currTime: moment()
+            currTime: moment(),
+            tempOrders: []
         }
     }
 
     interval;
+    // socket;
 
     componentDidMount() {
+
+
         axios.get("/api/kitchen")
+            .then(response => {
+                console.log(response.data.orders);
+                var tempOrders = response.data.orders;
+                tempOrders.forEach(curr => {
+                    curr.buttonDoneIsDisabled = false;
+                });
+                this.setState({
+                    ...this.state,
+                    orders: tempOrders
+                });
+            });
+
+        // this.socket = socketIOClient("localhost:5000");
+        // this.socket.on("orderzzzzz", data => {
+        //     console.log(data);
+        //     // if (data.orderId) {
+        //     //     axios.get("/api/kitchen/" + data.orderId)
+        //     //         .then(response => {
+        //     //             response.data.buttonDoneIsDisabled = false;
+        //     //             var tempOrders = [...this.state.orders];
+        //     //             tempOrders.push(response.data);
+
+        //     //             this.setState({
+        //     //                 ...this.state,
+        //     //                 orders: tempOrders
+        //     //             });
+        //     //         });
+        //     // }
+        // });
+
+        this.interval = setInterval(() => {
+            axios.get("/api/kitchen")
             .then(response => {
                 var tempOrders = response.data.orders;
                 tempOrders.forEach(curr => {
                     curr.buttonDoneIsDisabled = false;
-                })
+                });
                 this.setState({
                     ...this.state,
-                    restaurantId: response.data.restaurantId,
-                    orders: tempOrders
+                    orders: tempOrders,
+                    currTime: moment()
                 });
-
-                this.interval = setInterval(() => {
-                    this.setState({
-                        ...this.state,
-                        currTime: moment()
-                    });
-                }, 15000);
             });
+        }, 10000);
+
+        // this.interval = setInterval(() => {
+        //     this.setState({
+        //         ...this.state,
+        //         currTime: moment()
+        //     });
+        // }, 15000);
     }
 
     componentWillUnmount() {
@@ -51,9 +88,7 @@ class KitchenUI extends React.Component {
 
     handleClickDone = (orderItem) => {
         var tempOrders = [...this.state.orders];
-        tempOrders.forEach(curr => {
-            curr.buttonDoneIsDisabled = false;
-        })
+
         var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
             return curr._id === orderItem._id;
         });
@@ -85,7 +120,6 @@ class KitchenUI extends React.Component {
                             orders: tempOrders
                         });
                     }
-
                 }
             });
     }
@@ -99,8 +133,8 @@ class KitchenUI extends React.Component {
 
     render() {
         var ordersArr = [];
-        if (this.state.orders.length !== 0) {
-            ordersArr = this.state.orders.map((curr, i) => {
+        if (this.state.orders.length > 0) {
+                ordersArr = this.state.orders.map((curr, i) => {
                 return (
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2 position-relative"
                         key={i}

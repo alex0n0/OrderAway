@@ -29,8 +29,8 @@
 }
 
 :root {
-  --customerHeaderNavigationZIndex: 10000;
-  --customerSidebarNavigationZIndex: 9990;
+  --customerHeaderNavigationZIndex: 100;
+  --customerSidebarNavigationZIndex: 90;
   --customerHeaderNavigationHeight: 80px;
   --customerSidebarNavigationWidth: 200px;
   --customerHeaderNavigationBgColor: rgb(61, 61, 61);
@@ -107,4 +107,71 @@ body.sidebar-open {
   .customer.main-content {
     padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWidth);
   }
+}
+
+.customerModalCloseButton {
+  z-index: 2;
+  top: 0px;
+  right: 0px;
+}
+
+.customerModalCloseButton:hover {
+  color: black !important;
+}
+
+.customerModalCloseButton:disabled {
+  color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.customerModalCountDisplay {
+  position: relative;
+  z-index: 2;
+}
+
+.customerModalCountDisplay::before {
+  content: '';
+  z-index: -1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 1px;
+  width: calc(100% + 50px);
+  border-top: 1px dashed #464646;
+}
+
+.customerModalCountDisplay p {
+  background-color: white;
+  border: 1px solid #464646;
+}
+
+.customerModalCountButton {
+  z-index: 3;
+  background-color: white;
+  border: 1px dashed #464646;
+  height: 60px;
+  width: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.customerModalCountButton.customerModalCountButton--left {
+  left: -70px;
+}
+
+.customerModalCountButton.customerModalCountButton--right {
+  right: -70px;
+}
+
+.customerModalCountButton:hover {
+  background-color: gainsboro;
+}
+
+.customerModalCountButton:focus {
+  background-color: gainsboro;
+}
+
+.customerModalCountButton:disabled {
+  filter: brightness(150%);
+  background-color: white;
 }

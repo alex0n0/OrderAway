@@ -5,6 +5,11 @@ import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
 import MenuItemCorporate from '../../../elements/menuitem/Corporate';
+import Modal from "react-bootstrap/Modal";
+import ModalHeader from "react-bootstrap/ModalHeader";
+// import ModalTitle from "react-bootstrap/ModalTitle";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
 
 import '../../../css/corporate_menubuilder.css';
 
@@ -21,7 +26,9 @@ class MenuBuilder extends React.Component {
             menuItemActiveId: undefined,
             inputRenameCategory: "",
             inputCreateNewCategory: "",
-
+            modalCreateEditIsShown: false,
+            modalCreateEditModeIsCreate: true,
+            modalCreateEditMenuItem: undefined,
         }
         this.handleInputRenameCategory.bind(this);
         this.handleButtonRenameCategory.bind(this);
@@ -33,15 +40,18 @@ class MenuBuilder extends React.Component {
         var id = window.location.pathname.substring(idStartIndex);
         axios.get("/api/menubuilder/" + id)
             .then(response => {
-                console.log(response.data);
-                console.log("published)", response.data.isPublished);
-                this.setState({
-                    ...this.state,
-                    menu: response.data.menu,
-                    sidebarCategoryActiveIndex: response.data.menu.length !== 0 ? 0 : -1,
-                    sidebarCategoryActiveId: response.data.menu.length !== 0 ? response.data.menu[0]._id : undefined,
-                    inputRenameCategory: response.data.menu.length !== 0 ? response.data.menu[0].categoryTitle : "",
-                });
+                if (response.data.menu) {
+                    this.setState({
+                        ...this.state,
+                        menuId: response.data.menu._id,
+                        menu: response.data.menu.categories,
+                        sidebarCategoryActiveIndex: response.data.menu.categories.length !== 0 ? 0 : -1,
+                        sidebarCategoryActiveId: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryId : undefined,
+                        inputRenameCategory: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryTitle : "",
+                    });
+                } else {
+                    console.log("error has occured, menu undefined");
+                }
             });
     }
 
@@ -54,7 +64,7 @@ class MenuBuilder extends React.Component {
 
     handleSidebarCategoryOptionClick = (categoryId) => {
         var menuCategoryIndex = this.state.menu.findIndex(curr => {
-            return curr._id === categoryId;
+            return curr.categoryId === categoryId;
         });
         var menuCategory = this.state.menu[menuCategoryIndex];
         this.setState({
@@ -70,12 +80,12 @@ class MenuBuilder extends React.Component {
     handleMenuItemOptionClick = (menuItemId) => {
         var tempMenu = [...this.state.menu];
         var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
         });
 
         if (categoryIndex !== -1) {
             var menuItemIndex = tempMenu[categoryIndex].menuItems.findIndex(curr => {
-                return curr._id === menuItemId;
+                return curr.menuItemId === menuItemId;
             });
             this.setState({
                 ...this.state,
@@ -99,7 +109,7 @@ class MenuBuilder extends React.Component {
         e.preventDefault();
         var tempMenu = [...this.state.menu];
         var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
         });
         if (categoryIndex !== -1) {
             tempMenu[categoryIndex].categoryTitle = this.state.inputRenameCategory.trim();
@@ -120,7 +130,7 @@ class MenuBuilder extends React.Component {
         e.preventDefault();
         var tempMenu = [...this.state.menu];
         var newCategoryObj = {
-            _id: uuidv4(),
+            categoryId: uuidv4(),
             categoryTitle: this.state.inputCreateNewCategory,
             menuItems: []
         }
@@ -133,7 +143,7 @@ class MenuBuilder extends React.Component {
         if (tempMenu.length === 1) {
             stateObj.inputRenameCategory = tempMenu[0].categoryTitle;
             stateObj.sidebarCategoryActiveIndex = 0;
-            stateObj.sidebarCategoryActiveId = tempMenu[0]._id;
+            stateObj.sidebarCategoryActiveId = tempMenu[0].categoryId;
         }
         this.setState(stateObj);
     }
@@ -141,7 +151,7 @@ class MenuBuilder extends React.Component {
     handleButtonDeleteCategory = () => {
         var tempMenu = [...this.state.menu];
         var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
         });
 
         if (categoryIndex !== -1) {
@@ -151,7 +161,7 @@ class MenuBuilder extends React.Component {
                 ...this.state,
                 menu: tempMenu,
                 sidebarCategoryActiveIndex: tempMenu.length !== 0 ? 0 : -1,
-                sidebarCategoryActiveId: tempMenu.length !== 0 ? tempMenu[0]._id : undefined,
+                sidebarCategoryActiveId: tempMenu.length !== 0 ? tempMenu[0].categoryId : undefined,
                 menuItemActiveIndex: -1,
                 menuItemActiveId: undefined,
                 inputRenameCategory: ""
@@ -168,45 +178,34 @@ class MenuBuilder extends React.Component {
     // ///////////////////////////////////////////////////////////////////////////////////////////////
 
     handleButtonCreateNewMenuItem = () => {
-        var tempMenu = [...this.state.menu];
-        var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
-        });
-
-        if (categoryIndex !== -1) {
-            tempMenu[categoryIndex].menuItems.push({
-                _id: uuidv4(),
-                isHidden: false,
-                imageUrl: "https://media.giphy.com/media/TLIj98vlSKpNXnkrBK/giphy.gif",
-                imageOrientationLandscape: true,
-                menuItemTitle: "new item",
-                description: "description",
-                price: 0,
-                tags: {
-                    vg: false,
-                    v: false,
-                    gf: false
-                }
-            });
-            this.setState({
-                ...this.state,
-                menu: tempMenu
-            });
-        }
+        this.handleModalCreateEditShow({
+            isHidden: false,
+            imageUrl: "",
+            imageOrientationLandscape: true,
+            menuItemTitle: "",
+            description: "",
+            price: "",
+            tagsAll: false,
+            tags: {
+                vg: false,
+                v: false,
+                gf: false
+            }
+        }, true);
     }
 
     handleButtonDuplicateMenuItem = () => {
         var tempMenu = [...this.state.menu];
         var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
         });
         if (categoryIndex !== -1) {
             var menuItemIndex = tempMenu[categoryIndex].menuItems.findIndex(curr => {
-                return curr._id === this.state.menuItemId;
+                return curr.menuItemId === this.state.menuItemId;
             });
             if (menuItemIndex !== -1) {
-                var menuItem = { ...tempMenu[categoryIndex].menuItems[menuItemIndex] };
-                menuItem._id = uuidv4();
+                var menuItem = JSON.parse(JSON.stringify(tempMenu[categoryIndex].menuItems[menuItemIndex]));
+                menuItem.menuItemId = uuidv4();
                 tempMenu[categoryIndex].menuItems.splice(menuItemIndex, 0, menuItem);
                 this.setState({
                     ...this.state,
@@ -217,18 +216,46 @@ class MenuBuilder extends React.Component {
     }
 
     handleButtonEditMenuItem = () => {
+        var tempMenu = [...this.state.menu];
+        var categoryIndex = tempMenu.findIndex(curr => {
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
+        });
+        if (categoryIndex !== -1) {
+            var menuItemIndex = tempMenu[categoryIndex].menuItems.findIndex(curr => {
+                return curr.menuItemId === this.state.menuItemId;
+            });
+            if (menuItemIndex !== -1) {
+                var modalCreateEditMenuItem = JSON.parse(JSON.stringify(tempMenu[categoryIndex].menuItems[menuItemIndex]));
+                this.handleModalCreateEditShow({
+                    isHidden: modalCreateEditMenuItem.isHidden,
+                    imageUrl: modalCreateEditMenuItem.imageUrl,
+                    imageOrientationLandscape: modalCreateEditMenuItem.imageOrientationLandscape,
+                    menuItemTitle: modalCreateEditMenuItem.menuItemTitle,
+                    description: modalCreateEditMenuItem.description,
+                    price: modalCreateEditMenuItem.price,
+                    tagsAll: (modalCreateEditMenuItem.tags.vg && modalCreateEditMenuItem.tags.v && modalCreateEditMenuItem.tags.gf),
+                    tags: {
+                        vg: modalCreateEditMenuItem.tags.vg,
+                        v: modalCreateEditMenuItem.tags.v,
+                        gf: modalCreateEditMenuItem.tags.gf
+                    }
+                }, false);
+            }
+        }
 
     }
+
+
 
 
     handleButtonDeleteMenuItem = () => {
         var tempMenu = [...this.state.menu];
         var categoryIndex = tempMenu.findIndex(curr => {
-            return curr._id === this.state.sidebarCategoryActiveId;
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
         });
         if (categoryIndex !== -1) {
             var menuItemIndex = tempMenu[categoryIndex].menuItems.findIndex(curr => {
-                return curr._id === this.state.menuItemId;
+                return curr.menuItemId === this.state.menuItemId;
             });
             if (menuItemIndex !== -1) {
                 tempMenu[categoryIndex].menuItems.splice(menuItemIndex, 1);
@@ -245,18 +272,215 @@ class MenuBuilder extends React.Component {
 
 
 
-   
+
 
     handleButtonSaveMenu = () => {
         console.log(this.state.menu);
-        // axios.put("/api/menubuilder/" + this.state.menuDetails.id + "/save", { id: this.state.menuDetails.id, menu: this.state.menuDetails.menu })
-        //     .then(response => {
-        //         this.setState({
-        //             ...this.state,
-        //             menuDetails: response.data.menuDetails
-        //         });
-        //     });
+        axios.put("/api/menubuilder/save", { menuId: this.state.menuId, menu: this.state.menu })
+            .then(response => {
+                // this.setState({
+                //     ...this.state,
+                //     menuDetails: response.data.menuDetails
+                // });
+            });
     }
+
+    // ////////////////////////////////////////////////////////////////////
+
+    handleModalCreateEditShow = (modalCreateEditMenuItem, modalCreateEditModeIsCreate) => {
+        this.setState({
+            ...this.state,
+            modalCreateEditIsShown: true,
+            modalCreateEditMenuItem: modalCreateEditMenuItem,
+            modalCreateEditModeIsCreate: modalCreateEditModeIsCreate,
+        });
+    }
+    handleModalCreateEditClose = () => {
+        this.setState({
+            ...this.state,
+            modalCreateEditIsShown: false,
+        });
+    }
+    handleModalCreateEditExited = () => {
+        this.setState({
+            ...this.state,
+            modalCreateEditMenuItem: {
+                isHidden: false,
+                imageUrl: "",
+                imageOrientationLandscape: true,
+                menuItemTitle: "",
+                description: "",
+                price: "",
+                tagsAll: false,
+                tags: {
+                    vg: false,
+                    v: false,
+                    gf: false
+                }
+            }
+        });
+    }
+
+
+
+
+
+    handleModalCreateEditInputImageUrlChange = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.imageUrl = e.currentTarget.value;
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditToggleLandscape = (isLandscape) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.imageOrientationLandscape = isLandscape;
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputTitleChange = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.menuItemTitle = e.currentTarget.value;
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputDescriptionChange = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.description = e.currentTarget.value;
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputPriceChange = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.price = e.currentTarget.value;
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputTagAll = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            if (modalCreateEditMenuItem.tags.v && modalCreateEditMenuItem.tags.vg && modalCreateEditMenuItem.tags.gf) {
+                modalCreateEditMenuItem.tagsAll = false;
+                modalCreateEditMenuItem.tags.v = false;
+                modalCreateEditMenuItem.tags.vg = false;
+                modalCreateEditMenuItem.tags.gf = false;
+            } else {
+                modalCreateEditMenuItem.tagsAll = true;
+                modalCreateEditMenuItem.tags.v = true;
+                modalCreateEditMenuItem.tags.vg = true;
+                modalCreateEditMenuItem.tags.gf = true;
+            }
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputTagV = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.tags.v = !modalCreateEditMenuItem.tags.v;
+            if (modalCreateEditMenuItem.tags.v && modalCreateEditMenuItem.tags.vg && modalCreateEditMenuItem.tags.gf) {
+                modalCreateEditMenuItem.tagsAll = true;
+            } else {
+                modalCreateEditMenuItem.tagsAll = false;
+            }
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputTagVg = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.tags.vg = !modalCreateEditMenuItem.tags.vg;
+            if (modalCreateEditMenuItem.tags.v && modalCreateEditMenuItem.tags.vg && modalCreateEditMenuItem.tags.gf) {
+                modalCreateEditMenuItem.tagsAll = true;
+            } else {
+                modalCreateEditMenuItem.tagsAll = false;
+            }
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    handleModalCreateEditInputTagGF = (e) => {
+        if (this.state.modalCreateEditMenuItem) {
+            var modalCreateEditMenuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+            modalCreateEditMenuItem.tags.gf = !modalCreateEditMenuItem.tags.gf;
+            if (modalCreateEditMenuItem.tags.v && modalCreateEditMenuItem.tags.vg && modalCreateEditMenuItem.tags.gf) {
+                modalCreateEditMenuItem.tagsAll = true;
+            } else {
+                modalCreateEditMenuItem.tagsAll = false;
+            }
+
+            this.setState({
+                modalCreateEditMenuItem: modalCreateEditMenuItem
+            });
+        }
+    }
+    
+    // https://www.pedestrian.tv/content/uploads/2019/03/sonic-637x397.jpg
+    handleModalButtonSave = () => {
+        var menuItem = JSON.parse(JSON.stringify(this.state.modalCreateEditMenuItem));
+        menuItem.price = parseFloat(menuItem.price);
+        
+        menuItem.imageUrl = menuItem.imageUrl.trim();
+        menuItem.menuItemTitle = menuItem.menuItemTitle.trim();
+        menuItem.description = menuItem.description.trim();
+
+
+        var tempMenu = [...this.state.menu];
+        var categoryIndex = tempMenu.findIndex(curr => {
+            return curr.categoryId === this.state.sidebarCategoryActiveId;
+        });
+        if (this.state.modalCreateEditModeIsCreate) {
+            menuItem.menuItemId = uuidv4();
+            tempMenu[categoryIndex].menuItems.push(menuItem);
+        } else {
+            if (categoryIndex !== -1) {
+                var menuItemIndex = tempMenu[categoryIndex].menuItems.findIndex(curr => {
+                    return curr.menuItemId === this.state.menuItemId;
+                });
+                if (menuItemIndex !== -1) {
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].isHidden = menuItem.isHidden;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].imageUrl = menuItem.imageUrl;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].imageOrientationlandscape = menuItem.imageOrientationlandscape;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].menuItemTitle = menuItem.menuItemTitle;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].description = menuItem.description;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].price = menuItem.price;
+                    tempMenu[categoryIndex].menuItems[menuItemIndex].tags = menuItem.tags;
+                }
+            }
+        }
+
+        this.setState({
+            ...this.state,
+            menu: tempMenu,
+            modalCreateEditIsShown: false,
+        });
+    }
+
 
     render() {
         var categoriesArr = [];
@@ -265,8 +489,8 @@ class MenuBuilder extends React.Component {
             categoriesArr = this.state.menu.map((curr, i) => {
                 return (
                     <div key={i} className="d-flex my-3">
-                        <button className={curr._id === this.state.sidebarCategoryActiveId ? ("button--transparent w-100 py-2 active") : ("button--transparent bg-secondary w-100 py-2 ")}
-                            onClick={() => { this.handleSidebarCategoryOptionClick(curr._id) }}>
+                        <button className={curr.categoryId === this.state.sidebarCategoryActiveId ? ("button--transparent w-100 py-2 active") : ("button--transparent bg-secondary w-100 py-2 ")}
+                            onClick={() => { this.handleSidebarCategoryOptionClick(curr.categoryId) }}>
                             <p className="m-0 text-truncate w-100"><b>{curr.categoryTitle.toUpperCase()}</b></p>
                         </button>
                     </div>
@@ -277,7 +501,7 @@ class MenuBuilder extends React.Component {
                     return (
                         <div key={i} className="col-12 col-sm-6 col-md-4 col-lg-3 p-3">
                             <div
-                                onClick={() => { this.handleMenuItemOptionClick(curr._id) }}
+                                onClick={() => { this.handleMenuItemOptionClick(curr.menuItemId) }}
                                 className={i === this.state.menuItemActiveIndex ? "border border-dark h-100 w-100 shadow-sm" : "border border-transparent h-100 w-100"}>
                                 <MenuItemCorporate menuItem={curr} />
                             </div>
@@ -353,7 +577,7 @@ class MenuBuilder extends React.Component {
 
                 <section className="main-content-header pt-3">
                     <div className="container-fluid">
-                        <div className="row m-0 mt-3 px-2 px-lg-0 overflow-hidden shadow-sm bg-white py-3">
+                        <div className="row m-0 mt-3 px-2 px-lg-0 overflow-hidden flex-nowrap shadow-sm bg-white py-3">
                             <div className="col-3 px-2 px-lg-3">
                                 <button className="button--transparent bg-danger h-100 w-100 py-2 color-white"
                                     disabled={this.state.sidebarCategoryActiveIndex === -1 ? true : false}
@@ -370,7 +594,8 @@ class MenuBuilder extends React.Component {
                             </div>
                             <div className="col-3 px-2 px-lg-3">
                                 <button className="button--transparent bg-danger h-100 w-100 py-2 color-white"
-                                    disabled={this.state.menuItemActiveIndex === -1 ? true : false}>
+                                    disabled={this.state.menuItemActiveIndex === -1 ? true : false}
+                                    onClick={this.handleButtonEditMenuItem}>
                                     <i className="material-icons">edit</i><span className="d-none d-lg-inline-block">&nbsp;Edit</span>
                                 </button>
                             </div>
@@ -405,11 +630,158 @@ class MenuBuilder extends React.Component {
                     (<div
                         className="modal-backdrop show d-sm-none"
                         onClick={this.handleButtonSidebarToggleClick}
-                        style={{ zIndex: "9960" }}></div>
+                        style={{ zIndex: "60" }}></div>
                     )
                     :
                     ""
                 }
+                <Modal show={this.state.modalCreateEditIsShown} onHide={this.handleModalCreateEditClose} onExited={this.handleModalCreateEditExited} centered size="lg" backdrop={true}>
+                    <ModalHeader className="m-0 p-0 border-0">
+                        <button
+                            className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"
+                            onClick={this.handleModalCreateEditClose}>
+                            <i className="material-icons font-30">close</i>
+                        </button>
+                    </ModalHeader>
+                    {
+                        this.state.modalCreateEditMenuItem ?
+                            (
+                                <>
+                                    <ModalBody className="p-0 px-3 overflow-hidden">
+
+                                        <div className="row pb-2">
+                                            <div className="col-12 col-md-auto d-flex align-items-center">
+                                                <label htmlFor="inputUrl" className="font-14 color-black-04 m-0 py-2" style={{ width: "90px" }}><b>Image URL</b></label>
+                                            </div>
+                                            <div className="col-12 col-md">
+                                                <input id="inputUrl" type="text" className="form-control rounded-0" value={this.state.modalCreateEditMenuItem.imageUrl} onChange={this.handleModalCreateEditInputImageUrlChange} />
+                                            </div>
+                                            <div className="w-100 mb-3 d-none d-md-block"></div>
+                                            <div className="d-none d-md-block col-md-auto d-flex align-items-center">
+                                                <label htmlFor="inputUrl" className="font-14 color-black-04 m-0 py-2" style={{ width: "90px" }}></label>
+                                            </div>
+                                            <div className="col-12 col-md-auto">
+                                                <div className="d-flex">
+                                                    <button
+                                                        className={this.state.modalCreateEditMenuItem.imageOrientationLandscape ?
+                                                            "button--transparent bg-primary color-white rounded-0 p-2"
+                                                            :
+                                                            "button--transparent bg-light color-black rounded-0 p-2"}
+                                                        onClick={() => { this.handleModalCreateEditToggleLandscape(true) }}>
+                                                        Landscape
+                                                    </button>
+                                                    <button
+                                                        className={this.state.modalCreateEditMenuItem.imageOrientationLandscape ?
+                                                            "button--transparent bg-light color-black rounded-0 p-2"
+                                                            :
+                                                            "button--transparent bg-primary color-white rounded-0 p-2"}
+                                                        onClick={() => { this.handleModalCreateEditToggleLandscape(false) }}>
+                                                        Portrait
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="row py-2">
+                                            <div className="col-12 col-md-auto">
+                                                <label htmlFor="inputTitle" className="font-14 color-black-04 m-0 py-2" style={{ width: "90px" }}><b>Title</b></label>
+                                            </div>
+                                            <div className="col-12 col-md">
+                                                <input id="inputTitle" type="text" className="form-control rounded-0" value={this.state.modalCreateEditMenuItem.menuItemTitle} onChange={this.handleModalCreateEditInputTitleChange} />
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+                                        <div className="row py-2">
+                                            <div className="col-12 col-md-auto">
+                                                <label htmlFor="inputDescription" className="font-14 color-black-04 m-0 py-2" style={{ width: "90px" }}><b>Description</b></label>
+                                            </div>
+                                            <div className="col-12 col-md">
+                                                <textarea id="inputDescription" type="text" className="form-control rounded-0" value={this.state.modalCreateEditMenuItem.description} onChange={this.handleModalCreateEditInputDescriptionChange}></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div className="row py-2">
+                                            <div className="order-2 order-sm-1 col-12 col-sm">
+                                                <div className="d-flex align-items-center py-2 mt-3 mt-sm-0">
+                                                    <input type="checkbox" id="tagAll" checked={this.state.modalCreateEditMenuItem.tagsAll} onChange={this.handleModalCreateEditInputTagAll} />
+                                                    <label className="font-14 color-black-04 m-0 ml-2" htmlFor="tagAll"><b>Tag</b></label>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-6 col-sm-12 col-lg-6">
+                                                        <div className="d-flex align-items-center py-2">
+                                                            <input type="checkbox" id="tagVegan" checked={this.state.modalCreateEditMenuItem.tags.vg} onChange={this.handleModalCreateEditInputTagVg} />
+                                                            <label className="m-0 ml-2 text-nowrap" htmlFor="tagVegan">
+                                                                <span className="badge badge-pill table-success mx-1 py-1">Vg</span>
+                                                                <span className="d-none d-sm-inline">Vegan</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-6 col-sm-12 col-lg-6">
+                                                        <div className="d-flex align-items-center py-2">
+                                                            <input type="checkbox" id="tagVegetarian" checked={this.state.modalCreateEditMenuItem.tags.v} onChange={this.handleModalCreateEditInputTagV} />
+                                                            <label className="m-0 ml-2 text-nowrap" htmlFor="tagVegetarian">
+                                                                <span className="badge badge-pill badge-success mx-1 py-1">V</span>
+                                                                <span className="d-none d-sm-inline">Vegetarian</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-6 col-sm-12 col-lg-6">
+                                                        <div className="d-flex align-items-center py-2">
+                                                            <input type="checkbox" id="tagGlutenFree" checked={this.state.modalCreateEditMenuItem.tags.gf} onChange={this.handleModalCreateEditInputTagGF} />
+                                                            <label className="m-0 ml-2 text-nowrap" htmlFor="tagGlutenFree">
+                                                                <span className="badge badge-pill badge-warning mx-1 py-1">GF</span>
+                                                                <span className="d-none d-sm-inline">Gluten Free</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="order-1 order-sm-2 col-12 col-sm-auto">
+                                                <label className="font-14 color-black-04 m-0 py-2" htmlFor="inputPrice"><b>Price</b></label>
+                                                <div>
+                                                    <div className="d-flex align-items-end">
+                                                        <label htmlFor="inputPrice" className="m-0 py-2 mr-2"><b>$</b></label>
+                                                        <input id="inputPrice" type="text" className="form-control rounded-0" value={this.state.modalCreateEditMenuItem.price} onChange={this.handleModalCreateEditInputPriceChange} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ModalBody>
+                                    <ModalFooter className="border-0 justify-content-center px-0">
+                                        <div className="row w-100 justify-content-center mx-2">
+                                            <div className="col-12 order-1">
+                                                <p className="text-center">Create this item?</p>
+                                            </div>
+                                            <div className="order-2 order-sm-3 col-12 col-sm-6 col-md-4 mb-2 mb-sm-0 px-2">
+                                                <button
+                                                    className="btn btn-block btn-success"
+                                                    onClick={this.handleModalCreateEditClose}>
+                                                    NO
+                                        </button>
+                                            </div>
+                                            <div className="order-2 order-sm-3 col-12 col-sm-6 col-md-4 mb-2 mb-sm-0 px-2">
+                                                <button
+                                                    className="btn btn-block btn-success"
+                                                    onClick={this.handleModalButtonSave}>
+                                                    YES
+                                        </button>
+                                            </div>
+                                        </div>
+                                    </ModalFooter>
+                                </>
+                            )
+                            :
+                            ""
+                    }
+
+                </Modal>
             </div>
         );
     }

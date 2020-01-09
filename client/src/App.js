@@ -39,14 +39,14 @@ class App extends React.Component {
 
                 <div className="row justify-content-center px-3">
                   <div className="col-12 col-sm-6 border border-bottom-0 py-3">
-                    <Link to="/login">login</Link>
+                    <Link to="/login" target="_blank">login</Link>
                   </div>
                 </div>
 
 
                 <div className="row justify-content-center px-3">
                   <div className="col-12 col-sm-6 border border-bottom-0 py-3">
-                    <Link to="/corporate/menu">menu manager</Link>
+                    <Link to="/corporate/menu" target="_blank">menu manager</Link>
                   </div>
                 </div>
 
@@ -55,14 +55,14 @@ class App extends React.Component {
 
                 <div className="row justify-content-center px-3">
                   <div className="col-12 col-sm-6 border border-bottom-0 py-3">
-                    <Link to="/kitchen">view orders</Link>
+                    <Link to="/kitchen" target="_blank">view orders</Link>
                   </div>
                 </div>
 
 
                 <div className="row justify-content-center px-3">
                   <div className="col-12 col-sm-6 border border-bottom-0 py-3">
-                    <Link to="/customer">make orders</Link>
+                    <Link to="/customer" target="_blank">make orders</Link>
                   </div>
                 </div>
 

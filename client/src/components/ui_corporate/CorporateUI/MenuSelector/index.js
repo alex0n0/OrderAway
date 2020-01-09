@@ -23,7 +23,6 @@ class MenuSelector extends React.Component {
             menuPublishedId: undefined,
 
 
-
             inputCreateNewMenu: "",
             buttonCreateNewMenuDisabled: false,
             inputEditMenuTitle: "",
@@ -39,19 +38,27 @@ class MenuSelector extends React.Component {
     componentDidMount() {
         axios.get("/api/allmenus")
             .then(response => {
-                var menuPublishedIndex = response.data.restaurantMenus.findIndex(curr => {
-                    return curr.isPublished === true;
-                });
-                var menuPublishedId = menuPublishedIndex !== -1 ? response.data.restaurantMenus[menuPublishedIndex]._id : undefined;
-                var menuPublished = menuPublishedIndex !== -1 ? response.data.restaurantMenus[menuPublishedIndex] : undefined;
+                console.log(response.data.menus);
+                if (response.data.menus.length > 0) {
+                    var menuPublishedIndex = response.data.menus.findIndex(curr => {
+                        return curr.isPublished === true;
+                    });
+                    var menuPublishedId = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex]._id : undefined;
+                    var menuPublished = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex] : undefined;
 
-                this.setState({
-                    ...this.state,
-                    restaurantId: response.data.restaurant._id,
-                    menus: response.data.restaurantMenus,
-                    menuPublishedId: menuPublishedId,
-                    menuPublished: menuPublished
-                });
+                    this.setState({
+                        ...this.state,
+                        restaurantId: response.data.restaurant._id,
+                        menus: response.data.menus,
+                        menuPublishedId: menuPublishedId,
+                        menuPublished: menuPublished
+                    });
+                } else {
+                    this.setState({
+                        ...this.state,
+                        restaurantId: response.data.restaurant._id,
+                    });
+                }
             });
     }
 
@@ -211,20 +218,19 @@ class MenuSelector extends React.Component {
         var tempMenus = [...this.state.menus];
         var menuToDuplicate = { ...this.state.menuActive }
         var uploadObj = {
-            restaurantId: this.state.restaurantId,
-            menuTitle: menuToDuplicate.menuTitle
+            menuId: menuToDuplicate._id
         };
 
         axios.post("/api/allmenus/duplicate", uploadObj)
             .then(response => {
                 console.log(response.data);
-                if (response.data.dbMenu) {
-                    var newMenuIndex = tempMenus.findIndex(curr => {
+                if (response.data.menu) {
+                    var duplicatedMenuIndex = tempMenus.findIndex(curr => {
                         return curr._id === menuToDuplicate._id;
                     });
-                    console.log(newMenuIndex);
-                    if (newMenuIndex !== -1) {
-                        tempMenus.splice(newMenuIndex + 1, 0, response.data.dbMenu);
+                    console.log(duplicatedMenuIndex);
+                    if (duplicatedMenuIndex !== -1) {
+                        tempMenus.splice(duplicatedMenuIndex + 1, 0, response.data.menu);
                         this.setState({
                             ...this.state,
                             menus: tempMenus
@@ -267,6 +273,7 @@ class MenuSelector extends React.Component {
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-3"
                         key={i}
                     >
+                        <p className="font-12 color-black-04 m-0"><i>Created: 10 Nov 2019 at 11:50AM</i></p>
                         <button
                             className={buttonClassName}
                             style={{ wordBreak: "break-all" }}
@@ -354,7 +361,15 @@ class MenuSelector extends React.Component {
                                     <i className="material-icons">delete</i>&nbsp;DELETE
                                 </button>
                             </div>
-
+                            {
+                                this.state.menuPublishedId && this.state.menuActiveId && this.state.menuActiveId === this.state.menuPublishedId ?
+                                    (<div className="py-2 mt-4">
+                                        <p className="color-white font-12">No updates can be performed on a PUBLISHED menu.</p>
+                                        <p className="color-white font-12">Duplicate the menu if you wish to make changes</p>
+                                    </div>)
+                                    :
+                                    ""
+                            }
                         </div>
                     </div>
 
@@ -415,7 +430,7 @@ class MenuSelector extends React.Component {
                     </section>
                 </div>
                 {this.state.sidebarCategoryOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleButtonSidebarToggleClick} style={{
-                    zIndex: "9960"
+                    zIndex: "60"
                 }}></div>) : ""}
             </div >
         );

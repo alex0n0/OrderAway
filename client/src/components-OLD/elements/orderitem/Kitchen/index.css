@@ -1,0 +1,16 @@
+.orderitem .indicator--dot {
+    height: 10px;
+    width: 10px;
+    background-color: lime;
+}
+.orderitem .indicator--dot.late {
+    height: 10px;
+    width: 10px;
+    background-color: red;
+}
+.orderitem .indicator--border {
+    border-left: 5px solid lime;
+}
+.orderitem .indicator--border.late {
+    border-left: 5px solid red;
+}

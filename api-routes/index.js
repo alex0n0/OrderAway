@@ -1,50 +1,58 @@
 const path = require("path");
-const uuidv4 = require("uuid/v4");
 const moment = require("moment");
-const fakedb = require("../server_fakedb");
 const db = require("../db");
+const fakedb = require("../server_fakedb");
 
-const mongoose = require("mongoose");
+
+var username = "";
+username = "maxbrenner@gmail.com";
+// username = "hungryjacks@gmail.com";
+// username = "mcdonalds@gmail.com";
+
+
 module.exports = function (app) {
     // ////////////////////////////////////////////////////////////////////////////////////
-
-    app.post("/api/general/processlogin", function(req, res) {
+    app.post("/api/general/processlogin", function (req, res) {
         console.log(req.body.username, req.body.password);
-        db.Restaurant.findOne({username: req.body.username})
-        .then(function(dbRestaurant) {
-            console.log(dbRestaurant);
-            if (req.body.password === dbRestaurant.password) {
-                res.json({token: "successful!! ^o^ here is a token"});
-            }
-            else {
-                res.json({token: undefined});
-            }
-        });
+        db.Restaurant.findOne({ username: req.body.username })
+            .then(function (dbRestaurant) {
+                console.log(dbRestaurant);
+                if (req.body.password === dbRestaurant.password) {
+                    res.json({ token: "successful!! ^o^ here is a token" });
+                }
+                else {
+                    res.json({ token: undefined });
+                }
+            });
     });
-
+    // OK 
     app.get("/api/allmenus", function (req, res) {
         var responseObj = {
             restaurant: {},
-            restaurantMenus: []
+            menus: []
         }
-        db.Restaurant.findOne({ username: "maxbrenner@gmail.com" })
+        db.Restaurant.findOne({ username: username })
             .then(function (dbRestaurant) {
                 responseObj.restaurant = dbRestaurant;
                 return db.Menu.find({ restaurantId: dbRestaurant._id }).sort({ menuTitle: "asc", _id: "asc" });
             })
             .then(function (docs) {
-                responseObj.restaurantMenus = docs;
+                responseObj.menus = docs;
                 res.json(responseObj);
             })
             .catch(function (err) {
                 res.json(err);
             });
     });
+    // OK 
     app.post("/api/allmenus/create", function (req, res) {
+        var newMenuObj = {
+            restaurantId: req.body.restaurantId, menuTitle: req.body.menuTitle, isPublished: false, categories: []
+        };
         var responseObj = {
             menu: undefined,
         }
-        db.Menu.create({ restaurantId: req.body.restaurantId, menuTitle: req.body.menuTitle, isPublished: false })
+        db.Menu.create(newMenuObj)
             .then(function (dbMenu) {
                 responseObj.menu = dbMenu;
                 res.json(responseObj);
@@ -53,23 +61,38 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // need to do
+    // OK 
     app.post("/api/allmenus/duplicate", function (req, res) {
         var responseObj = {
-            dbMenu: undefined
+            menu: undefined
         }
-        db.Menu.create({ restaurantId: req.body.restaurantId, menuTitle: req.body.menuTitle, isPublished: false })
+        db.Menu.findOne({ _id: req.body.menuId })
             .then(function (dbMenu) {
-                responseObj.dbMenu = dbMenu;
-                res.json(responseObj);
+                var newMenuObj = {
+                    restaurantId: dbMenu.restaurantId,
+                    menuTitle: dbMenu.menuTitle,
+                    isPublished: false,
+                    categories: dbMenu.categories
+                };
+                // var newMenuObj = {
+                //     ...dbMenu
+                // }; // shallow copy, nested arrays and objects will not be copied
+                // delete newMenuObj._id;
+                return db.Menu.create(newMenuObj);
+            })
+            .then(function (dbMenu) {
+                responseObj.menu = dbMenu;
+                res.json({ menu: dbMenu });
             })
             .catch(function (err) {
                 res.json(err);
             });
+
     });
+    // OK 
     app.put("/api/allmenus/rename", function (req, res) {
         var responseObj = {
-            updatedMenu: undefined
+            menu: undefined
         }
         db.Menu.findOneAndUpdate({ _id: req.body.menuId }, { menuTitle: req.body.menuTitle })
             .then(function (dbMenu) {
@@ -81,12 +104,9 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
+    // OK 
     app.put("/api/allmenus/delete", function (req, res) {
         db.Menu.deleteOne({ _id: req.body.menuId })
-            .then(function (outcome) {
-                // console.log(outcome); // param is the outcome of delete
-                return db.Category.deleteMany({ menuId: req.body.menuId });
-            })
             .then(function (outcome) {
                 // console.log(outcome); // param is the outcome of delete
                 res.json(outcome);
@@ -94,8 +114,8 @@ module.exports = function (app) {
             .catch(function (err) {
                 res.json(err);
             });
-
     });
+    // OK
     app.put("/api/allmenus/publish", function (req, res) {
         var responseObj = {
             newPublishedMenu: undefined,
@@ -123,66 +143,59 @@ module.exports = function (app) {
     app.get("/api/menubuilder/:id", function (req, res) {
         var responseObj = {
             menu: undefined,
-            isPublished: false
         }
-        db.Menu.findOne({_id: req.params.id})
-        .then(function(dbMenu) {
-            if (!dbMenu.isPublished) {
-                return db.Category.find({menuId: dbMenu._id}).populate("menuItems");
-            } else {
-                responseObj.isPublished = true;
-                return [];
-            }
-        })
-        .then(function(dbCategories) {
-            responseObj.menu = dbCategories;
-            res.json(responseObj);
-        })
-        .catch(function(err) {
-            res.json(err);
-        });
+        db.Menu.findOne({ _id: req.params.id })
+            .then(function (dbMenu) {
+                if (!dbMenu.isPublished) {
+                    responseObj.menu = dbMenu;
+                    res.json(responseObj);
+                } else {
+                    res.json(responseObj);
+                }
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
     });
 
-    app.put("/api/menubuilder/:id/save", function (req, res) {
-        var menu = req.body.menu;
-        var menuIndex = fakedb.allmenus.findIndex(curr => {
-            return String(curr.id) === req.params.id;
-        });
-        fakedb.allmenus[menuIndex].menu = menu;
-        res.json({ menuDetails: fakedb.allmenus[menuIndex] });
+    app.put("/api/menubuilder/save", function (req, res) {
+        console.log("============================================")
+        console.log("id:", req.body.menuId);
+        console.log(req.body.menu);
+
+        db.Menu.findOneAndUpdate({_id: req.body.menuId}, {categories: req.body.menu})
+        .then(function(dbMenu) {
+            res.json({status: "ok"});
+        })
+
+        // var menu = req.body.menu;
+        // var menuIndex = fakedb.allmenus.findIndex(curr => {
+        //     return String(curr.id) === req.params.id;
+        // });
+        // fakedb.allmenus[menuIndex].menu = menu;
+        // res.json({ menuDetails: fakedb.allmenus[menuIndex] });
     });
     // /////////////////////////////////////////////////////////////////////////////////
+    // OK
     app.get("/api/customer", function (req, res) {
         var responseObj = {
-            restaurant: {},
-            menu: []
+            menu: {}
         };
 
-        db.Restaurant.findOne({ username: "maxbrenner@gmail.com" })
+        db.Restaurant.findOne({ username: username })
             .then(function (dbRestaurant) {
-                responseObj.restaurant = dbRestaurant;
-                return db.Menu.find({ restaurantId: dbRestaurant._id, isPublished: true });
+                return db.Menu.findOne({ restaurantId: dbRestaurant._id, isPublished: true });
             })
-            .then(function (dbMenus) {
-                if (dbMenus.length > 0) {
-                    var publishedMenuId = dbMenus[0]._id;
-                    return db.Category.find({ menuId: publishedMenuId }).populate("menuItems");
+            .then(function (dbMenu) {
+                // dbMenu = null if nothing is found
+                if (dbMenu) {
+                    responseObj.menu = dbMenu;
                 }
-                else {
-                    return [];
-                }
-            })
-            .then(function (dbCategories) {
-                responseObj.menu = dbCategories;
                 res.json(responseObj);
             })
             .catch(function (err) {
                 res.json(err);
             });
-
-        var publishedMenu = fakedb.allmenus.find(curr => {
-            return curr.published === true;
-        });
     });
     // /////////////////////////////////////////////////////////////////////////////////
     app.get("/api/kitchen", function (req, res) {
@@ -191,21 +204,21 @@ module.exports = function (app) {
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
 
         var responseObj = {
-            restaurant: undefined,
             orders: []
         }
-        db.Restaurant.findOne({ username: "maxbrenner@gmail.com" })
+        db.Restaurant.findOne({ username: username })
             .then(function (dbRestaurant) {
-                responseObj.restaurant = dbRestaurant;
+
                 return db.Order.find(
                     {
                         restaurantId: dbRestaurant._id,
                         isCompleted: false,
                         orderTime: { $gt: parseInt(todayStart.format("X")) }
                     }
-                ).populate("menuItems");
+                ).sort({ orderTime: "asc" });
             })
             .then(function (dbOrders) {
+                console.log(dbOrders);
                 responseObj.orders = dbOrders;
                 res.json(responseObj);
             })
@@ -213,47 +226,47 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
+    app.get("/api/kitchen/:orderId", function (req, res) {
+
+        db.Order.findOne({ _id: req.params.orderId }).populate("menuItems")
+            .then(function (dbOrder) {
+                res.json(dbOrder);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
     app.post("/api/kitchen/create", function (req, res) {
-        var menuItemObj = {
-            restaurantId: req.body.restaurantId,
-            isCompleted: false,
-            tableNumber: req.body.tableNumber,
-            orderTime: req.body.orderTime,
-            category: [req.body.menuItem.category],
-            quantity: [req.body.menuItem.quantity],
-            menuItems: [req.body.menuItem._id]
-        }
+        var menuItemObj = req.body.order;
+        menuItemObj.isCompleted = false;
+
         var responseObj = {
             order: undefined
         }
         db.Order.create(menuItemObj)
-        .then(function(dbOrder) {
-            responseObj.order = dbOrder;
-            res.json(responseObj);
-        });
+            .then(function (dbOrder) {
+                responseObj.order = dbOrder;
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
     });
     app.put("/api/kitchen/done", function (req, res) {
-        db.Order.findOneAndUpdate({_id: req.body.orderId}, {isCompleted: true})
-        .then(function(dbOrder) {
-            console.log(dbOrder) // pre-update data
-            if (dbOrder) {
-                res.json({order: dbOrder});
-            } else {
-                res.json({order: undefined});
-            }
-        })
-        .catch(function(err) {
-            res.json(err);
-        });
+        db.Order.findOneAndUpdate({ _id: req.body.orderId }, { isCompleted: true })
+            .then(function (dbOrder) {
+                // console.log(dbOrder) // pre-update data
+                if (dbOrder) {
+                    res.json({ order: dbOrder });
+                } else {
+                    res.json({ order: undefined });
+                }
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
     });
     // ////////////////////////////////////////////////////////////////////////////////////
-
-    app.get("/testingproxy", function (req, res) {
-        res.json({ "message": "proxy was successful" });
-        // res.status(404).end(); // not found
-        // res.status(400).end(); // bad request
-    });
-
 
     app.get("/*", function (req, res) {
         res.sendFile(path.join(__dirname, '../client/build/index.html'));

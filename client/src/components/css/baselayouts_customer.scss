@@ -53,8 +53,8 @@ $break-xl: 1200px;
 }
 
 :root {
-    --customerHeaderNavigationZIndex: 10000;
-    --customerSidebarNavigationZIndex: 9990;
+    --customerHeaderNavigationZIndex: 100;
+    --customerSidebarNavigationZIndex: 90;
 
     --customerHeaderNavigationHeight: 80px;
     --customerSidebarNavigationWidth: 200px;
@@ -134,5 +134,68 @@ body {
 
     @include break-sm {
         padding: var(--customerHeaderNavigationHeight) 0px 0px var(--customerSidebarNavigationWidth);
+    }
+
+    
+}
+
+
+.customerModalCloseButton {
+    z-index: 2;
+    top: 0px;
+    right: 0px;
+    &:hover {
+        color: black !important;
+    }
+    &:disabled {
+        color: rgba(0, 0, 0, 0.2) !important;
+    }
+}
+
+.customerModalCountDisplay {
+    position: relative;
+    z-index: 2;
+    &::before {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 1px;
+        width: calc(100% + 50px);
+        border-top: 1px dashed rgb(70, 70, 70);
+    }
+    p {
+        background-color: white;
+        border: 1px solid rgb(70, 70, 70);
+    }
+}
+
+
+
+.customerModalCountButton {
+    z-index: 3;
+    background-color: white;
+    border: 1px dashed rgb(70, 70, 70);
+    height: 60px;
+    width: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    &.customerModalCountButton--left {
+        left: -70px;
+    }
+    &.customerModalCountButton--right {
+        right: -70px;
+    }
+    &:hover {
+        background-color: gainsboro;
+    }
+    &:focus {
+        background-color: gainsboro;
+    }
+    &:disabled {
+        filter: brightness(150%);
+        background-color: white;
     }
 }

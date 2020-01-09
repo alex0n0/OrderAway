@@ -8,7 +8,7 @@ class OrderItem extends React.Component {
         var timeFrom = moment(this.props.orderItem.orderTime, "X").from(moment(this.props.currTime));
         var millisFrom = moment(this.props.currTime).format('x') - moment(this.props.orderItem.orderTime, "X").format('x');
         var isLate = false;
-        if (millisFrom / 60000 > 2) {
+        if (millisFrom / 60000 > 10) {
             isLate = true;
         }
         return (
@@ -37,11 +37,11 @@ class OrderItem extends React.Component {
                                             <p className="m-0 font-12 color-white-06 text-truncate">
                                                 {/* Menu {curr._id}
                                                 &nbsp;&middot;&nbsp; */}
-                                                {this.props.orderItem.category[i].toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}
+                                                {curr.categoryTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}
                                             </p>
                                             <p className="m-0 font-16 d-block">{curr.menuItemTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
                                         </div>
-                                        <p className="col-auto p-0 m-0 font-20 pl-2" style={{ flex: "0 0 68px" }}><span className="color-white-06">&times;</span><b>{this.props.orderItem.quantity[i]}</b></p>
+                                        <p className="col-auto p-0 m-0 font-20 pl-2" style={{ flex: "0 0 68px" }}><span className="color-white-06">&times;</span><b>{curr.quantity}</b></p>
                                     </div>
                                 );
                             })

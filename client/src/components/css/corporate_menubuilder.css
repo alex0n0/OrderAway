@@ -1,7 +1,7 @@
 :root {
   --corporateMainContentSidebarNavigationWidth: 200px;
-  --mainContentHeaderZIndex: 9950;
-  --mainContentSidebarZIndex: 9970;
+  --mainContentSidebarZIndex: 70;
+  --mainContentHeaderZIndex: 50;
 }
 
 .menubuilder .container-fluid {
@@ -76,6 +76,7 @@
   top: var(--headerNavigationHeight);
   left: calc(var(--corporateSidebarNavigationWidth) + 20px);
   z-index: var(--mainContentHeaderZIndex);
+  min-width: calc(var(--pageMinWidth) - var(--corporateSidebarNavigationWidth) - 20px);
   width: calc(100% - var(--corporateSidebarNavigationWidth) - 20px);
   background-color: var(--corporateMainBgColor);
 }

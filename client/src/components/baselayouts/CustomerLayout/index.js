@@ -81,7 +81,7 @@ class CustomerLayout extends React.Component {
                         </div>
                     </main>
                 </div>
-                {this.state.sidebarOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleSidebarToggle}></div>) : ""}
+                {this.state.sidebarOpen ? (<div className="modal-backdrop show d-sm-none" onClick={this.handleSidebarToggle} style={{ zIndex: "60" }}></div>) : ""}
 
             </>
         );
