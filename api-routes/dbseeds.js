@@ -34,86 +34,86 @@ var arrRestaurant1Menu1Category1MenuItems = [
         price: 15.30,
         tags: { vg: false, v: false, gf: false }
     },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/G-S0Iihh/w643-h428-cfill-q90/taste/2016/11/chicken-supreme-pizza-87871-1.jpeg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "supreme pizza",
-        description: "a bit of everything",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/Tzf7Gbwg/w643-h428-cfill-q90/taste/2016/11/bbq-meatlovers-pizza-34466-1.jpeg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "meatlovers pizza",
-        description: "5 kinds of meat",
-        price: 12.99,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/-4Khkr79/w720-h480-cfill-q80/taste/2019/05/prawn-fetta-pizzas-149913-1.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "prawn and fetta pizza",
-        description: "",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/qH9yxHr0/w720-h480-cfill-q80/taste/2019/04/pork-sausage-and-ricotta-pizzas-148994-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "Pork sausage and ricotta pizza",
-        description: "",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/bRNtXRam/w720-h480-cfill-q80/taste/2019/03/lamb-and-eggplant-pastry-pizzas-148069-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "lamb and eggplant pastry pizza",
-        description: "",
-        price: 12.99,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/qKTwM-iZ/w720-h480-cfill-q80/taste/2019/07/pulled-beef-pizza-taste-152018-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "pulled beef pizza",
-        description: "",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/TjYXfCAQ/w720-h480-cfill-q80/taste/2019/09/wholemeal-pizzas-with-tomato-pesto-153978-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "wholemeal tomato and pesto pizza",
-        description: "",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/pX9xJm54/w720-h480-cfill-q80/taste/2019/01/speedy-zucchini-and-ricotta-pizza-with-crispy-kale-146056-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "zucchini and ricotta pizza with crispy kale",
-        description: "",
-        price: 12.99,
-        tags: { vg: false, v: false, gf: false }
-    }
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/G-S0Iihh/w643-h428-cfill-q90/taste/2016/11/chicken-supreme-pizza-87871-1.jpeg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "supreme pizza",
+    //     description: "a bit of everything",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/Tzf7Gbwg/w643-h428-cfill-q90/taste/2016/11/bbq-meatlovers-pizza-34466-1.jpeg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "meatlovers pizza",
+    //     description: "5 kinds of meat",
+    //     price: 12.99,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/-4Khkr79/w720-h480-cfill-q80/taste/2019/05/prawn-fetta-pizzas-149913-1.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "prawn and fetta pizza",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/qH9yxHr0/w720-h480-cfill-q80/taste/2019/04/pork-sausage-and-ricotta-pizzas-148994-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "Pork sausage and ricotta pizza",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/bRNtXRam/w720-h480-cfill-q80/taste/2019/03/lamb-and-eggplant-pastry-pizzas-148069-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "lamb and eggplant pastry pizza",
+    //     description: "",
+    //     price: 12.99,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/qKTwM-iZ/w720-h480-cfill-q80/taste/2019/07/pulled-beef-pizza-taste-152018-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "pulled beef pizza",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/TjYXfCAQ/w720-h480-cfill-q80/taste/2019/09/wholemeal-pizzas-with-tomato-pesto-153978-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "wholemeal tomato and pesto pizza",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/pX9xJm54/w720-h480-cfill-q80/taste/2019/01/speedy-zucchini-and-ricotta-pizza-with-crispy-kale-146056-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "zucchini and ricotta pizza with crispy kale",
+    //     description: "",
+    //     price: 12.99,
+    //     tags: { vg: false, v: false, gf: false }
+    // }
 ]
 var objRestaurant1Menu1Category2 = {
     categoryId: uuidv4(),
@@ -132,26 +132,26 @@ var arrRestaurant1Menu1Category2MenuItems = [
         price: 15.30,
         tags: { vg: false, v: false, gf: false }
     },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/k82dcCDv/w643-h428-cfill-q90/taste/2016/11/mid-week-lamb-ragu-92302-1.jpeg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "lamb ragu",
-        description: "lamb",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/CTlLYX9-/w643-h428-cfill-q90/taste/2019/04/onepotcreamyporkpasta-148615-1.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "Creamy Tuscan Sausage Pasta",
-        description: "tasty",
-        price: 12.99,
-        tags: { vg: false, v: false, gf: false }
-    },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/k82dcCDv/w643-h428-cfill-q90/taste/2016/11/mid-week-lamb-ragu-92302-1.jpeg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "lamb ragu",
+    //     description: "lamb",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/CTlLYX9-/w643-h428-cfill-q90/taste/2019/04/onepotcreamyporkpasta-148615-1.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "Creamy Tuscan Sausage Pasta",
+    //     description: "tasty",
+    //     price: 12.99,
+    //     tags: { vg: false, v: false, gf: false }
+    // },
 ];
 var objRestaurant1Menu1Category3 = {
     categoryId: uuidv4(),
@@ -217,36 +217,36 @@ var arrRestaurant2Menu1Category1MenuItems = [
         price: 15.30,
         tags: { vg: false, v: false, gf: false }
     },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/Tip1qG7D/w643-h428-cfill-q90/taste/2019/02/veggie-kimchi-burger-147372-1.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "Veggie and kimchi burger",
-        description: "",
-        price: 15.30,
-        tags: { vg: true, v: true, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/ez51oIwU/w643-h428-cfill-q90/taste/2020/01/chicken-free-chicken-and-avocado-burger-02-157124-1.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "Chicken-free schnitzel and avocado burger",
-        description: "",
-        price: 15.30,
-        tags: { vg: true, v: true, gf: false }
-    },
-    {
-        menuItemId: uuidv4(),
-        isHidden: false,
-        imageUrl: "https://img.taste.com.au/b7r04U17/w643-h428-cfill-q90/taste/2019/09/beef-burger-with-tomato-salsa-154171-2.jpg",
-        imageOrientationLandscape: true,
-        menuItemTitle: "Beef burger with fresh tomato salsa",
-        description: "",
-        price: 15.30,
-        tags: { vg: false, v: false, gf: false }
-    }
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/Tip1qG7D/w643-h428-cfill-q90/taste/2019/02/veggie-kimchi-burger-147372-1.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "Veggie and kimchi burger",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: true, v: true, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/ez51oIwU/w643-h428-cfill-q90/taste/2020/01/chicken-free-chicken-and-avocado-burger-02-157124-1.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "Chicken-free schnitzel and avocado burger",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: true, v: true, gf: false }
+    // },
+    // {
+    //     menuItemId: uuidv4(),
+    //     isHidden: false,
+    //     imageUrl: "https://img.taste.com.au/b7r04U17/w643-h428-cfill-q90/taste/2019/09/beef-burger-with-tomato-salsa-154171-2.jpg",
+    //     imageOrientationLandscape: true,
+    //     menuItemTitle: "Beef burger with fresh tomato salsa",
+    //     description: "",
+    //     price: 15.30,
+    //     tags: { vg: false, v: false, gf: false }
+    // }
 ];
 var objRestaurant3 = {
     restaurantTitle: "mcdonalds",

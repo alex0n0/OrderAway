@@ -7,6 +7,7 @@ import CustomerUI from './components/ui_restaurant/CustomerUI';
 import KitchenUI from './components/ui_restaurant/KitchenUI';
 import LoginUI from './components/ui_login';
 // import ServerUI from './components/ui_restaurant/ServerUI';
+import RegexTestComponent from './components/test/regextest.js';
 
 
 import axios from 'axios';
@@ -94,6 +95,7 @@ class App extends React.Component {
           <Route path="/customer" component={CustomerUI} />
           <Route path="/kitchen" component={KitchenUI} />
           <Route path="/login" component={LoginUI} />
+          <Route path="/regextest" component={RegexTestComponent} />
           {/* <Route path="/server" component={CustomerUI} /> */}
           {/* <Route path="/chef" render={() => (<h1>chef</h1>)}/>
         <Route path="/server" render={() => (<h1>server</h1>)} /> */}

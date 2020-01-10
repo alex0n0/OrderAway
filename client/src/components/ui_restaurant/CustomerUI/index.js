@@ -229,13 +229,13 @@ class CustomerUIComponent extends React.Component {
                     </div>
                     <div className="order-3 order-sm-2 col-12 col-sm-6 col-md-4 px-2">
                       <button
-                        className="btn btn-block btn-danger"
+                        className="button--transparent bg-danger h-100 w-100 color-white py-2"
                         disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
                         onClick={this.handleModalOrderClose}>NO</button>
                     </div>
                     <div className="order-2 order-sm-3 col-12 col-sm-6 col-md-4 mb-2 mb-sm-0 px-2">
                       <button
-                        className="btn btn-block btn-success"
+                        className="button--transparent bg-success h-100 w-100 color-white py-2"
                         disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
                         onClick={this.handleModalOrderButtonOrderClick}>YES</button>
                     </div>

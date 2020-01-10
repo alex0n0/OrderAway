@@ -7,9 +7,9 @@
 
 .menu-item-image.menu-item-image--landscape {
     width: auto;
-    height: 100%;
+    height: 105%;
 }
 .menu-item-image.menu-item-image--portrait {
-    width: 100%;
+    width: 105%;
     height: auto;
 }

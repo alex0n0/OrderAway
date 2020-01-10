@@ -159,9 +159,6 @@ module.exports = function (app) {
     });
 
     app.put("/api/menubuilder/save", function (req, res) {
-        console.log("============================================")
-        console.log("id:", req.body.menuId);
-        console.log(req.body.menu);
 
         db.Menu.findOneAndUpdate({_id: req.body.menuId}, {categories: req.body.menu})
         .then(function(dbMenu) {
