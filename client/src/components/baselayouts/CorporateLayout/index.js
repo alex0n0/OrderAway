@@ -10,13 +10,23 @@ import DropdownItem from 'react-bootstrap/DropdownItem';
 import '../../css/baselayouts_corporate.css';
 
 class CorporateLayout extends React.Component {
+    // componentDidMount() {
+    //     console.log(this.props.history);
+    // }
+
+    handleButtonClickSignOut = () => {
+        console.log("clicked");
+        document.cookie = "U_TKN=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_ID=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        this.props.history.push("/login");
+    }
 
     render() {
         return (
             <>
                 <header className={this.props.darkTheme ? "corporate header-navigation shadow--basic darkTheme" : "corporate header-navigation shadow--basic"}>
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
-                        <button className="button--transparent h-100 px-4 mr-auto">ZZZ</button>
+                        <button className="button--transparent h-100 px-4 mr-auto">Untitled</button>
 
                         <Dropdown className="h-100">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
@@ -30,12 +40,16 @@ class CorporateLayout extends React.Component {
                             </DropdownToggle>
 
                             <DropdownMenu alignRight={true}>
-                                <DropdownItem href="#/action-1">Settings</DropdownItem>
+                                <DropdownItem onClick={this.handleButtonClickSignOut}>Settings</DropdownItem>
                                 <Dropdown.Divider/>
-                                <DropdownItem href="#/action-1">Sign out</DropdownItem>
+                                <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem>
+                                {/* <button 
+                                    className="button--transparent border w-100 h-100 py-2 px-4 justify-content-start text-truncate"
+                                    onClick={this.handleButtonClickSignOut}>
+                                    Sign out
+                                </button> */}
                             </DropdownMenu>
                         </Dropdown>
-
                     </div>
                 </header >
                 <section className={this.props.darkTheme ? "corporate sidebar-navigation shadow--basic darkTheme" : "corporate sidebar-navigation shadow--basic"}>

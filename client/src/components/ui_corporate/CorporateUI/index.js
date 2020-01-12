@@ -15,6 +15,9 @@ class CorporateUIComponent extends React.Component {
             sidebarMenuActiveIndex: 0,
         }
     }
+    // componentDidMount() {
+    //     console.log(this.props.history);
+    // }
 
     handleSidebarOptionClick = (i) => {
         this.setState({
@@ -42,13 +45,13 @@ class CorporateUIComponent extends React.Component {
                     </CorporateLayout>
                 </Route>
                 <Route exact path="/corporate/menu">
-                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick}>
-                        <MenuSelector />
+                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
+                        <MenuSelector history={this.props.history}/>
                     </CorporateLayout>
                 </Route>
                 <Route path="/corporate/menu/builder/:id">
-                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick}>
-                        <MenuBuilder />
+                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
+                        <MenuBuilder history={this.props.history}/>
                     </CorporateLayout>
                 </Route>
             </>

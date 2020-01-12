@@ -9,6 +9,8 @@ class MenuSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            token: false,
+            uid: undefined,
             restaurantId: undefined,
             sidebarCategoryOpen: false,
             menus: [],
@@ -36,30 +38,55 @@ class MenuSelector extends React.Component {
 
 
     componentDidMount() {
-        axios.get("/api/allmenus")
-            .then(response => {
-                console.log(response.data.menus);
-                if (response.data.menus.length > 0) {
-                    var menuPublishedIndex = response.data.menus.findIndex(curr => {
-                        return curr.isPublished === true;
-                    });
-                    var menuPublishedId = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex]._id : undefined;
-                    var menuPublished = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex] : undefined;
+        var cookies = document.cookie;
+        var cookiesArr = cookies.split(";").map(curr => curr.trim());
+        cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+        var token = cookiesArr.find(curr => {
+            return curr[0] === "U_TKN";            
+        });
+        var uid = cookiesArr.find(curr => {
+            return curr[0] === "U_ID";            
+        });
 
-                    this.setState({
-                        ...this.state,
-                        restaurantId: response.data.restaurant._id,
-                        menus: response.data.menus,
-                        menuPublishedId: menuPublishedId,
-                        menuPublished: menuPublished
-                    });
+        if (token) {
+            this.setState({
+                ...this.state,
+                token: token[1],
+                uid: uid[1]
+            });
+            axios.post("/api/allmenus", {uid: uid[1]}, { headers: { Authorization: "Bearer " + token[1] } })
+            .then(response => {
+                if (response.data.success === false) {
+                    this.props.history.push("/login");
                 } else {
-                    this.setState({
-                        ...this.state,
-                        restaurantId: response.data.restaurant._id,
-                    });
+                    if (response.data.menus.length > 0) {
+                        var menuPublishedIndex = response.data.menus.findIndex(curr => {
+                            return curr.isPublished === true;
+                        });
+                        var menuPublishedId = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex]._id : undefined;
+                        var menuPublished = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex] : undefined;
+
+                        this.setState({
+                            ...this.state,
+                            tokenValid: true,
+                            restaurantId: response.data.restaurant._id,
+                            menus: response.data.menus,
+                            menuPublishedId: menuPublishedId,
+                            menuPublished: menuPublished
+                        });
+                    } else {
+                        this.setState({
+                            ...this.state,
+                            restaurantId: response.data.restaurant._id,
+                        });
+                    }
                 }
             });
+        } else {
+            this.props.history.push("/login");
+        }
+
+
     }
 
     handleButtonSidebarToggleClick = () => {
@@ -97,9 +124,10 @@ class MenuSelector extends React.Component {
 
         var uploadObj = {
             menuId: this.state.menuActive._id,
-            menuTitle: this.state.inputEditMenuTitle.trim()
+            menuTitle: this.state.inputEditMenuTitle.trim(),
+            uid: this.state.uid
         };
-        axios.put("/api/allmenus/rename", uploadObj)
+        axios.put("/api/allmenus/rename", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 tempMenus.forEach(curr => {
                     if (curr._id === uploadObj.menuId) {
@@ -131,9 +159,9 @@ class MenuSelector extends React.Component {
             buttonCreateNewMenuDisabled: true
         });
 
-        var uploadObj = { restaurantId: this.state.restaurantId, menuTitle: this.state.inputCreateNewMenu.trim() };
+        var uploadObj = { restaurantId: this.state.restaurantId, menuTitle: this.state.inputCreateNewMenu.trim(), uid: this.state.uid };
 
-        axios.post("/api/allmenus/create", uploadObj)
+        axios.post("/api/allmenus/create", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 tempMenus.push(response.data.menu);
                 this.setState({
@@ -154,10 +182,11 @@ class MenuSelector extends React.Component {
     handleButtonDeleteMenu = () => {
         var tempMenus = [...this.state.menus];
         var uploadObj = {
-            restaurantId: this.state.restaurantId,
+            // restaurantId: this.state.restaurantId,
             menuId: this.state.menuActive._id
         };
-        axios.put("/api/allmenus/delete", uploadObj)
+
+        axios.put("/api/allmenus/delete", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 tempMenus = tempMenus.filter(curr => {
                     if (curr._id === uploadObj.menuId) {
@@ -188,7 +217,8 @@ class MenuSelector extends React.Component {
             currentlyPublishedMenuId: this.state.menuPublishedId
         };
 
-        axios.put("/api/allmenus/publish", uploadObj)
+        
+        axios.put("/api/allmenus/publish", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 var newPublishedMenu = response.data.newPublishedMenu;
                 var oldPublishedMenu = response.data.oldPublishedMenu;
@@ -221,14 +251,12 @@ class MenuSelector extends React.Component {
             menuId: menuToDuplicate._id
         };
 
-        axios.post("/api/allmenus/duplicate", uploadObj)
+        axios.post("/api/allmenus/duplicate", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
-                console.log(response.data);
                 if (response.data.menu) {
                     var duplicatedMenuIndex = tempMenus.findIndex(curr => {
                         return curr._id === menuToDuplicate._id;
                     });
-                    console.log(duplicatedMenuIndex);
                     if (duplicatedMenuIndex !== -1) {
                         tempMenus.splice(duplicatedMenuIndex + 1, 0, response.data.menu);
                         this.setState({

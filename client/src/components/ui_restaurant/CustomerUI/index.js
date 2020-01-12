@@ -19,6 +19,8 @@ class CustomerUIComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: undefined,
+      uid: undefined,
       restaurantId: undefined,
       menuTitle: undefined,
       tableNumber: 1,
@@ -37,18 +39,42 @@ class CustomerUIComponent extends React.Component {
 
   componentDidMount() {
     // this.socket = socketIOClient("localhost:5000");
-    axios.get("/api/customer")
-      .then(response => {
-        if (response.data.menu.categories) {
-          this.setState({
-            ...this.state,
-            restaurantId: response.data.menu.restaurantId,
-            menuTitle: response.data.menu.menuTitle,
-            menu: response.data.menu.categories,
-            sidebarMenuActiveIndex: response.data.menu.categories.length === 0 ? -1 : 0
-          });
-        }
+    var cookies = document.cookie;
+    var cookiesArr = cookies.split(";").map(curr => curr.trim());
+    cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+    var token = cookiesArr.find(curr => {
+      return curr[0] === "U_TKN";
+    });
+    var uid = cookiesArr.find(curr => {
+      return curr[0] === "U_ID";
+    });
+
+    if (token) {
+      this.setState({
+        ...this.state,
+        token: token[1],
+        uid: uid[1]
       });
+
+      axios.post("/api/customer", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+        .then(response => {
+          if (response.data.success === false) {
+            this.props.history.push("/login");
+          } else {
+            if (response.data.menu.categories) {
+              this.setState({
+                ...this.state,
+                restaurantId: response.data.menu.restaurantId,
+                menuTitle: response.data.menu.menuTitle,
+                menu: response.data.menu.categories,
+                sidebarMenuActiveIndex: response.data.menu.categories.length === 0 ? -1 : 0
+              });
+            }
+          }
+        });
+    } else {
+      this.props.history.push("/login");
+    }
   }
 
   handleSidebarOptionClick = (i) => {
@@ -122,7 +148,7 @@ class CustomerUIComponent extends React.Component {
       menuItems: tempOrderMenuItemList,
     };
 
-    axios.post("/api/kitchen/create", { order: uploadObj })
+    axios.post("/api/kitchen/create", { order: uploadObj }, { headers: { Authorization: "Bearer " + this.state.token } })
       .then(response => {
         this.setState({
           ...this.state,
@@ -153,7 +179,7 @@ class CustomerUIComponent extends React.Component {
     return (
       <>
         <Route exact path="/customer">
-          <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick}>
+          <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
             <div className="container-fluid py-3">
               <div className="row">
                 {/* MENU ITEM START */}

@@ -41,17 +41,22 @@ class LoginUI extends React.Component {
                 buttonFormSubmitIsDisabled: true
             });
 
-            axios.post("/api/general/processlogin", { username: this.state.loginFormInputEmail.trim(), password: this.state.loginFormInputPassword })
+            let uploadObj = { username: this.state.loginFormInputEmail.trim(), password: this.state.loginFormInputPassword }
+
+            axios.post("/api/general/processlogin", uploadObj)
                 .then(response => {
-                    console.log(response.data);
-                    if (response.data.token) {
+                    // console.log(response.data);
+                    if (response.data.success === true) {
+                        document.cookie = `U_TKN=${response.data.token}`;
+                        document.cookie = `U_ID=${response.data.uid}`;
                         this.props.history.push('/corporate/menu');
-                    } else {
+                    } else if (response.data.success === false) {
+                        console.log("fix your shit");                        
                         this.setState({
                             ...this.state,
                             buttonFormSubmitIsDisabled: false,
                             loginFormInputPassword: ""
-                        });    
+                        });
                     }
                 });
         }

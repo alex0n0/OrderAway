@@ -13,6 +13,8 @@ class KitchenUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            token: undefined,
+            uid: undefined,
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 0,
             orders: [],
@@ -25,60 +27,86 @@ class KitchenUI extends React.Component {
     // socket;
 
     componentDidMount() {
+        var cookies = document.cookie;
+        var cookiesArr = cookies.split(";").map(curr => curr.trim());
+        cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+        var token = cookiesArr.find(curr => {
+            return curr[0] === "U_TKN";
+        });
+        var uid = cookiesArr.find(curr => {
+            return curr[0] === "U_ID";
+        });
 
-
-        axios.get("/api/kitchen")
-            .then(response => {
-                console.log(response.data.orders);
-                var tempOrders = response.data.orders;
-                tempOrders.forEach(curr => {
-                    curr.buttonDoneIsDisabled = false;
-                });
-                this.setState({
-                    ...this.state,
-                    orders: tempOrders
-                });
+        if (token) {
+            this.setState({
+                ...this.state,
+                token: token[1],
+                uid: uid[1]
             });
 
-        // this.socket = socketIOClient("localhost:5000");
-        // this.socket.on("orderzzzzz", data => {
-        //     console.log(data);
-        //     // if (data.orderId) {
-        //     //     axios.get("/api/kitchen/" + data.orderId)
-        //     //         .then(response => {
-        //     //             response.data.buttonDoneIsDisabled = false;
-        //     //             var tempOrders = [...this.state.orders];
-        //     //             tempOrders.push(response.data);
 
-        //     //             this.setState({
-        //     //                 ...this.state,
-        //     //                 orders: tempOrders
-        //     //             });
-        //     //         });
-        //     // }
-        // });
-
-        this.interval = setInterval(() => {
-            axios.get("/api/kitchen")
-            .then(response => {
-                var tempOrders = response.data.orders;
-                tempOrders.forEach(curr => {
-                    curr.buttonDoneIsDisabled = false;
+            axios.post("/api/kitchen", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+                .then(response => {
+                    if (response.data.success === false) {
+                        this.props.history.push("/login");
+                    } else {
+                        var tempOrders = response.data.orders;
+                        tempOrders.forEach(curr => {
+                            curr.buttonDoneIsDisabled = false;
+                        });
+                        this.setState({
+                            ...this.state,
+                            orders: tempOrders
+                        });
+                    }
                 });
-                this.setState({
-                    ...this.state,
-                    orders: tempOrders,
-                    currTime: moment()
-                });
-            });
-        }, 10000);
 
-        // this.interval = setInterval(() => {
-        //     this.setState({
-        //         ...this.state,
-        //         currTime: moment()
-        //     });
-        // }, 15000);
+            // this.socket = socketIOClient("localhost:5000");
+            // this.socket.on("orderzzzzz", data => {
+            //     console.log(data);
+            //     // if (data.orderId) {
+            //     //     axios.get("/api/kitchen/" + data.orderId)
+            //     //         .then(response => {
+            //     //             response.data.buttonDoneIsDisabled = false;
+            //     //             var tempOrders = [...this.state.orders];
+            //     //             tempOrders.push(response.data);
+
+            //     //             this.setState({
+            //     //                 ...this.state,
+            //     //                 orders: tempOrders
+            //     //             });
+            //     //         });
+            //     // }
+            // });
+
+            this.interval = setInterval(() => {
+                axios.post("/api/kitchen", { uid: this.state.uid }, { headers: { Authorization: "Bearer " + this.state.token } })
+                    .then(response => {
+                        if (response.data.success === false) {
+                            this.props.history.push("/login");
+                        } else {
+                            var tempOrders = response.data.orders;
+                            tempOrders.forEach(curr => {
+                                curr.buttonDoneIsDisabled = false;
+                            });
+                            this.setState({
+                                ...this.state,
+                                orders: tempOrders,
+                                currTime: moment()
+                            });
+                        }
+                    });
+            }, 10000);
+
+            // this.interval = setInterval(() => {
+            //     this.setState({
+            //         ...this.state,
+            //         currTime: moment()
+            //     });
+            // }, 15000);
+        } else {
+            this.props.history.push("/login");
+        }
     }
 
     componentWillUnmount() {
@@ -98,7 +126,7 @@ class KitchenUI extends React.Component {
             orders: tempOrders
         });
 
-        axios.put("/api/kitchen/done", { orderId: orderItem._id })
+        axios.put("/api/kitchen/done", { orderId: orderItem._id }, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
                     return curr._id === orderItem._id;
@@ -134,7 +162,7 @@ class KitchenUI extends React.Component {
     render() {
         var ordersArr = [];
         if (this.state.orders.length > 0) {
-                ordersArr = this.state.orders.map((curr, i) => {
+            ordersArr = this.state.orders.map((curr, i) => {
                 return (
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-2 px-2 position-relative"
                         key={i}
@@ -148,7 +176,7 @@ class KitchenUI extends React.Component {
             });
         }
         return (
-            <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick}>
+            <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
                 <div className="py-3 px-3">
 
                     <div className="container-fluid">

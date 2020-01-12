@@ -18,6 +18,8 @@ class MenuBuilder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            token: undefined,
+            uid: undefined,
             menu: [],
             sidebarCategoryActiveIndex: -1,
             sidebarCategoryActiveId: undefined,
@@ -36,23 +38,44 @@ class MenuBuilder extends React.Component {
     }
 
     componentDidMount() {
-        var idStartIndex = window.location.pathname.lastIndexOf("/") + 1;
-        var id = window.location.pathname.substring(idStartIndex);
-        axios.get("/api/menubuilder/" + id)
-            .then(response => {
-                if (response.data.menu) {
-                    this.setState({
-                        ...this.state,
-                        menuId: response.data.menu._id,
-                        menu: response.data.menu.categories,
-                        sidebarCategoryActiveIndex: response.data.menu.categories.length !== 0 ? 0 : -1,
-                        sidebarCategoryActiveId: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryId : undefined,
-                        inputRenameCategory: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryTitle : "",
-                    });
-                } else {
-                    console.log("error has occured, menu undefined");
-                }
+        var cookies = document.cookie;
+        var cookiesArr = cookies.split(";").map(curr => curr.trim());
+        cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+        var token = cookiesArr.find(curr => {
+            return curr[0] === "U_TKN";
+        });
+        var uid = cookiesArr.find(curr => {
+            return curr[0] === "U_ID";
+        });
+
+        if (token) {
+            this.setState({
+                ...this.state,
+                token: token[1],
+                uid: uid[1]
             });
+
+            var idStartIndex = window.location.pathname.lastIndexOf("/") + 1;
+            var id = window.location.pathname.substring(idStartIndex);
+            axios.get("/api/menubuilder/" + id, { headers: { Authorization: "Bearer " + token[1] } })
+                .then(response => {
+                    if (response.data.menu) {
+                        this.setState({
+                            ...this.state,
+                            menuId: response.data.menu._id,
+                            menu: response.data.menu.categories,
+                            sidebarCategoryActiveIndex: response.data.menu.categories.length !== 0 ? 0 : -1,
+                            sidebarCategoryActiveId: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryId : undefined,
+                            inputRenameCategory: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryTitle : "",
+                        });
+                    } else {
+                        console.log("error has occured, menu undefined");
+                    }
+                });
+        } else {
+            this.props.history.push("/login");
+        }
+
     }
 
     handleButtonSidebarToggleClick = () => {
@@ -276,13 +299,9 @@ class MenuBuilder extends React.Component {
 
 
     handleButtonSaveMenu = () => {
-        console.log(this.state.menu);
-        axios.put("/api/menubuilder/save", { menuId: this.state.menuId, menu: this.state.menu })
+        axios.put("/api/menubuilder/save", { menuId: this.state.menuId, menu: this.state.menu }, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
-                // this.setState({
-                //     ...this.state,
-                //     menuDetails: response.data.menuDetails
-                // });
+                // console.log(response.data);
             });
     }
 

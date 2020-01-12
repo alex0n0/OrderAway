@@ -3,6 +3,8 @@ const moment = require("moment");
 const db = require("../db");
 const fakedb = require("../server_fakedb");
 
+var login = require("./tokengenerate.js");
+let middleware = require('./tokencheck.js');
 
 var username = "";
 username = "maxbrenner@gmail.com";
@@ -10,28 +12,20 @@ username = "maxbrenner@gmail.com";
 // username = "mcdonalds@gmail.com";
 
 
+
 module.exports = function (app) {
     // ////////////////////////////////////////////////////////////////////////////////////
     app.post("/api/general/processlogin", function (req, res) {
-        console.log(req.body.username, req.body.password);
-        db.Restaurant.findOne({ username: req.body.username })
-            .then(function (dbRestaurant) {
-                console.log(dbRestaurant);
-                if (req.body.password === dbRestaurant.password) {
-                    res.json({ token: "successful!! ^o^ here is a token" });
-                }
-                else {
-                    res.json({ token: undefined });
-                }
-            });
+        login.tokenGenerate(req, res);
     });
-    // OK 
-    app.get("/api/allmenus", function (req, res) {
+    
+    app.post("/api/allmenus", middleware.tokenCheck, function (req, res) {
+        var uid = req.body.uid;
         var responseObj = {
             restaurant: {},
             menus: []
         }
-        db.Restaurant.findOne({ username: username })
+        db.Restaurant.findOne({ _id: uid })
             .then(function (dbRestaurant) {
                 responseObj.restaurant = dbRestaurant;
                 return db.Menu.find({ restaurantId: dbRestaurant._id }).sort({ menuTitle: "asc", _id: "asc" });
@@ -44,10 +38,10 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // OK 
-    app.post("/api/allmenus/create", function (req, res) {
+    
+    app.post("/api/allmenus/create", middleware.tokenCheck, function (req, res) {
         var newMenuObj = {
-            restaurantId: req.body.restaurantId, menuTitle: req.body.menuTitle, isPublished: false, categories: []
+            restaurantId: req.body.uid, menuTitle: req.body.menuTitle, isPublished: false, categories: []
         };
         var responseObj = {
             menu: undefined,
@@ -61,8 +55,8 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // OK 
-    app.post("/api/allmenus/duplicate", function (req, res) {
+    
+    app.post("/api/allmenus/duplicate", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined
         }
@@ -74,10 +68,6 @@ module.exports = function (app) {
                     isPublished: false,
                     categories: dbMenu.categories
                 };
-                // var newMenuObj = {
-                //     ...dbMenu
-                // }; // shallow copy, nested arrays and objects will not be copied
-                // delete newMenuObj._id;
                 return db.Menu.create(newMenuObj);
             })
             .then(function (dbMenu) {
@@ -89,8 +79,8 @@ module.exports = function (app) {
             });
 
     });
-    // OK 
-    app.put("/api/allmenus/rename", function (req, res) {
+    
+    app.put("/api/allmenus/rename", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined
         }
@@ -104,8 +94,8 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // OK 
-    app.put("/api/allmenus/delete", function (req, res) {
+    
+    app.put("/api/allmenus/delete", middleware.tokenCheck, function (req, res) {
         db.Menu.deleteOne({ _id: req.body.menuId })
             .then(function (outcome) {
                 // console.log(outcome); // param is the outcome of delete
@@ -115,8 +105,8 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // OK
-    app.put("/api/allmenus/publish", function (req, res) {
+    
+    app.put("/api/allmenus/publish", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             newPublishedMenu: undefined,
             oldPublishedMenu: undefined
@@ -140,7 +130,7 @@ module.exports = function (app) {
     });
 
     // /////////////////////////////////////////////////////////////////////////////////
-    app.get("/api/menubuilder/:id", function (req, res) {
+    app.get("/api/menubuilder/:id", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined,
         }
@@ -158,12 +148,12 @@ module.exports = function (app) {
             });
     });
 
-    app.put("/api/menubuilder/save", function (req, res) {
+    app.put("/api/menubuilder/save", middleware.tokenCheck, function (req, res) {
 
-        db.Menu.findOneAndUpdate({_id: req.body.menuId}, {categories: req.body.menu})
-        .then(function(dbMenu) {
-            res.json({status: "ok"});
-        })
+        db.Menu.findOneAndUpdate({ _id: req.body.menuId }, { categories: req.body.menu })
+            .then(function (dbMenu) {
+                res.json({ status: "ok" });
+            })
 
         // var menu = req.body.menu;
         // var menuIndex = fakedb.allmenus.findIndex(curr => {
@@ -173,13 +163,13 @@ module.exports = function (app) {
         // res.json({ menuDetails: fakedb.allmenus[menuIndex] });
     });
     // /////////////////////////////////////////////////////////////////////////////////
-    // OK
-    app.get("/api/customer", function (req, res) {
+    
+    app.post("/api/customer", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: {}
         };
 
-        db.Restaurant.findOne({ username: username })
+        db.Restaurant.findOne({ _id: req.body.uid })
             .then(function (dbRestaurant) {
                 return db.Menu.findOne({ restaurantId: dbRestaurant._id, isPublished: true });
             })
@@ -195,7 +185,7 @@ module.exports = function (app) {
             });
     });
     // /////////////////////////////////////////////////////////////////////////////////
-    app.get("/api/kitchen", function (req, res) {
+    app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
 
         var currTime = moment();
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
@@ -203,7 +193,7 @@ module.exports = function (app) {
         var responseObj = {
             orders: []
         }
-        db.Restaurant.findOne({ username: username })
+        db.Restaurant.findOne({ _id: req.body.uid })
             .then(function (dbRestaurant) {
 
                 return db.Order.find(
@@ -215,7 +205,6 @@ module.exports = function (app) {
                 ).sort({ orderTime: "asc" });
             })
             .then(function (dbOrders) {
-                console.log(dbOrders);
                 responseObj.orders = dbOrders;
                 res.json(responseObj);
             })
@@ -223,17 +212,17 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    app.get("/api/kitchen/:orderId", function (req, res) {
+    // app.get("/api/kitchen/:orderId", function (req, res) {
 
-        db.Order.findOne({ _id: req.params.orderId }).populate("menuItems")
-            .then(function (dbOrder) {
-                res.json(dbOrder);
-            })
-            .catch(function (err) {
-                res.json(err);
-            });
-    });
-    app.post("/api/kitchen/create", function (req, res) {
+    //     db.Order.findOne({ _id: req.params.orderId }).populate("menuItems")
+    //         .then(function (dbOrder) {
+    //             res.json(dbOrder);
+    //         })
+    //         .catch(function (err) {
+    //             res.json(err);
+    //         });
+    // });
+    app.post("/api/kitchen/create", middleware.tokenCheck, function (req, res) {
         var menuItemObj = req.body.order;
         menuItemObj.isCompleted = false;
 
@@ -249,7 +238,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    app.put("/api/kitchen/done", function (req, res) {
+    app.put("/api/kitchen/done", middleware.tokenCheck, function (req, res) {
         db.Order.findOneAndUpdate({ _id: req.body.orderId }, { isCompleted: true })
             .then(function (dbOrder) {
                 // console.log(dbOrder) // pre-update data

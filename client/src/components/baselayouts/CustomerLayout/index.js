@@ -1,6 +1,11 @@
 import React from 'react';
 import '../../css/baselayouts_customer.css';
 
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownToggle from 'react-bootstrap/DropdownToggle';
+import DropdownMenu from 'react-bootstrap/DropdownMenu';
+import DropdownItem from 'react-bootstrap/DropdownItem';
+
 class CustomerLayout extends React.Component {
     constructor(props) {
         super(props);
@@ -18,6 +23,12 @@ class CustomerLayout extends React.Component {
 
     handleSidebarOptionClick = (i) => {
         this.props.handleSidebarOptionClick(i);
+    }
+
+    handleButtonClickSignOut = () => {
+        document.cookie = "U_TKN=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_ID=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        this.props.history.push("/login");
     }
 
     render() {
@@ -44,8 +55,9 @@ class CustomerLayout extends React.Component {
 
         return (
             <>
-                <header className="customer header-navigation overflowWrapper shadow--dark">
-                    <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
+                <header className="customer header-navigation shadow--dark">
+
+                    <div className="container-fluid pageMinWidth h-100 p-0 d-flex flex-nowrap">
                         <button className="button--transparent h-100 px-4 d-flex d-sm-none" onClick={this.handleSidebarToggle}>
                             <i className="material-icons">menu</i>
                         </button>
@@ -55,9 +67,19 @@ class CustomerLayout extends React.Component {
                         <button className="button--transparent h-100 px-4">
                             <i className="material-icons">language</i>
                         </button>
-                        <button className="button--transparent h-100 px-4">
-                            <i className="material-icons">help_outline</i>
-                        </button>
+                        <Dropdown className="h-100">
+                            <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
+                                <div className="h-100 d-flex align-items-center justify-content-center px-2">
+                                    <i className="material-icons">more_vert</i>
+                                </div>
+                            </DropdownToggle>
+
+                            <DropdownMenu alignRight={true}>
+                                {/* <Dropdown.Divider /> */}
+                                <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+
                     </div>
                 </header>
                 <section className={this.state.sidebarOpen ? "customer sidebar-navigation shadow--dark open" : "customer sidebar-navigation shadow--dark"}>
