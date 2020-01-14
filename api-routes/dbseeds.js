@@ -8,9 +8,10 @@ const uuidv4 = require("uuid/v4");
 
 
 var objRestaurant1 = {
-    restaurantTitle: "luigi's kitchen",
-    iconUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/63f1fa19-6c94-43b4-ba7e-e5d2ff356331/dd81xm1-dae0fbc8-bef8-4ed5-a9c6-776aa07e08aa.png/v1/fill/w_1280,h_1268,strp/luigi_icon_by_usanintendo_dd81xm1-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI2OCIsInBhdGgiOiJcL2ZcLzYzZjFmYTE5LTZjOTQtNDNiNC1iYTdlLWU1ZDJmZjM1NjMzMVwvZGQ4MXhtMS1kYWUwZmJjOC1iZWY4LTRlZDUtYTljNi03NzZhYTA3ZTA4YWEucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.x7XOCPDpDOITnhVGZlPgX0zn2IG2r26_4FTNjpEq3dU",
-    username: "luigi@gmail.com",
+    restaurantTitle: "KFC",
+    // iconUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/63f1fa19-6c94-43b4-ba7e-e5d2ff356331/dd81xm1-dae0fbc8-bef8-4ed5-a9c6-776aa07e08aa.png/v1/fill/w_1280,h_1268,strp/luigi_icon_by_usanintendo_dd81xm1-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI2OCIsInBhdGgiOiJcL2ZcLzYzZjFmYTE5LTZjOTQtNDNiNC1iYTdlLWU1ZDJmZjM1NjMzMVwvZGQ4MXhtMS1kYWUwZmJjOC1iZWY4LTRlZDUtYTljNi03NzZhYTA3ZTA4YWEucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.x7XOCPDpDOITnhVGZlPgX0zn2IG2r26_4FTNjpEq3dU",
+    iconUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/220px-KFC_logo.svg.png",
+    username: "kfc@gmail.com",
     password: "Asdf1234"
 }
 var objRestaurant1Menu1 = {
