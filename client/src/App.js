@@ -12,9 +12,9 @@ import SignUpUI from './components/ui_signup';
 
 
 import axios from 'axios';
-// import logo from './logo.svg';
 // import TestingProxy from './components/zzz/testingproxy';
-import BreakpointIndicator from './components/zzz/breakpointindicator';
+
+// import BreakpointIndicator from './components/zzz/breakpointindicator';
 
 
 class App extends React.Component {
@@ -128,7 +128,7 @@ class App extends React.Component {
           {/* <Route path="/server" render={() => (<h1>server</h1>)} /> */}
         </BrowserRouter>
 
-        <BreakpointIndicator />
+        {/* <BreakpointIndicator /> */}
       </>
     );
   }
