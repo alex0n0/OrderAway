@@ -19,7 +19,11 @@ class KitchenUI extends React.Component {
             sidebarMenuActiveIndex: 0,
             orders: [],
             currTime: moment(),
-            tempOrders: []
+            tempOrders: [],
+            restaurant: {
+                restaurantTitle: "",
+                iconUrl: ""
+            }
         }
     }
 
@@ -50,6 +54,15 @@ class KitchenUI extends React.Component {
                     if (response.data.success === false) {
                         this.props.history.push("/signin");
                     } else {
+                        if (response.data.restaurant) {
+                            this.setState({
+                                ...this.state,
+                                restaurant: {
+                                    restaurantTitle: response.data.restaurant.restaurantTitle,
+                                    iconUrl:response.data.restaurant.iconUrl
+                                }
+                            });
+                        }
                         var tempOrders = response.data.orders;
                         tempOrders.forEach(curr => {
                             curr.buttonDoneIsDisabled = false;
@@ -176,7 +189,7 @@ class KitchenUI extends React.Component {
             });
         }
         return (
-            <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
+            <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
                 <div className="py-3 px-3">
 
                     <div className="container-fluid">

@@ -13,7 +13,10 @@ class CorporateUIComponent extends React.Component {
         this.state = {
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 0,
-            restaurant: {}
+            restaurant: {
+                restaurantTitle: "",
+                iconUrl: ""
+            }
         }
     }
     // componentDidMount() {

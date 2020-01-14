@@ -30,17 +30,20 @@ class CorporateLayout extends React.Component {
                         <Dropdown className="h-100">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center">
-                                    <div className="mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center" style={{ height: "48px", width: "48px" }}>
+                                    <div
+                                        className={this.props.darkTheme ? "mr-1 mr-md-3 rounded-circle bg-light overflow-hidden d-flex align-items-center justify-content-center":"mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center"}
+                                        style={{ height: "48px", width: "48px" }}>
                                         {
                                             this.props.restaurant.iconUrl ? 
                                             (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="auto" width="70%" />)
                                             :
                                             ""
                                         }
-
-                                        
                                     </div>
-                                    <p className="color-black m-0 mr-1 d-none d-md-block">{this.props.restaurant.restaurantTitle ? this.props.restaurant.restaurantTitle : ""}</p>
+                                    <p
+                                        className={this.props.darkTheme ? "color-white m-0 mr-1 d-none d-md-block":"color-black m-0 mr-1 d-none d-md-block"}>
+                                        {this.props.restaurant.restaurantTitle ? this.props.restaurant.restaurantTitle : ""}
+                                    </p>
                                     <i className="color-black material-icons">keyboard_arrow_down</i>
                                 </div>
                             </DropdownToggle>

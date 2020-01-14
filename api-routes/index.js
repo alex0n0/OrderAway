@@ -223,6 +223,10 @@ module.exports = function (app) {
         }
         db.Restaurant.findOne({ _id: req.body.uid })
             .then(function (dbRestaurant) {
+                responseObj.restaurant = {
+                    restaurantTitle: dbRestaurant.restaurantTitle,
+                    iconUrl: dbRestaurant.iconUrl
+                }
 
                 return db.Order.find(
                     {
