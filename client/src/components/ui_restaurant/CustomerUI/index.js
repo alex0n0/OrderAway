@@ -59,7 +59,7 @@ class CustomerUIComponent extends React.Component {
       axios.post("/api/customer", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
         .then(response => {
           if (response.data.success === false) {
-            this.props.history.push("/login");
+            this.props.history.push("/signin");
           } else {
             if (response.data.menu.categories) {
               this.setState({
@@ -73,7 +73,7 @@ class CustomerUIComponent extends React.Component {
           }
         });
     } else {
-      this.props.history.push("/login");
+      this.props.history.push("/signin");
     }
   }
 

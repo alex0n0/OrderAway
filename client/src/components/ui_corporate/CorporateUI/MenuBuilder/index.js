@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
+import moment from 'moment';
 
 import MenuItemCorporate from '../../../elements/menuitem/Corporate';
 import Modal from "react-bootstrap/Modal";
@@ -59,6 +60,11 @@ class MenuBuilder extends React.Component {
             var id = window.location.pathname.substring(idStartIndex);
             axios.get("/api/menubuilder/" + id, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
+                    console.log(response.data);
+                    if (response.data.restaurant) {
+                        this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle);
+                    }
+
                     if (response.data.menu) {
                         this.setState({
                             ...this.state,
@@ -73,7 +79,7 @@ class MenuBuilder extends React.Component {
                     }
                 });
         } else {
-            this.props.history.push("/login");
+            this.props.history.push("/signin");
         }
 
     }
@@ -299,7 +305,7 @@ class MenuBuilder extends React.Component {
 
 
     handleButtonSaveMenu = () => {
-        axios.put("/api/menubuilder/save", { menuId: this.state.menuId, menu: this.state.menu }, { headers: { Authorization: "Bearer " + this.state.token } })
+        axios.put("/api/menubuilder/save", { updatedAt: parseInt(moment().format("X")), menuId: this.state.menuId, menu: this.state.menu }, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 // console.log(response.data);
             });

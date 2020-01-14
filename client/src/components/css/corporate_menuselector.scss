@@ -121,6 +121,22 @@ $break-xl: 1200px;
             &.active {
                 border-color: rgb(3, 161, 235) !important;
                 background-color: rgb(3, 161, 235) !important;
+                .background {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    width: 150%;
+                    padding-top: 300%;
+
+                    background-color: var(--secondary);
+                    // background: linear-gradient(0deg, rgb(247, 33, 247), rgb(28, 145, 247));
+                  
+
+                    // border: 1px solid white;
+                    z-index: 5;
+                }
             }
             &.published {
                 background-color: transparent !important;

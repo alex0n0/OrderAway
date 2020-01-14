@@ -51,7 +51,7 @@ class LoginUI extends React.Component {
                         document.cookie = `U_ID=${response.data.uid}`;
                         this.props.history.push('/corporate/menu');
                     } else if (response.data.success === false) {
-                        console.log("fix your shit");                        
+                        console.log("fix your shit");
                         this.setState({
                             ...this.state,
                             buttonFormSubmitIsDisabled: false,
@@ -68,6 +68,7 @@ class LoginUI extends React.Component {
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-12 col-md-6 py-5">
+                            <h2>Sign In</h2>
                             <form>
                                 <input
                                     type="text" placeholder="email"

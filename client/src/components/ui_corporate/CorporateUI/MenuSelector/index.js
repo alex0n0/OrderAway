@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 
 
 import '../../../css/corporate_menuselector.css';
@@ -42,10 +43,10 @@ class MenuSelector extends React.Component {
         var cookiesArr = cookies.split(";").map(curr => curr.trim());
         cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
         var token = cookiesArr.find(curr => {
-            return curr[0] === "U_TKN";            
+            return curr[0] === "U_TKN";
         });
         var uid = cookiesArr.find(curr => {
-            return curr[0] === "U_ID";            
+            return curr[0] === "U_ID";
         });
 
         if (token) {
@@ -54,36 +55,41 @@ class MenuSelector extends React.Component {
                 token: token[1],
                 uid: uid[1]
             });
-            axios.post("/api/allmenus", {uid: uid[1]}, { headers: { Authorization: "Bearer " + token[1] } })
-            .then(response => {
-                if (response.data.success === false) {
-                    this.props.history.push("/login");
-                } else {
-                    if (response.data.menus.length > 0) {
-                        var menuPublishedIndex = response.data.menus.findIndex(curr => {
-                            return curr.isPublished === true;
-                        });
-                        var menuPublishedId = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex]._id : undefined;
-                        var menuPublished = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex] : undefined;
-
-                        this.setState({
-                            ...this.state,
-                            tokenValid: true,
-                            restaurantId: response.data.restaurant._id,
-                            menus: response.data.menus,
-                            menuPublishedId: menuPublishedId,
-                            menuPublished: menuPublished
-                        });
+            axios.post("/api/allmenus", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+                .then(response => {
+                    if (response.data.success === false) {
+                        this.props.history.push("/signin");
                     } else {
-                        this.setState({
-                            ...this.state,
-                            restaurantId: response.data.restaurant._id,
-                        });
+                        if (response.data.restaurant) {
+                            console.log(response.data.restaurant);
+                            this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle, response.data.restaurant.iconUrl);
+                        }
+
+                        if (response.data.menus.length > 0) {
+                            var menuPublishedIndex = response.data.menus.findIndex(curr => {
+                                return curr.isPublished === true;
+                            });
+                            var menuPublishedId = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex]._id : undefined;
+                            var menuPublished = menuPublishedIndex !== -1 ? response.data.menus[menuPublishedIndex] : undefined;
+
+                            this.setState({
+                                ...this.state,
+                                tokenValid: true,
+                                restaurantId: response.data.restaurant._id,
+                                menus: response.data.menus,
+                                menuPublishedId: menuPublishedId,
+                                menuPublished: menuPublished
+                            });
+                        } else {
+                            this.setState({
+                                ...this.state,
+                                restaurantId: response.data.restaurant._id,
+                            });
+                        }
                     }
-                }
-            });
+                });
         } else {
-            this.props.history.push("/login");
+            this.props.history.push("/signin");
         }
 
 
@@ -124,6 +130,7 @@ class MenuSelector extends React.Component {
 
         var uploadObj = {
             menuId: this.state.menuActive._id,
+            updatedAt: parseInt(moment().format("X")),
             menuTitle: this.state.inputEditMenuTitle.trim(),
             uid: this.state.uid
         };
@@ -131,6 +138,7 @@ class MenuSelector extends React.Component {
             .then(response => {
                 tempMenus.forEach(curr => {
                     if (curr._id === uploadObj.menuId) {
+                        curr.updatedAt = uploadObj.updatedAt;
                         curr.menuTitle = uploadObj.menuTitle;
                     }
                 });
@@ -159,7 +167,7 @@ class MenuSelector extends React.Component {
             buttonCreateNewMenuDisabled: true
         });
 
-        var uploadObj = { restaurantId: this.state.restaurantId, menuTitle: this.state.inputCreateNewMenu.trim(), uid: this.state.uid };
+        var uploadObj = { restaurantId: this.state.restaurantId, createdAt: parseInt(moment().format("X")), menuTitle: this.state.inputCreateNewMenu.trim(), uid: this.state.uid };
 
         axios.post("/api/allmenus/create", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
@@ -217,7 +225,7 @@ class MenuSelector extends React.Component {
             currentlyPublishedMenuId: this.state.menuPublishedId
         };
 
-        
+
         axios.put("/api/allmenus/publish", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
             .then(response => {
                 var newPublishedMenu = response.data.newPublishedMenu;
@@ -248,7 +256,8 @@ class MenuSelector extends React.Component {
         var tempMenus = [...this.state.menus];
         var menuToDuplicate = { ...this.state.menuActive }
         var uploadObj = {
-            menuId: menuToDuplicate._id
+            menuId: menuToDuplicate._id,
+            createdAt: parseInt(moment().format("X"))
         };
 
         axios.post("/api/allmenus/duplicate", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
@@ -301,7 +310,16 @@ class MenuSelector extends React.Component {
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-3"
                         key={i}
                     >
-                        <p className="font-12 color-black-04 m-0"><i>Created: 10 Nov 2019 at 11:50AM</i></p>
+                        <p className="font-12 color-black-04 m-0"><i>
+                            {curr.updatedAt ?
+                                "Updated: " + moment(curr.updatedAt, "X").format("D MMM YYYY") + " at " + moment(curr.updatedAt, "X").format("h:mm A")
+                                :
+                                curr.createdAt ?
+                                    "Created: " + moment(curr.createdAt, "X").format("D MMM YYYY") + " at " + moment(curr.createdAt, "X").format("h:mm A")
+                                    :
+                                    "Created: ?"
+                            }
+                        </i></p>
                         <button
                             className={buttonClassName}
                             style={{ wordBreak: "break-all" }}

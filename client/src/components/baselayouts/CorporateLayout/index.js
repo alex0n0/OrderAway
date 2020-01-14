@@ -15,10 +15,9 @@ class CorporateLayout extends React.Component {
     // }
 
     handleButtonClickSignOut = () => {
-        console.log("clicked");
         document.cookie = "U_TKN=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         document.cookie = "U_ID=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        this.props.history.push("/login");
+        this.props.history.push("/signin");
     }
 
     render() {
@@ -26,22 +25,29 @@ class CorporateLayout extends React.Component {
             <>
                 <header className={this.props.darkTheme ? "corporate header-navigation shadow--basic darkTheme" : "corporate header-navigation shadow--basic"}>
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
-                        <button className="button--transparent h-100 px-4 mr-auto">Untitled</button>
+                        <button className="button--transparent h-100 px-4 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></button>
 
                         <Dropdown className="h-100">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center">
                                     <div className="mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center" style={{ height: "48px", width: "48px" }}>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="auto" width="70%" />
+                                        {
+                                            this.props.restaurant.iconUrl ? 
+                                            (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="auto" width="70%" />)
+                                            :
+                                            ""
+                                        }
+
+                                        
                                     </div>
-                                    <p className="color-black m-0 mr-1 d-none d-md-block">Hungry Jack's</p>
+                                    <p className="color-black m-0 mr-1 d-none d-md-block">{this.props.restaurant.restaurantTitle ? this.props.restaurant.restaurantTitle : ""}</p>
                                     <i className="color-black material-icons">keyboard_arrow_down</i>
                                 </div>
                             </DropdownToggle>
 
                             <DropdownMenu alignRight={true}>
                                 <DropdownItem onClick={this.handleButtonClickSignOut}>Settings</DropdownItem>
-                                <Dropdown.Divider/>
+                                <Dropdown.Divider />
                                 <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem>
                                 {/* <button 
                                     className="button--transparent border w-100 h-100 py-2 px-4 justify-content-start text-truncate"

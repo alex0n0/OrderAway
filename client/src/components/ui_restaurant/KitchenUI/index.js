@@ -48,7 +48,7 @@ class KitchenUI extends React.Component {
             axios.post("/api/kitchen", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
                     if (response.data.success === false) {
-                        this.props.history.push("/login");
+                        this.props.history.push("/signin");
                     } else {
                         var tempOrders = response.data.orders;
                         tempOrders.forEach(curr => {
@@ -83,7 +83,7 @@ class KitchenUI extends React.Component {
                 axios.post("/api/kitchen", { uid: this.state.uid }, { headers: { Authorization: "Bearer " + this.state.token } })
                     .then(response => {
                         if (response.data.success === false) {
-                            this.props.history.push("/login");
+                            this.props.history.push("/signin");
                         } else {
                             var tempOrders = response.data.orders;
                             tempOrders.forEach(curr => {
@@ -105,7 +105,7 @@ class KitchenUI extends React.Component {
             //     });
             // }, 15000);
         } else {
-            this.props.history.push("/login");
+            this.props.history.push("/signin");
         }
     }
 

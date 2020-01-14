@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const db = require("../db");
+const moment = require("moment");
 
 const uuidv4 = require("uuid/v4");
 
@@ -7,13 +8,15 @@ const uuidv4 = require("uuid/v4");
 
 
 var objRestaurant1 = {
-    restaurantTitle: "max brenner",
-    username: "maxbrenner@gmail.com",
+    restaurantTitle: "luigi's kitchen",
+    iconUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/63f1fa19-6c94-43b4-ba7e-e5d2ff356331/dd81xm1-dae0fbc8-bef8-4ed5-a9c6-776aa07e08aa.png/v1/fill/w_1280,h_1268,strp/luigi_icon_by_usanintendo_dd81xm1-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI2OCIsInBhdGgiOiJcL2ZcLzYzZjFmYTE5LTZjOTQtNDNiNC1iYTdlLWU1ZDJmZjM1NjMzMVwvZGQ4MXhtMS1kYWUwZmJjOC1iZWY4LTRlZDUtYTljNi03NzZhYTA3ZTA4YWEucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.x7XOCPDpDOITnhVGZlPgX0zn2IG2r26_4FTNjpEq3dU",
+    username: "luigi@gmail.com",
     password: "Asdf1234"
 }
 var objRestaurant1Menu1 = {
     restaurantId: undefined,
-    menuTitle: "100% menu",
+    createdAt: parseInt(moment().format("X")),
+    menuTitle: "First Menu",
     isPublished: true,
     categories: []
 };
@@ -183,7 +186,8 @@ var arrRestaurant1Menu1Category3MenuItems = [
 ];
 var objRestaurant1Menu2 = {
     restaurantId: undefined,
-    menuTitle: "empty menu",
+    createdAt: parseInt(moment().format("X")),
+    menuTitle: "blank menu",
     isPublished: false,
     categories: []
 }
@@ -191,11 +195,13 @@ var objRestaurant1Menu2 = {
 
 var objRestaurant2 = {
     restaurantTitle: "hungry jacks",
+    iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png",
     username: "hungryjacks@gmail.com",
     password: "Asdf1234"
 }
 var objRestaurant2Menu1 = {
     restaurantId: undefined,
+    createdAt: parseInt(moment().format("X")),
     menuTitle: "Burger menu",
     isPublished: false,
     categories: []
@@ -250,6 +256,7 @@ var arrRestaurant2Menu1Category1MenuItems = [
 ];
 var objRestaurant3 = {
     restaurantTitle: "mcdonalds",
+    iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/200px-McDonald%27s_Golden_Arches.svg.png",
     username: "mcdonalds@gmail.com",
     password: "Asdf1234"
 }

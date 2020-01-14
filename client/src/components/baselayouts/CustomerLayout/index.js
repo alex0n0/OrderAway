@@ -28,7 +28,7 @@ class CustomerLayout extends React.Component {
     handleButtonClickSignOut = () => {
         document.cookie = "U_TKN=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         document.cookie = "U_ID=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        this.props.history.push("/login");
+        this.props.history.push("/signin");
     }
 
     render() {

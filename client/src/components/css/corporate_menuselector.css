@@ -112,6 +112,17 @@
   background-color: #03a1eb !important;
 }
 
+.menuselector .main-content-content button.button--transparent.active .background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  padding-top: 300%;
+  background-color: var(--secondary);
+  z-index: 5;
+}
+
 .menuselector .main-content-content button.button--transparent.published {
   background-color: transparent !important;
   border-color: #a826e4;

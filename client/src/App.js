@@ -6,8 +6,9 @@ import CorporateUI from './components/ui_corporate/CorporateUI';
 import CustomerUI from './components/ui_restaurant/CustomerUI';
 import KitchenUI from './components/ui_restaurant/KitchenUI';
 import LoginUI from './components/ui_login';
+import SignUpUI from './components/ui_signup';
 // import ServerUI from './components/ui_restaurant/ServerUI';
-import RegexTestComponent from './components/test/regextest.js';
+// import RegexTestComponent from './components/test/regextest.js';
 
 
 import axios from 'axios';
@@ -40,7 +41,33 @@ class App extends React.Component {
 
                 <div className="row justify-content-center px-3">
                   <div className="col-12 col-sm-6 border border-bottom-0 py-3">
-                    <Link to="/login" target="_blank">login</Link>
+                    <Link to="/signup" target="_blank">sign up</Link>
+                  </div>
+                </div>
+
+                <div className="row justify-content-center px-3">
+                  <div className="col-12 col-sm-6 border py-3">
+                    <Link to="/signin" target="_blank">sign in</Link>
+                  </div>
+                </div>
+
+
+              </div>
+            </>
+          )} />
+          <Route exact path="/secret" render={() => (
+            <>
+              <div className="container my-5">
+
+                <div className="row justify-content-center px-3">
+                  <div className="col-12 col-sm-6 border border-bottom-0 py-3">
+                    <Link to="/signup" target="_blank">sign up</Link>
+                  </div>
+                </div>
+
+                <div className="row justify-content-center px-3">
+                  <div className="col-12 col-sm-6 border border-bottom-0 py-3">
+                    <Link to="/signin" target="_blank">sign in</Link>
                   </div>
                 </div>
 
@@ -94,11 +121,11 @@ class App extends React.Component {
           <Route path="/corporate" component={CorporateUI} />
           <Route path="/customer" component={CustomerUI} />
           <Route path="/kitchen" component={KitchenUI} />
-          <Route path="/login" component={LoginUI} />
-          <Route path="/regextest" component={RegexTestComponent} />
+          <Route path="/signin" component={LoginUI} />
+          <Route path="/signup" component={SignUpUI} />
           {/* <Route path="/server" component={CustomerUI} /> */}
-          {/* <Route path="/chef" render={() => (<h1>chef</h1>)}/>
-        <Route path="/server" render={() => (<h1>server</h1>)} /> */}
+          {/* <Route path="/chef" render={() => (<h1>chef</h1>)}/> */}
+          {/* <Route path="/server" render={() => (<h1>server</h1>)} /> */}
         </BrowserRouter>
 
         <BreakpointIndicator />

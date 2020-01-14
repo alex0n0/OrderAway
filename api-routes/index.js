@@ -1,24 +1,33 @@
 const path = require("path");
 const moment = require("moment");
 const db = require("../db");
-const fakedb = require("../server_fakedb");
 
 var login = require("./tokengenerate.js");
 let middleware = require('./tokencheck.js');
 
-var username = "";
-username = "maxbrenner@gmail.com";
-// username = "hungryjacks@gmail.com";
-// username = "mcdonalds@gmail.com";
 
 
+
+let signup = function (req, res, next) {
+    var createObj = {
+        restaurantTitle: req.body.restaurantTitle,
+        iconUrl: req.body.iconUrl,
+        username: req.body.username,
+        password: req.body.password
+    }
+    db.Restaurant.create(createObj)
+        .then(function (dbRestaurant) {
+            next();
+        }).catch(function (err) {
+            console.log(err);
+        });
+}
 
 module.exports = function (app) {
     // ////////////////////////////////////////////////////////////////////////////////////
-    app.post("/api/general/processlogin", function (req, res) {
-        login.tokenGenerate(req, res);
-    });
-    
+    app.post("/api/general/signup", signup, login.tokenGenerate);
+    app.post("/api/general/processlogin", login.tokenGenerate);
+
     app.post("/api/allmenus", middleware.tokenCheck, function (req, res) {
         var uid = req.body.uid;
         var responseObj = {
@@ -38,11 +47,15 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    
+
     app.post("/api/allmenus/create", middleware.tokenCheck, function (req, res) {
         var newMenuObj = {
             restaurantId: req.body.uid, menuTitle: req.body.menuTitle, isPublished: false, categories: []
         };
+        if (req.body.createdAt) {
+            newMenuObj.createdAt = req.body.createdAt;
+        }
+
         var responseObj = {
             menu: undefined,
         }
@@ -55,7 +68,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    
+
     app.post("/api/allmenus/duplicate", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined
@@ -68,6 +81,9 @@ module.exports = function (app) {
                     isPublished: false,
                     categories: dbMenu.categories
                 };
+                if (req.body.createdAt) {
+                    newMenuObj.createdAt = req.body.createdAt;
+                }
                 return db.Menu.create(newMenuObj);
             })
             .then(function (dbMenu) {
@@ -79,12 +95,18 @@ module.exports = function (app) {
             });
 
     });
-    
+
     app.put("/api/allmenus/rename", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined
         }
-        db.Menu.findOneAndUpdate({ _id: req.body.menuId }, { menuTitle: req.body.menuTitle })
+        var updateObj = {
+            menuTitle: req.body.menuTitle
+        }
+        if (req.body.updatedAt) {
+            updateObj.updatedAt = req.body.updatedAt;
+        }
+        db.Menu.findOneAndUpdate({ _id: req.body.menuId }, updateObj)
             .then(function (dbMenu) {
                 responseObj.updatedMenu = dbMenu;
                 // console.log(dbMenu); // this is pre-update data
@@ -94,7 +116,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    
+
     app.put("/api/allmenus/delete", middleware.tokenCheck, function (req, res) {
         db.Menu.deleteOne({ _id: req.body.menuId })
             .then(function (outcome) {
@@ -105,7 +127,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    
+
     app.put("/api/allmenus/publish", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             newPublishedMenu: undefined,
@@ -133,15 +155,22 @@ module.exports = function (app) {
     app.get("/api/menubuilder/:id", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: undefined,
+            restaurant: undefined
         }
+
         db.Menu.findOne({ _id: req.params.id })
             .then(function (dbMenu) {
                 if (!dbMenu.isPublished) {
                     responseObj.menu = dbMenu;
-                    res.json(responseObj);
-                } else {
-                    res.json(responseObj);
                 }
+                return db.Restaurant.findOne({_id: dbMenu.restaurantId});
+            })
+            .then(function(dbRestaurant) {
+                if (dbRestaurant) {
+                    responseObj.restaurant = {restaurantTitle: dbRestaurant.restaurantTitle};
+                }
+
+                res.json(responseObj);
             })
             .catch(function (err) {
                 res.json(err);
@@ -150,20 +179,19 @@ module.exports = function (app) {
 
     app.put("/api/menubuilder/save", middleware.tokenCheck, function (req, res) {
 
-        db.Menu.findOneAndUpdate({ _id: req.body.menuId }, { categories: req.body.menu })
+        var updateObj = { 
+            categories: req.body.menu 
+        }
+        if (req.body.updatedAt) {
+            updateObj.updatedAt = req.body.updatedAt;
+        }
+        db.Menu.findOneAndUpdate({ _id: req.body.menuId }, updateObj)
             .then(function (dbMenu) {
                 res.json({ status: "ok" });
             })
-
-        // var menu = req.body.menu;
-        // var menuIndex = fakedb.allmenus.findIndex(curr => {
-        //     return String(curr.id) === req.params.id;
-        // });
-        // fakedb.allmenus[menuIndex].menu = menu;
-        // res.json({ menuDetails: fakedb.allmenus[menuIndex] });
     });
     // /////////////////////////////////////////////////////////////////////////////////
-    
+
     app.post("/api/customer", middleware.tokenCheck, function (req, res) {
         var responseObj = {
             menu: {}

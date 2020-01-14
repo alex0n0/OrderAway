@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const restaurantSchema = new Schema({
-    restaurantTitle: { type: String, required: true },
+    restaurantTitle: { type: String },
+    iconUrl: { type:String },
     username: { type: String },
     password: { type: String }
 });
