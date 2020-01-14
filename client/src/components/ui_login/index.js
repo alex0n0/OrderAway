@@ -17,6 +17,22 @@ class LoginUI extends React.Component {
 
     }
 
+    componentDidMount() {
+        var cookies = document.cookie;
+        var cookiesArr = cookies.split(";").map(curr => curr.trim());
+        cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+        var token = cookiesArr.find(curr => {
+            return curr[0] === "U_TKN";
+        });
+        // var uid = cookiesArr.find(curr => {
+        //     return curr[0] === "U_ID";
+        // });
+
+        if (token) {
+            this.props.history.push("/corporate/menu");
+        }
+    }
+
     handleLoginFormEmailChange = (e) => {
         // e.preventDefault();
         this.setState({
