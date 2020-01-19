@@ -691,7 +691,7 @@ class MenuBuilder extends React.Component {
                     :
                     ""
                 }
-                <Modal show={this.state.modalCreateEditIsShown} onHide={this.handleModalCreateEditClose} onExited={this.handleModalCreateEditExited} centered size="lg" backdrop={"static"}>
+                <Modal className="modalMinWidth" show={this.state.modalCreateEditIsShown} onHide={this.handleModalCreateEditClose} onExited={this.handleModalCreateEditExited} centered size="lg" backdrop={"static"}>
                     <ModalHeader className="m-0 p-0 border-0">
                         <button
                             className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"

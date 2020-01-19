@@ -51,6 +51,13 @@
     align-items: center;
     justify-content: center;
 }
+.button--transparent.button--dev {
+    background: linear-gradient(90deg, rgb(214, 12, 137), rgb(53, 2, 238));
+    /* background-color: rgb(230, 11, 211);  */
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
 
 .button--transparent:disabled {
     filter: brightness(0.6);
@@ -74,3 +81,20 @@
     background-color: transparent !important;
 }
 .dropdown-toggle:after { content: none }
+
+.modalMinWidth { min-width: var(--pageMinWidth); }
+
+@keyframes blink {
+    0% {
+        /* background-color: rgb(230, 11, 211);  */
+        background: linear-gradient(90deg, rgb(23, 110, 160), rgb(51, 41, 90));
+    }
+    50% {
+        /* background-color: rgb(110, 9, 102);  */
+        background: linear-gradient(90deg, rgb(185, 127, 80), rgb(7, 201, 82));
+    }
+    100% {
+        /* background-color: rgb(230, 11, 211);  */
+        background: linear-gradient(90deg, rgb(214, 12, 137), rgb(34, 7, 134));
+    }
+}

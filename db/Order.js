@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
     restaurantId: { type: String },
+    billId: { type: String },
     tableNumber: { type: Number },
     orderTime: { type: Number },
     menuItems: [

@@ -163,11 +163,11 @@ module.exports = function (app) {
                 if (!dbMenu.isPublished) {
                     responseObj.menu = dbMenu;
                 }
-                return db.Restaurant.findOne({_id: dbMenu.restaurantId});
+                return db.Restaurant.findOne({ _id: dbMenu.restaurantId });
             })
-            .then(function(dbRestaurant) {
+            .then(function (dbRestaurant) {
                 if (dbRestaurant) {
-                    responseObj.restaurant = {restaurantTitle: dbRestaurant.restaurantTitle};
+                    responseObj.restaurant = { restaurantTitle: dbRestaurant.restaurantTitle };
                 }
 
                 res.json(responseObj);
@@ -179,8 +179,8 @@ module.exports = function (app) {
 
     app.put("/api/menubuilder/save", middleware.tokenCheck, function (req, res) {
 
-        var updateObj = { 
-            categories: req.body.menu 
+        var updateObj = {
+            categories: req.body.menu
         }
         if (req.body.updatedAt) {
             updateObj.updatedAt = req.body.updatedAt;
@@ -212,9 +212,47 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
+
+    app.post("/api/customer/bill/get", middleware.tokenCheck, function (req, res) {
+        var responseObj = {
+            billDetails: undefined,
+            orderItems: []
+        }
+        db.Bill.findOne({_id: req.body.billId})
+            .then(function (dbBill) {
+                responseObj.billDetails = dbBill;
+                return db.Order.find({billId: dbBill._id})
+            })
+            .then(function (dbOrders) {
+                responseObj.orderItems = dbOrders;
+                console.log(responseObj);
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
+    app.post("/api/customer/bill/create", middleware.tokenCheck, function (req, res) {
+        var createObj = {
+            restaurantId: req.body.uid,
+            tableNumber: req.body.tableNumber,
+            startTime: moment().format("X"),
+            isCompleted: false
+        }
+        var responseObj = {
+            bill: undefined
+        }
+        db.Bill.create(createObj)
+            .then(function (dbBill) {
+                responseObj.bill = dbBill;
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
     // /////////////////////////////////////////////////////////////////////////////////
     app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
-
         var currTime = moment();
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
 
@@ -261,6 +299,7 @@ module.exports = function (app) {
         var responseObj = {
             order: undefined
         }
+
         db.Order.create(menuItemObj)
             .then(function (dbOrder) {
                 responseObj.order = dbOrder;

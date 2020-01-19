@@ -21,16 +21,25 @@ class CustomerUIComponent extends React.Component {
     this.state = {
       token: undefined,
       uid: undefined,
+      uCurrBill: undefined,
       restaurantId: undefined,
       menuTitle: undefined,
       tableNumber: 1,
       menu: [],
       sidebarMenuActiveIndex: -1,
+
       modalOrderIsShown: false,
       modalOrderButtonDismissIsDisabled: false,
       modalOrderQuantity: 1,
       modalOrderMenuItemActive: undefined,
       modalOrderMenuItemList: [],
+
+      modalBillIsShown: false,
+      modalBillButtonDismissIsDisabled: false,
+      modalBillTime: undefined,
+
+      billDetails: undefined,
+      billOrderItems: undefined
     }
   }
 
@@ -48,13 +57,23 @@ class CustomerUIComponent extends React.Component {
     var uid = cookiesArr.find(curr => {
       return curr[0] === "U_ID";
     });
+    var uCurrBill = cookiesArr.find(curr => {
+      return curr[0] === "U_CURR_BILL";
+    });
 
-    if (token) {
+    if (token && uid) {
+      var newState = {
+        token: token[1],
+        uid: uid[1],
+      }
+      if (uCurrBill) {
+        newState.uCurrBill = uCurrBill[1];
+      }
       this.setState({
         ...this.state,
-        token: token[1],
-        uid: uid[1]
+        ...newState
       });
+
 
       axios.post("/api/customer", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
         .then(response => {
@@ -69,6 +88,18 @@ class CustomerUIComponent extends React.Component {
                 menu: response.data.menu.categories,
                 sidebarMenuActiveIndex: response.data.menu.categories.length === 0 ? -1 : 0
               });
+              if (this.state.uCurrBill) {
+                console.log(this.state.uCurrBill);
+                axios.post("/api/customer/bill/get", { billId: this.state.uCurrBill }, { headers: { Authorization: "Bearer " + token[1] } })
+                  .then(response => {
+                    var billDetails = JSON.parse(JSON.stringify(response.data.billDetails));
+                    billDetails.orderItems = response.data.orderItems;
+                    this.setState({
+                      ...this.state,
+                      billDetails: billDetails
+                    });
+                  });
+              }
             }
           }
         });
@@ -85,11 +116,15 @@ class CustomerUIComponent extends React.Component {
   }
 
   handleModalOrderShow = (menuItem) => {
-    this.setState({
-      ...this.state,
-      modalOrderIsShown: true,
-      modalOrderMenuItemActive: menuItem
-    });
+    if (this.state.billDetails) {
+      this.setState({
+        ...this.state,
+        modalOrderIsShown: true,
+        modalOrderMenuItemActive: menuItem
+      });
+    } else {
+      console.log("ERR: bill does not exist");
+    }
   }
   handleModalOrderClose = () => {
     this.setState({
@@ -142,19 +177,26 @@ class CustomerUIComponent extends React.Component {
     tempOrderMenuItemList.push(tempOrderMenuItemActive);
 
     var uploadObj = {
-      restaurantId: this.state.restaurantId,
-      tableNumber: this.state.tableNumber,
-      orderTime: parseInt(moment().format("X")),
-      menuItems: tempOrderMenuItemList,
+      order: {
+        restaurantId: this.state.restaurantId,
+        billId: this.state.billDetails._id,
+        tableNumber: this.state.tableNumber,
+        orderTime: parseInt(moment().format("X")),
+        menuItems: tempOrderMenuItemList,
+      }
     };
 
-    axios.post("/api/kitchen/create", { order: uploadObj }, { headers: { Authorization: "Bearer " + this.state.token } })
+    axios.post("/api/kitchen/create", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
       .then(response => {
+        console.log(response.data);
+        var billDetails = JSON.parse(JSON.stringify(this.state.billDetails));
+        billDetails.orderItems.push(response.data.order);
         this.setState({
           ...this.state,
           modalOrderIsShown: false,
           modalOrderMenuItemList: [],
-          modalOrderButtonDismissIsDisabled: false
+          modalOrderButtonDismissIsDisabled: false,
+          billDetails: billDetails
         });
       })
       .catch(err => {
@@ -164,6 +206,102 @@ class CustomerUIComponent extends React.Component {
         });
       });
   }
+
+
+
+
+  /**
+   * HANDLERS and FUNCTIONS for bill modal
+   */
+  handleButtonClickBillModalOpen = () => {
+    var eachItem = [];
+    if (this.state.billDetails) {
+      var orderItems = this.state.billDetails.orderItems;
+      if (orderItems.length > 0) {
+        orderItems.forEach(curr => {
+          curr.menuItems.forEach(curr => {
+            eachItem.push(curr);
+          });
+        });
+      }
+    } else {
+      console.log("ERR: bill does not exist");
+    }
+    this.setState({
+      ...this.state,
+      modalBillIsShown: true,
+      billOrderItems: eachItem
+    });
+  }
+
+  handleModalBillShow = () => {
+    this.setState({
+      ...this.state,
+      modalBillIsShown: true
+    });
+  }
+  handleModalBillClose = () => {
+    this.setState({
+      ...this.state,
+      modalBillIsShown: false
+    });
+  }
+  // handleModalBillExited = () => {
+  //   this.setState({
+  //     ...this.state,
+  //     modalOrderQuantity: 1,
+  //     modalOrderMenuItemActive: undefined
+  //   });
+  // }
+
+  handleModalBillCreateBill = () => {
+    if (this.state.billDetails) {
+      console.log("ERR: bill already exists");
+    } else {
+      console.log("create bill");
+      axios.post("/api/customer/bill/create", { uid: this.state.uid, tableNumber: this.state.tableNumber }, { headers: { Authorization: "Bearer " + this.state.token } })
+        .then(response => {
+          if (response.data.success === false) {
+            this.props.history.push("/signin");
+          } else {
+            if (response.data.bill) {
+              var billDetails = response.data.bill;
+              billDetails.orderItems = [];
+              this.setState({
+                ...this.state,
+                billDetails: billDetails,
+                uCurrBill: billDetails._id,
+                modalBillIsShown: false
+              });
+              document.cookie = `U_CURR_BILL=${billDetails._id}`;
+              console.log(this.state.billDetails);
+            }
+          }
+        });
+    }
+  }
+
+  handleModalBillPayBill = () => {
+    if (this.state.billDetails) {
+      console.log("pay bill");
+      // axios, update endTime new moment, isCompleted true
+      document.cookie = "U_CURR_BILL=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      this.setState({
+        ...this.state,
+        billDetails: undefined,
+        billOrderItems: undefined,
+        modalBillIsShown: false
+      });
+    } else {
+      console.log("ERR: bill does not exist");
+    }
+
+  }
+
+
+
+
+
   render() {
     var menuItemsArr = [];
     if (this.state.menu.length !== 0) {
@@ -176,10 +314,49 @@ class CustomerUIComponent extends React.Component {
         )
       });
     }
+
+    var billOrderItems = [];
+    var billOrderItemsCount = 0;
+    var billOrderTotalPrice = 0;
+    if (this.state.billOrderItems) {
+      var tempBillOrderItems = JSON.parse(JSON.stringify(this.state.billOrderItems));
+      billOrderItems = tempBillOrderItems.map((curr, i) => {
+        if (curr.quantity === 1) {
+          return (
+            <div key={i} className="px-3 px-lg-5 row mb-2">
+              <div className="col mr-auto text-truncate"><b>{curr.menuItemTitle.toUpperCase()}</b></div>
+              <div className="col-auto text-right">{curr.price.toFixed(2)}</div>
+            </div>
+          )
+        } else {
+          return (
+            <div key={i} className="px-3 px-lg-5 row mb-2">
+              <div className="col-12 text-truncate"><b>{curr.menuItemTitle.toUpperCase()}</b></div>
+              <div className="w-100"></div>
+              <div className="col mr-auto text-truncate">Qty ${curr.quantity} @ ${curr.price.toFixed(2)} ea</div>
+              <div className="col-auto text-right">{(curr.price * curr.quantity).toFixed(2)}</div>
+            </div>
+          )
+        }
+      });
+      if (tempBillOrderItems.length > 0) {
+        tempBillOrderItems.forEach(curr => {
+          billOrderTotalPrice += curr.price * curr.quantity;
+        });
+      }
+      if (tempBillOrderItems.length > 0) {
+        tempBillOrderItems.forEach(curr => {
+          billOrderItemsCount += curr.quantity;
+        });
+      }
+    }
+
+
+
     return (
       <>
         <Route exact path="/customer">
-          <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history}>
+          <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} handleButtonClickBillModalOpen={this.handleButtonClickBillModalOpen}>
             <div className="container-fluid py-3">
               <div className="row">
                 {/* MENU ITEM START */}
@@ -194,7 +371,7 @@ class CustomerUIComponent extends React.Component {
               </button> */}
 
 
-              <Modal show={this.state.modalOrderIsShown} onHide={this.handleModalOrderClose} onExited={this.handleModalOrderExited} centered size="md" backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true}>
+              <Modal className="modalMinWidth" show={this.state.modalOrderIsShown} onHide={this.handleModalOrderClose} onExited={this.handleModalOrderExited} centered size="md" backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true}>
                 <ModalHeader className="m-0 p-0 border-0">
                   <button
                     className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"
@@ -253,7 +430,7 @@ class CustomerUIComponent extends React.Component {
                     <div className="col-12 order-1">
                       <p className="text-center">Order this item?</p>
                     </div>
-                    <div className="order-3 order-sm-2 col-12 col-sm-6 col-md-4 px-2">
+                    {/* <div className="order-3 order-sm-2 col-12 col-sm-6 col-md-4 px-2">
                       <button
                         className="button--transparent bg-danger h-100 w-100 color-white py-2"
                         disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
@@ -264,10 +441,103 @@ class CustomerUIComponent extends React.Component {
                         className="button--transparent bg-success h-100 w-100 color-white py-2"
                         disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
                         onClick={this.handleModalOrderButtonOrderClick}>YES</button>
+                    </div> */}
+                    <div className="order-2 col-6 col-md-4 px-2">
+                      <button
+                        className="button--transparent bg-danger h-100 w-100 color-white py-2"
+                        disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
+                        onClick={this.handleModalOrderClose}>NO</button>
+                    </div>
+                    <div className="order-3 col-6 col-md-4 px-2">
+                      <button
+                        className="button--transparent bg-success h-100 w-100 color-white py-2"
+                        disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
+                        onClick={this.handleModalOrderButtonOrderClick}>YES</button>
                     </div>
                   </div>
                 </ModalFooter>
               </Modal>
+
+
+
+
+
+              <Modal className="modalMinWidth" show={this.state.modalBillIsShown} onHide={this.handleModalBillClose} onExited={this.handleModalBillExited} centered size="xl" backdrop={this.state.modalBillButtonDismissIsDisabled ? "static" : true}>
+                <ModalHeader className="m-0 p-0 border-0 py-3 pl-3">
+                  <button
+                    className="button--transparent button--dev py-2 px-5 color-white rounded-pill"
+                    onClick={this.handleModalBillCreateBill}>CREATE_BILL_DEV</button>
+
+                  <button
+                    className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"
+                    disabled={this.state.modalBillButtonDismissIsDisabled ? true : false}
+                    onClick={this.handleModalBillClose}>
+                    <i className="material-icons font-30">close</i>
+                  </button>
+                </ModalHeader>
+                <ModalBody className="p-0">
+                  <div className="px-3 px-lg-5 mb-4">
+                    {/* <div className="row">
+                      <div className="col mr-auto border">
+                        <p className="m-0 font-30"><b>TABLE {this.state.tableNumber}</b></p>
+                      </div>
+                      <div className="col-auto text-right border">
+                        <p className="m-0"><b>3:29 PM</b></p>
+                      </div>
+                    </div> */}
+                    <div className="d-flex align-items-center overflow-hidden">
+                      <p className="m-0 mr-auto font-30 text-nowrap"><b>TABLE {this.state.tableNumber}&nbsp;&middot;&nbsp;</b>BILL</p>
+                      <p className="m-0 ml-3 text-nowrap text-truncate"><b>{moment().format("h:mm A")}</b></p>
+                    </div>
+                    <p className="m-0 small color-black-05 p-0">BILL ID: {this.state.billDetails ? this.state.billDetails._id : ""}</p>
+                  </div>
+
+
+                  <div className="px-3 px-lg-5 row">
+                    <div className="col text-right"><p className="m-0">$</p></div>
+                  </div>
+                  {/* <div className="px-3 px-lg-5 row mb-2">
+                    <div className="col mr-auto text-truncate"><b>GELATO asdf asdf asdf asdf asf asfd as</b></div>
+                    <div className="col-auto text-right">12.20</div>
+                  </div>
+                  <div className="px-3 px-lg-5 row mb-2">
+                    <div className="col-12 text-truncate"><b>SQUID INK PASTA awef awef awef awef awef awef </b></div>
+                    <div className="w-100"></div>
+                    <div className="col mr-auto text-truncate">Qty 2333333333333333 @ $15.00 ea</div>
+                    <div className="col-auto text-right">30.00</div>
+                  </div> */}
+                  {billOrderItems}
+
+                  <div className="px-3 px-lg-5 mb-3">
+                    <hr />
+                  </div>
+
+                  <div className="px-3 px-lg-5 d-flex align-items-center">
+                    <p className="m-0 mr-auto font-18 text-truncate">{billOrderItemsCount} ITEMS</p>
+                    <p className="m-0 ml-3 font-24 text-nowrap">TOTAL ${billOrderTotalPrice.toFixed(2)}</p>
+                  </div>
+
+                </ModalBody>
+                <ModalFooter className="border-0 justify-content-center px-0">
+                  <div className="row w-100 justify-content-center">
+                    <div className="col-6 col-md-4 px-2">
+                      <button
+                        className="button--transparent bg-danger h-100 w-100 color-white py-2"
+                        // disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
+                        onClick={this.handleModalBillClose}>CANCEL</button>
+                    </div>
+                    <div className="col-6 col-md-4 px-2">
+                      <button
+                        className="button--transparent bg-success h-100 w-100 color-white py-2"
+                        // disabled={this.state.modalOrderButtonDismissIsDisabled ? true : false}
+                        onClick={this.handleModalBillPayBill}>PAY</button>
+                    </div>
+                  </div>
+                </ModalFooter>
+              </Modal>
+
+
+
             </div>
           </CustomerLayout>
         </Route>
