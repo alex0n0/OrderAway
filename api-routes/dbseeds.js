@@ -35,7 +35,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "hawaiian pizza",
         description: "Juicy pineapple on pizza",
-        price: 15.30,
+        price: 14.99,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -45,7 +45,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "supreme pizza",
         description: "a bit of everything",
-        price: 15.30,
+        price: 13.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -55,7 +55,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "meatlovers pizza",
         description: "5 kinds of meat",
-        price: 12.99,
+        price: 12.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -65,7 +65,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "prawn and fetta pizza",
         description: "",
-        price: 15.30,
+        price: 12.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -75,7 +75,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "Pork sausage and ricotta pizza",
         description: "",
-        price: 15.30,
+        price: 15.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -85,7 +85,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "lamb and eggplant pastry pizza",
         description: "",
-        price: 12.99,
+        price: 7.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -95,7 +95,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "pulled beef pizza",
         description: "",
-        price: 15.30,
+        price: 14.25,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -105,7 +105,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "wholemeal tomato and pesto pizza",
         description: "",
-        price: 15.30,
+        price: 18.90,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -115,7 +115,7 @@ var arrRestaurant1Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "zucchini and ricotta pizza with crispy kale",
         description: "",
-        price: 12.99,
+        price: 10.50,
         tags: { vg: false, v: false, gf: false }
     }
 ]
@@ -133,7 +133,7 @@ var arrRestaurant1Menu1Category2MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "squid ink pasta",
         description: "makes your teeth black",
-        price: 15.30,
+        price: 12.99,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -143,7 +143,7 @@ var arrRestaurant1Menu1Category2MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "lamb ragu",
         description: "lamb",
-        price: 15.30,
+        price: 15.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -171,7 +171,7 @@ var arrRestaurant1Menu1Category3MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "gelato",
         description: "mango",
-        price: 15.30,
+        price: 6.00,
         tags: { vg: false, v: false, gf: false }
     },
     {
@@ -181,7 +181,7 @@ var arrRestaurant1Menu1Category3MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "tiramisu",
         description: "sweet",
-        price: 15.30,
+        price: 5.50,
         tags: { vg: false, v: false, gf: false }
     }
 ];
@@ -231,7 +231,7 @@ var arrRestaurant2Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "Veggie and kimchi burger",
         description: "",
-        price: 15.30,
+        price: 12.25,
         tags: { vg: true, v: true, gf: false }
     },
     {
@@ -241,7 +241,7 @@ var arrRestaurant2Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "Chicken-free schnitzel and avocado burger",
         description: "",
-        price: 15.30,
+        price: 11.00,
         tags: { vg: true, v: true, gf: false }
     },
     {
@@ -251,7 +251,7 @@ var arrRestaurant2Menu1Category1MenuItems = [
         imageOrientationLandscape: true,
         menuItemTitle: "Beef burger with fresh tomato salsa",
         description: "",
-        price: 15.30,
+        price: 15.00,
         tags: { vg: false, v: false, gf: false }
     }
 ];

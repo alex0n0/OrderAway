@@ -218,10 +218,10 @@ module.exports = function (app) {
             billDetails: undefined,
             orderItems: []
         }
-        db.Bill.findOne({_id: req.body.billId})
+        db.Bill.findOne({ _id: req.body.billId })
             .then(function (dbBill) {
                 responseObj.billDetails = dbBill;
-                return db.Order.find({billId: dbBill._id})
+                return db.Order.find({ billId: dbBill._id })
             })
             .then(function (dbOrders) {
                 responseObj.orderItems = dbOrders;
@@ -251,10 +251,32 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
+    app.post("/api/customer/bill/pay", middleware.tokenCheck, function (req, res) {
+        var updateObj = {
+            endTime: moment().format("X"),
+            isCompleted: true
+        }
+        var responseObj = {
+            bill: undefined,
+            success: undefined
+        }
+
+        db.Bill.findOneAndUpdate({_id: req.body.billId, isCompleted: false}, updateObj, {upsert: true})
+            .then(function (dbBill) {
+                responseObj.bill = dbBill;
+                responseObj.success = true;
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
     // /////////////////////////////////////////////////////////////////////////////////
     app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
         var currTime = moment();
+        
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+        var last24Hours = currTime.subtract(24, "hours");
 
         var responseObj = {
             orders: []
@@ -270,9 +292,43 @@ module.exports = function (app) {
                     {
                         restaurantId: dbRestaurant._id,
                         isCompleted: false,
-                        orderTime: { $gt: parseInt(todayStart.format("X")) }
+                        // orderTime: { $gt: parseInt(todayStart.format("X")) }
+                        orderTime: { $gt: parseInt(last24Hours.format("X")) }
                     }
                 ).sort({ orderTime: "asc" });
+            })
+            .then(function (dbOrders) {
+                responseObj.orders = dbOrders;
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
+    app.post("/api/kitchen/completed", middleware.tokenCheck, function (req, res) {
+        var currTime = moment();
+        
+        var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+        var last24Hours = currTime.subtract(24, "hours");
+
+        var responseObj = {
+            orders: []
+        }
+        db.Restaurant.findOne({ _id: req.body.uid })
+            .then(function (dbRestaurant) {
+                responseObj.restaurant = {
+                    restaurantTitle: dbRestaurant.restaurantTitle,
+                    iconUrl: dbRestaurant.iconUrl
+                }
+
+                return db.Order.find(
+                    {
+                        restaurantId: dbRestaurant._id,
+                        isCompleted: true,
+                        // orderTime: { $gt: parseInt(todayStart.format("X")) }
+                        orderTime: { $gt: parseInt(last24Hours.format("X")) }
+                    }
+                ).sort({ completeTime: "desc" });
             })
             .then(function (dbOrders) {
                 responseObj.orders = dbOrders;
@@ -310,7 +366,7 @@ module.exports = function (app) {
             });
     });
     app.put("/api/kitchen/done", middleware.tokenCheck, function (req, res) {
-        db.Order.findOneAndUpdate({ _id: req.body.orderId }, { isCompleted: true })
+        db.Order.findOneAndUpdate({ _id: req.body.orderId }, { isCompleted: true, completeTime: moment().format("X") })
             .then(function (dbOrder) {
                 // console.log(dbOrder) // pre-update data
                 if (dbOrder) {

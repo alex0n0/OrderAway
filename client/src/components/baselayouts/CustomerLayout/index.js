@@ -26,9 +26,10 @@ class CustomerLayout extends React.Component {
     }
 
     handleButtonClickSignOut = () => {
-        document.cookie = "U_TKN=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        document.cookie = "U_ID=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        document.cookie = "U_CURR_BILL=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         this.props.history.push("/signin");
     }
 
@@ -60,17 +61,20 @@ class CustomerLayout extends React.Component {
             <>
                 <header className="customer header-navigation shadow--dark">
 
-                    <div className="container-fluid pageMinWidth h-100 p-0 d-flex flex-nowrap">
+                    <div className="container-fluid pageMinWidth h-100 p-0 d-flex flex-nowrap align-items-center">
                         <button className="button--transparent h-100 px-4 d-flex d-sm-none" onClick={this.handleSidebarToggle}>
                             <i className="material-icons">menu</i>
                         </button>
-                        <div className="h-100 px-0 px-sm-4 py-3 mr-auto">
+                        <div className="h-100 px-0 px-sm-4 py-3 mr-4">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="100%" width="auto" />
                         </div>
-                        <button className="button--transparent h-100 px-4">
+                        <p className="m-0 mr-3 font-24 color-white"><b>Table&nbsp;{this.props.tableNumber}</b></p>
+                        <div className="h-100 px-0 px-sm-4 py-3 mr-4 color-white">
+                        </div>
+                        {/* <button className="button--transparent h-100 px-4">
                             <i className="material-icons">language</i>
-                        </button>
-                        <Dropdown className="h-100">
+                        </button> */}
+                        <Dropdown className="h-100 ml-auto">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center px-2">
                                     <i className="material-icons">more_vert</i>
@@ -80,10 +84,10 @@ class CustomerLayout extends React.Component {
                             <DropdownMenu alignRight={true}>
                                 {/* <Dropdown.Divider /> */}
                                 <div className="px-2 mb-2">
-                                    <input type="text" className="form-control" placeholder="PIN"/>
+                                    <input type="text" className="form-control" placeholder="PIN" />
                                 </div>
                                 <div className="px-2">
-                                    <button 
+                                    <button
                                         className="btn btn-success btn-block"
                                         onClick={this.handleButtonClickSignOut}>
                                         Sign out

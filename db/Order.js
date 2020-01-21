@@ -6,6 +6,7 @@ const orderSchema = new Schema({
     billId: { type: String },
     tableNumber: { type: Number },
     orderTime: { type: Number },
+    completeTime: { type: Number },
     menuItems: [
         {
             menuTitle: { type: String },

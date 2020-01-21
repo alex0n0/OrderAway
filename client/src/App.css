@@ -36,6 +36,8 @@
 .font-28 { font-size: 28px ; }
 .font-30 { font-size: 30px ; }
 
+
+
 .pageMinWidth {
     min-width: var(--pageMinWidth);
 }
@@ -52,11 +54,15 @@
     justify-content: center;
 }
 .button--transparent.button--dev {
-    background: linear-gradient(90deg, rgb(214, 12, 137), rgb(53, 2, 238));
-    /* background-color: rgb(230, 11, 211);  */
+    background-color: rgb(11, 230, 157); 
     animation-name: blink;
     animation-duration: 2s;
     animation-iteration-count: infinite;
+}
+.button--transparent.button--dev:disabled {
+    background-color: rgb(11, 230, 157);
+    animation-name: none;
+    filter: brightness(0.6);
 }
 
 .button--transparent:disabled {
@@ -86,15 +92,26 @@
 
 @keyframes blink {
     0% {
-        /* background-color: rgb(230, 11, 211);  */
-        background: linear-gradient(90deg, rgb(23, 110, 160), rgb(51, 41, 90));
+        background-color: rgb(3, 202, 136);
     }
-    50% {
-        /* background-color: rgb(110, 9, 102);  */
-        background: linear-gradient(90deg, rgb(185, 127, 80), rgb(7, 201, 82));
+    30% {
+        background-color: rgb(5, 255, 172); 
     }
     100% {
-        /* background-color: rgb(230, 11, 211);  */
-        background: linear-gradient(90deg, rgb(214, 12, 137), rgb(34, 7, 134));
+        background-color: rgb(3, 202, 136);
     }
+}
+
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+.initialiseBillModal .modal-content{
+    background-color: transparent;
+}
+
+.dropdown-menu {
+    border-radius: 0px;
 }

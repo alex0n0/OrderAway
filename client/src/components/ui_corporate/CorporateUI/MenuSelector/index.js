@@ -92,7 +92,6 @@ class MenuSelector extends React.Component {
             this.props.history.push("/signin");
         }
 
-
     }
 
     handleButtonSidebarToggleClick = () => {
