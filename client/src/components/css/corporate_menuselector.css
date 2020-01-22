@@ -136,14 +136,14 @@
   width: 150%;
   padding-top: 300%;
   background: linear-gradient(0deg, #1414bc, #ff3131);
-  animation-name: gradientmagic;
+  animation-name: spinninggradient;
   animation-duration: 5s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   z-index: 5;
 }
 
-@keyframes gradientmagic {
+@keyframes spinninggradient {
   0% {
     transform: translate(-50%, -50%) rotate(0deg) scale(2);
   }

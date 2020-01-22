@@ -152,7 +152,7 @@ $break-xl: 1200px;
 
                     background: linear-gradient(0deg, rgb(20, 20, 188), rgb(255, 49, 49));
                     // background: linear-gradient(0deg, rgb(247, 33, 247), rgb(28, 145, 247));
-                    animation-name: gradientmagic;
+                    animation-name: spinninggradient;
                     animation-duration: 5s;
                     animation-iteration-count: infinite;
                     animation-timing-function: linear;
@@ -166,7 +166,7 @@ $break-xl: 1200px;
     
 }
 
-@keyframes gradientmagic {
+@keyframes spinninggradient {
     0% {
         transform: translate(-50%, -50%) rotate(0deg) scale(2);
     }

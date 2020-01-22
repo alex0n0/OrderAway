@@ -2,18 +2,24 @@
     height: 10px;
     width: 10px;
     background-color: lime;
-    background-color: gainsboro;
 }
 .orderitem .indicator--dot.late {
     height: 10px;
     width: 10px;
     background-color: red;
 }
+.orderitem .indicator--dot.neutral {
+    height: 10px;
+    width: 10px;
+    background-color: gainsboro;
+}
+
 .orderitem .indicator--border {
-    border-left: 5px solid lime;
-    border-left: 5px solid gainsboro;
-    
+    border-left: 5px solid lime;   
 }
 .orderitem .indicator--border.late {
     border-left: 5px solid red;
+}
+.orderitem .indicator--border.neutral {
+    border-left: 5px solid gainsboro;
 }

@@ -8,7 +8,7 @@ class OrderItem extends React.Component {
         var timeFrom = moment(this.props.orderItem.orderTime, "X").from(moment(this.props.currTime));
         var millisFrom = moment(this.props.currTime).format('x') - moment(this.props.orderItem.orderTime, "X").format('x');
         var isLate = false;
-        if (millisFrom / 60000 > 10) {
+        if (millisFrom / 60000 >= 11) {
             isLate = true;
         }
         return (

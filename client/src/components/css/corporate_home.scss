@@ -1,0 +1,32 @@
+$break-sm: 576px;
+$break-md: 768px;
+$break-lg: 992px;
+$break-xl: 1200px;
+
+@mixin break-sm {
+    @media(min-width: $break-sm) { @content; }
+}
+@mixin break-md {
+    @media(min-width: $break-md) { @content; }
+}
+@mixin break-lg {
+    @media(min-width: $break-lg) { @content; }
+}
+@mixin break-xl {
+    @media(min-width: $break-xl) { @content; }
+}
+
+
+
+
+.corporatehome {
+    .container {
+        max-width: 1200px !important;
+        margin: 0px !important;
+    }
+
+    .main-content-content {
+        padding-top: 20px;
+    }
+
+}

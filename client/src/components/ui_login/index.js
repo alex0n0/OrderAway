@@ -29,7 +29,7 @@ class LoginUI extends React.Component {
         // });
 
         if (token) {
-            this.props.history.push("/corporate/menu");
+            this.props.history.push("/corporate");
         }
     }
 
@@ -65,7 +65,7 @@ class LoginUI extends React.Component {
                     if (response.data.success === true) {
                         document.cookie = `U_TKN=${response.data.token}; path=/`;
                         document.cookie = `U_ID=${response.data.uid}; path=/`;
-                        this.props.history.push('/corporate/menu');
+                        this.props.history.push('/corporate');
                     } else if (response.data.success === false) {
                         console.log("fix your shit");
                         this.setState({

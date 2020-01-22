@@ -9,7 +9,7 @@ import OrderItem from '../../../elements/orderitem/Kitchen';
 // import order from '../../zzz/order'; // can delete this import AND delete from ./zzz
 import sidebarmenu from '../sidebarmenu';
 
-class KitchenUI extends React.Component {
+class KitchenOrdersUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -165,12 +165,12 @@ class KitchenUI extends React.Component {
             });
     }
 
-    handleSidebarOptionClick = (i) => {
-        this.setState({
-            ...this.state,
-            sidebarMenuActiveIndex: i
-        });
-    }
+    // handleSidebarOptionClick = (i) => {
+    //     this.setState({
+    //         ...this.state,
+    //         sidebarMenuActiveIndex: i
+    //     });
+    // }
 
     render() {
         var ordersArr = [];
@@ -189,8 +189,13 @@ class KitchenUI extends React.Component {
             });
         }
         return (
-            <CorporateLayout darkTheme={true} sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
-
+            <CorporateLayout 
+                darkTheme={true} 
+                sidebarmenu={this.state.sidebarmenu} 
+                sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} 
+                // handleSidebarOptionClick={this.handleSidebarOptionClick} 
+                history={this.props.history} 
+                restaurant={this.state.restaurant}>
                 <div className="py-3 px-3">
 
                     <div className="container-fluid">
@@ -211,4 +216,4 @@ class KitchenUI extends React.Component {
     }
 }
 
-export default KitchenUI;
+export default KitchenOrdersUI;

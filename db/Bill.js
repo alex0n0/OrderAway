@@ -6,7 +6,8 @@ const billSchema = new Schema({
     tableNumber: { type: Number },
     startTime: { type: Number },
     endTime: { type: Number },
-    isCompleted: { type: Boolean }
+    isCompleted: { type: Boolean },
+    subtotal: { type: Number }
 });
 
 const Bill = mongoose.model("Bill", billSchema);

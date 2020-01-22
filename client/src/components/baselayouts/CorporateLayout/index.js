@@ -29,29 +29,30 @@ class CorporateLayout extends React.Component {
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
                         <button className="button--transparent h-100 px-4 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></button>
 
+                        
                         <Dropdown className="h-100">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center">
                                     <div
-                                        className={this.props.darkTheme ? "mr-1 mr-md-3 rounded-circle bg-light overflow-hidden d-flex align-items-center justify-content-center":"mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center"}
+                                        className={this.props.darkTheme ? "mr-1 mr-md-3 rounded-circle bg-light overflow-hidden d-flex align-items-center justify-content-center" : "mr-1 mr-md-3 rounded-circle bg-dark overflow-hidden d-flex align-items-center justify-content-center"}
                                         style={{ height: "48px", width: "48px" }}>
                                         {
-                                            this.props.restaurant.iconUrl ? 
-                                            (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="auto" width="70%" />)
-                                            :
-                                            ""
+                                            this.props.restaurant.iconUrl ?
+                                                (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="auto" width="70%" />)
+                                                :
+                                                ""
                                         }
                                     </div>
                                     <p
-                                        className={this.props.darkTheme ? "color-white m-0 mr-1 d-none d-md-block":"color-black m-0 mr-1 d-none d-md-block"}>
+                                        className={this.props.darkTheme ? "color-white m-0 mr-1 d-none d-md-block" : "color-black m-0 mr-1 d-none d-md-block"}>
                                         {this.props.restaurant.restaurantTitle ? this.props.restaurant.restaurantTitle : ""}
                                     </p>
-                                    <i className="color-black material-icons">keyboard_arrow_down</i>
+                                    <i className={this.props.darkTheme ? "color-white material-icons" : "color-black material-icons"}>keyboard_arrow_down</i>
                                 </div>
                             </DropdownToggle>
 
-                            <DropdownMenu alignRight={true}>
-                                <DropdownItem onClick={this.handleButtonClickSignOut}>Settings</DropdownItem>
+                            <DropdownMenu alignRight={true} >
+                                {/* <DropdownItem onClick={this.handleButtonClickSignOut}>Settings</DropdownItem> */}
                                 <Dropdown.Divider />
                                 <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem>
                                 {/* <button 
@@ -69,31 +70,27 @@ class CorporateLayout extends React.Component {
                         {
                             this.props.sidebarmenu.map((curr, i) => {
                                 return (
-                                    <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent w-100 flex-column py-3 active" : "button--transparent w-100 flex-column py-3"}
-                                        key={i}
-                                        onClick={() => { this.props.handleSidebarOptionClick(i) }}
-                                    >
-                                        <i className="material-icons">{curr.icon}</i>
-                                        <p className="m-0 font-12">{curr.title}</p>
-                                    </button>
+                                    <Link
+                                        to={curr.url ? curr.url : "/"}
+                                        style={{ textDecoration: "none" }}
+                                        key={i}>
+                                        <button className={i === this.props.sidebarMenuActiveIndex ? "button--transparent w-100 flex-column py-3 active" : "button--transparent w-100 flex-column py-3"}>
+                                            <i className="material-icons">{curr.icon}</i>
+                                            <p className="m-0 font-12">{curr.title}</p>
+                                        </button>
+                                    </Link>
                                 );
                             })
                         }
                     </div>
-                    <div className="mt-5">
-                        <Link to="/kitchen" target="_blank">
-                            <button className="button--transparent w-100 flex-column py-3">
-                                <i className="material-icons">outdoor_grill</i>
-                                <p className="m-0 font-12">Kitchen Screen</p>
-                            </button>
-                        </Link>
+                    {/* <div className="mt-5">
                         <Link to="/customer/table" target="_blank">
                             <button className="button--transparent w-100 flex-column py-3 pb-4">
                                 <i className="material-icons">restaurant</i>
                                 <p className="m-0 font-12">Customer Screen</p>
                             </button>
                         </Link>
-                    </div>
+                    </div> */}
                 </section>
                 <div className="overflowWrapper">
                     <main className={this.props.darkTheme ? "corporate main-content pageMinWidth darkTheme" : "corporate main-content pageMinWidth"}>

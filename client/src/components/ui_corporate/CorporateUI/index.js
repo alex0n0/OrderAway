@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import CorporateLayout from '../../baselayouts/CorporateLayout';
+import CorporateHomeUI from './CorporateHome';
 import MenuSelector from './MenuSelector';
 import MenuBuilder from './MenuBuilder';
 
@@ -33,7 +34,6 @@ class CorporateUIComponent extends React.Component {
     }
 
     setRestaurantTitle = (title, url) => {
-        console.log(url);
         this.setState({
             ...this.state,
             restaurant: {
@@ -47,27 +47,17 @@ class CorporateUIComponent extends React.Component {
         return (
             <>
                 <Route exact path="/corporate">
-                    <CorporateLayout sidebarmenu={this.state.sidebarmenu}>
-                        <h1>business UI home</h1>
-                        <div className="container-xl bg-white border">
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                            <p>asdf</p>
-                        </div>
+                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={0} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
+                        <CorporateHomeUI history={this.props.history} liftRestuarantTitle={this.setRestaurantTitle}></CorporateHomeUI>
                     </CorporateLayout>
                 </Route>
                 <Route exact path="/corporate/menu">
-                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
+                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={1} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
                         <MenuSelector history={this.props.history} liftRestuarantTitle={this.setRestaurantTitle}/>
                     </CorporateLayout>
                 </Route>
                 <Route path="/corporate/menu/builder/:id">
-                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
+                    <CorporateLayout sidebarmenu={this.state.sidebarmenu} sidebarMenuActiveIndex={1} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} restaurant={this.state.restaurant}>
                         <MenuBuilder history={this.props.history} liftRestuarantTitle={this.setRestaurantTitle}/>
                     </CorporateLayout>
                 </Route>

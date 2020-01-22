@@ -28,6 +28,31 @@ module.exports = function (app) {
     app.post("/api/general/signup", signup, login.tokenGenerate);
     app.post("/api/general/processlogin", login.tokenGenerate);
 
+
+    // ////////////////////////////////////////////////////////////////////////////////////
+
+    app.post("/api/allrevenue", middleware.tokenCheck, function (req, res) {
+        var uid = req.body.uid;
+        var responseObj = {
+            restaurants: undefined,
+            bills: []
+        }
+
+        db.Restaurant.findOne({ _id: uid })
+            .then(function (dbRestaurant) {
+                responseObj.restaurant = dbRestaurant;
+                // return db.Menu.find({ restaurantId: dbRestaurant._id }).sort({ menuTitle: "asc", _id: "asc" });
+                return db.Bill.find({ restaurantId: uid, isCompleted: true }).sort({ endTime: "desc" })
+
+            }).then(function (dbBills) {
+                responseObj.bills = dbBills;
+                res.json(responseObj);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+    });
+
     app.post("/api/allmenus", middleware.tokenCheck, function (req, res) {
         var uid = req.body.uid;
         var responseObj = {
@@ -225,7 +250,6 @@ module.exports = function (app) {
             })
             .then(function (dbOrders) {
                 responseObj.orderItems = dbOrders;
-                console.log(responseObj);
                 res.json(responseObj);
             })
             .catch(function (err) {
@@ -254,14 +278,16 @@ module.exports = function (app) {
     app.post("/api/customer/bill/pay", middleware.tokenCheck, function (req, res) {
         var updateObj = {
             endTime: moment().format("X"),
-            isCompleted: true
+            isCompleted: true,
+            subtotal: req.body.subtotal
         }
+
         var responseObj = {
             bill: undefined,
             success: undefined
         }
 
-        db.Bill.findOneAndUpdate({_id: req.body.billId, isCompleted: false}, updateObj, {upsert: true})
+        db.Bill.findOneAndUpdate({ _id: req.body.billId, isCompleted: false }, updateObj, { upsert: true })
             .then(function (dbBill) {
                 responseObj.bill = dbBill;
                 responseObj.success = true;
@@ -274,7 +300,7 @@ module.exports = function (app) {
     // /////////////////////////////////////////////////////////////////////////////////
     app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
         var currTime = moment();
-        
+
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
 
@@ -307,7 +333,7 @@ module.exports = function (app) {
     });
     app.post("/api/kitchen/completed", middleware.tokenCheck, function (req, res) {
         var currTime = moment();
-        
+
         var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
 

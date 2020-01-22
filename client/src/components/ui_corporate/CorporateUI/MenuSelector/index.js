@@ -61,7 +61,6 @@ class MenuSelector extends React.Component {
                         this.props.history.push("/signin");
                     } else {
                         if (response.data.restaurant) {
-                            console.log(response.data.restaurant);
                             this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle, response.data.restaurant.iconUrl);
                         }
 
@@ -74,7 +73,6 @@ class MenuSelector extends React.Component {
 
                             this.setState({
                                 ...this.state,
-                                tokenValid: true,
                                 restaurantId: response.data.restaurant._id,
                                 menus: response.data.menus,
                                 menuPublishedId: menuPublishedId,

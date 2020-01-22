@@ -1,16 +1,18 @@
 var sidebarmenu = [
     {
-        icon: 'home',
-        title: 'Home'
+        icon: 'list_alt',
+        title: 'Orders',
+        url: "/kitchen"
     },
     {
-        icon: 'menu_book',
-        title: 'Menu'
+        icon: 'history',
+        title: 'History',
+        url: "/kitchen/completed",
     },
-    {
-        icon: 'settings_applications',
-        title: 'Settings'
-    }
+    // {
+    //     icon: 'settings_applications',
+    //     title: 'Settings'
+    // }
 ];
 
 export default sidebarmenu;

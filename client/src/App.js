@@ -6,8 +6,8 @@ import CorporateUI from './components/ui_corporate/CorporateUI';
 import CustomerTableSelectorUI from './components/ui_restaurant/CustomerUI/TableSelectorInterface';
 import CustomerMenuUI from './components/ui_restaurant/CustomerUI/MenuInterface';
 // import KitchenUI from './components/ui_restaurant/KitchenUI';
-import KitchenUI from './components/ui_restaurant/KitchenUI/IncompleteOrders';
-import KitchenCompletedOrdersUI from './components/ui_restaurant/KitchenUI/CompletedOrders';
+import KitchenOrdersUI from './components/ui_restaurant/KitchenUI/Orders';
+import KitchenCompletedUI from './components/ui_restaurant/KitchenUI/Completed';
 import LoginUI from './components/ui_login';
 import SignUpUI from './components/ui_signup';
 // import ServerUI from './components/ui_restaurant/ServerUI';
@@ -124,8 +124,8 @@ class App extends React.Component {
           <Route path="/corporate" component={CorporateUI} />
           <Route exact path="/customer/table" component={CustomerTableSelectorUI} />
           <Route exact path="/customer/menu" component={CustomerMenuUI} />
-          <Route exact path="/kitchen" component={KitchenUI} />
-          <Route exact path="/kitchen/completed" component={KitchenCompletedOrdersUI} />
+          <Route exact path="/kitchen" component={KitchenOrdersUI} />
+          <Route exact path="/kitchen/completed" component={KitchenCompletedUI} />
           <Route path="/signin" component={LoginUI} />
           <Route path="/signup" component={SignUpUI} />
           {/* <Route path="/server" component={CustomerUI} /> */}

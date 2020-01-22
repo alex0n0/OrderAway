@@ -9,14 +9,14 @@ import OrderItem from '../../../elements/orderitem/KitchenCompleted';
 // import order from '../../zzz/order'; // can delete this import AND delete from ./zzz
 import sidebarmenu from '../sidebarmenu';
 
-class KitchenCompletedOrdersUI extends React.Component {
+class KitchenCompletedUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             token: undefined,
             uid: undefined,
             sidebarmenu: sidebarmenu,
-            sidebarMenuActiveIndex: 0,
+            sidebarMenuActiveIndex: 1,
             orders: [],
             currTime: moment(),
             tempOrders: [],
@@ -31,7 +31,6 @@ class KitchenCompletedOrdersUI extends React.Component {
     // socket;
 
     componentDidMount() {
-        console.log("completed");
         var cookies = document.cookie;
         var cookiesArr = cookies.split(";").map(curr => curr.trim());
         cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
@@ -211,4 +210,4 @@ class KitchenCompletedOrdersUI extends React.Component {
     }
 }
 
-export default KitchenCompletedOrdersUI;
+export default KitchenCompletedUI;

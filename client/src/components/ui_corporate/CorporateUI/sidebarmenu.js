@@ -2,14 +2,12 @@ var sidebarmenu = [
     {
         icon: "home",
         title: "Home",
-        href: "",
-        targetBlank: false
+        url: "/corporate"
     },
     {
         icon: "menu_book",
         title: "Menu",
-        href: "",
-        targetBlank: false
+        url: "/corporate/menu"
     },
     // {
     //     icon: "account_balance_wallet",

@@ -347,8 +347,12 @@ class CustomerMenuUI extends React.Component {
       this.setState({
         ...this.state,
         modalBillButtonDismissIsDisabled: true
-      })
-      axios.post("/api/customer/bill/pay", { billId: billDetails._id }, { headers: { Authorization: "Bearer " + this.state.token } })
+      });
+      var uploadObj = {
+        billId: billDetails._id,
+        subtotal: this.calculateBillTotalPrice()
+      }
+      axios.post("/api/customer/bill/pay", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
         .then(response => {
           console.log(response.data);
           if (response.data.success) {
@@ -368,7 +372,7 @@ class CustomerMenuUI extends React.Component {
         })
         .catch(err => {
           console.log(err);
-        })
+        });
     } else {
       console.log("ERR: bill does not exist");
     }
@@ -393,6 +397,24 @@ class CustomerMenuUI extends React.Component {
     document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     this.props.history.push("/customer/table");
   }
+
+
+  calculateBillTotalPrice = () => {
+    var billOrderItems = this.state.billOrderItems;
+    var billOrderTotalPrice = 0;
+    if (billOrderItems) {
+      var tempBillOrderItems = JSON.parse(JSON.stringify(this.state.billOrderItems));
+     
+      if (tempBillOrderItems.length > 0) {
+        tempBillOrderItems.forEach(curr => {
+          billOrderTotalPrice += curr.price * curr.quantity;
+        });
+        return billOrderTotalPrice;
+      }
+    }
+    return 0;
+  }
+
 
 
   render() {
@@ -434,12 +456,12 @@ class CustomerMenuUI extends React.Component {
       });
       if (tempBillOrderItems.length > 0) {
         tempBillOrderItems.forEach(curr => {
-          billOrderTotalPrice += curr.price * curr.quantity;
+          billOrderItemsCount += curr.quantity;
         });
       }
       if (tempBillOrderItems.length > 0) {
         tempBillOrderItems.forEach(curr => {
-          billOrderItemsCount += curr.quantity;
+          billOrderTotalPrice += curr.price * curr.quantity;
         });
       }
     }
@@ -456,7 +478,13 @@ class CustomerMenuUI extends React.Component {
             </div>
 
 
-            <Modal className="modalMinWidth" show={this.state.modalOrderIsShown} onHide={this.handleModalOrderClose} onExited={this.handleModalOrderExited} centered size="md" backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true}>
+            <Modal className="modalMinWidth" 
+              centered size="md" 
+              show={this.state.modalOrderIsShown} 
+              onHide={this.handleModalOrderClose} 
+              onExited={this.handleModalOrderExited} 
+              backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true} 
+              keyboard={this.state.modalOrderButtonDismissIsDisabled ? false : true}>
               <ModalHeader className="m-0 p-0 border-0">
                 <button
                   className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"
@@ -540,7 +568,11 @@ class CustomerMenuUI extends React.Component {
 
 
 
-            <Modal className="modalMinWidth initialiseBillModal" show={this.state.modalInitialiseBillIsShown} centered size="xl" backdrop="static" >
+            <Modal className="modalMinWidth initialiseBillModal" 
+              centered size="xl" 
+              show={this.state.modalInitialiseBillIsShown} 
+              backdrop="static"
+              keyboard={false}>
               <ModalHeader className="border-0">
                 <div className="row w-100">
                   <div className="col-12 col-lg-6 ml-auto d-flex justify-content-end">
@@ -570,7 +602,13 @@ class CustomerMenuUI extends React.Component {
 
 
 
-            <Modal className="modalMinWidth" show={this.state.modalBillIsShown} onHide={this.handleModalBillClose} onExited={this.handleModalBillExited} centered size="lg" backdrop={this.state.modalBillButtonDismissIsDisabled ? "static" : true}>
+            <Modal className="modalMinWidth" 
+              centered size="lg" 
+              show={this.state.modalBillIsShown} 
+              onHide={this.handleModalBillClose} 
+              onExited={this.handleModalBillExited} 
+              backdrop={this.state.modalBillButtonDismissIsDisabled ? "static" : true}
+              keyboard={this.state.modalBillButtonDismissIsDisabled ? false : true}>
               <ModalHeader className={this.state.billDetails ? "d-block m-0 p-0 border-0" : "d-none m-0 p-0 border-0"}>
                 <button
                   className="ml-auto button--transparent color-black-05 customerModalCloseButton p-2"
@@ -643,3 +681,4 @@ class CustomerMenuUI extends React.Component {
 }
 
 export default CustomerMenuUI;
+

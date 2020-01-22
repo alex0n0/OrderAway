@@ -60,7 +60,6 @@ class MenuBuilder extends React.Component {
             var id = window.location.pathname.substring(idStartIndex);
             axios.get("/api/menubuilder/" + id, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.restaurant) {
                         this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle);
                     }
