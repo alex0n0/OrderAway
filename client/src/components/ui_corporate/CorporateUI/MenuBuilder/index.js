@@ -21,6 +21,7 @@ class MenuBuilder extends React.Component {
         this.state = {
             token: undefined,
             uid: undefined,
+            orderawaykey: undefined,
             menu: [],
             sidebarCategoryActiveIndex: -1,
             sidebarCategoryActiveId: undefined,
@@ -48,33 +49,46 @@ class MenuBuilder extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
 
+        
         if (token) {
             this.setState({
                 ...this.state,
                 token: token[1],
-                uid: uid[1]
+                uid: uid[1],
+                orderawaykey: orderawaykey[1]
             });
 
             var idStartIndex = window.location.pathname.lastIndexOf("/") + 1;
             var id = window.location.pathname.substring(idStartIndex);
-            axios.get("/api/menubuilder/" + id, { headers: { Authorization: "Bearer " + token[1] } })
+            axios.post("/api/menubuilder/" + id, { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
-                    if (response.data.restaurant) {
-                        this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle);
-                    }
-
-                    if (response.data.menu) {
-                        this.setState({
-                            ...this.state,
-                            menuId: response.data.menu._id,
-                            menu: response.data.menu.categories,
-                            sidebarCategoryActiveIndex: response.data.menu.categories.length !== 0 ? 0 : -1,
-                            sidebarCategoryActiveId: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryId : undefined,
-                            inputRenameCategory: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryTitle : "",
-                        });
+                    if (response.data.success === false) {
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
                     } else {
-                        console.log("error has occured, menu undefined");
+                        if (response.data.restaurant) {
+                            this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle);
+                        }
+    
+                        if (response.data.menu) {
+                            this.setState({
+                                ...this.state,
+                                menuId: response.data.menu._id,
+                                menu: response.data.menu.categories,
+                                sidebarCategoryActiveIndex: response.data.menu.categories.length !== 0 ? 0 : -1,
+                                sidebarCategoryActiveId: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryId : undefined,
+                                inputRenameCategory: response.data.menu.categories.length !== 0 ? response.data.menu.categories[0].categoryTitle : "",
+                            });
+                        } else {
+                            console.log("error has occured, menu undefined");
+                        }
                     }
                 });
         } else {

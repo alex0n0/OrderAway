@@ -21,6 +21,7 @@ class CustomerMenuUI extends React.Component {
     this.state = {
       token: undefined,
       uid: undefined,
+      orderawaykey: undefined,
       uCurrBill: undefined,
       restaurantId: undefined,
       menuTitle: undefined,
@@ -51,6 +52,7 @@ class CustomerMenuUI extends React.Component {
   // socket;
 
   componentDidMount() {
+    console.log("hello");
     // this.socket = socketIOClient("localhost:5000");
     var cookies = document.cookie;
     var cookiesArr = cookies.split(";").map(curr => curr.trim());
@@ -61,6 +63,9 @@ class CustomerMenuUI extends React.Component {
     var uid = cookiesArr.find(curr => {
       return curr[0] === "U_ID";
     });
+    var orderawaykey = cookiesArr.find(curr => {
+      return curr[0] === "ORDERAWAYKEY";
+    });
     var uCurrBill = cookiesArr.find(curr => {
       return curr[0] === "U_CURR_BILL";
     });
@@ -68,10 +73,12 @@ class CustomerMenuUI extends React.Component {
       return curr[0] === "U_TABLE_NUMBER";
     });
 
+
     if (token && uid) {
       var newState = {
         token: token[1],
         uid: uid[1],
+        orderawaykey: orderawaykey[1]
       }
 
       if (uTableNumber) {
@@ -86,10 +93,15 @@ class CustomerMenuUI extends React.Component {
           ...newState
         });
 
-        axios.post("/api/customer", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+        axios.post("/api/customer", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
           .then(response => {
             if (response.data.success === false) {
-              this.props.history.push("/signin");
+              // this.props.history.push("/signin");
+              if (response.data.path) {
+                this.props.history.push(response.data.path);
+              } else {
+                this.props.history.push("/signin");
+              }
             } else {
               if (response.data.menu.categories) {
                 this.setState({
@@ -277,7 +289,7 @@ class CustomerMenuUI extends React.Component {
                 uCurrBill: billDetails._id,
                 modalInitialiseBillIsShown: false
               });
-              document.cookie = `U_CURR_BILL=${billDetails._id}`;
+              document.cookie = `U_CURR_BILL=${billDetails._id}; path=/customer;`;
             } else {
               this.setState({
                 ...this.state,
@@ -389,13 +401,12 @@ class CustomerMenuUI extends React.Component {
     });
   }
   handleButtonClickSignOut = () => {
-    // document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    // document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    // document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    // document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    // this.props.history.push("/signin");
+    document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "ORDERAWAYKEY=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    this.props.history.push("/customer/table");
+    this.props.history.push("/signin");
   }
 
 
@@ -404,7 +415,7 @@ class CustomerMenuUI extends React.Component {
     var billOrderTotalPrice = 0;
     if (billOrderItems) {
       var tempBillOrderItems = JSON.parse(JSON.stringify(this.state.billOrderItems));
-     
+
       if (tempBillOrderItems.length > 0) {
         tempBillOrderItems.forEach(curr => {
           billOrderTotalPrice += curr.price * curr.quantity;
@@ -478,12 +489,12 @@ class CustomerMenuUI extends React.Component {
             </div>
 
 
-            <Modal className="modalMinWidth" 
-              centered size="md" 
-              show={this.state.modalOrderIsShown} 
-              onHide={this.handleModalOrderClose} 
-              onExited={this.handleModalOrderExited} 
-              backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true} 
+            <Modal className="modalMinWidth"
+              centered size="md"
+              show={this.state.modalOrderIsShown}
+              onHide={this.handleModalOrderClose}
+              onExited={this.handleModalOrderExited}
+              backdrop={this.state.modalOrderButtonDismissIsDisabled ? "static" : true}
               keyboard={this.state.modalOrderButtonDismissIsDisabled ? false : true}>
               <ModalHeader className="m-0 p-0 border-0">
                 <button
@@ -568,9 +579,9 @@ class CustomerMenuUI extends React.Component {
 
 
 
-            <Modal className="modalMinWidth initialiseBillModal" 
-              centered size="xl" 
-              show={this.state.modalInitialiseBillIsShown} 
+            <Modal className="modalMinWidth initialiseBillModal"
+              centered size="xl"
+              show={this.state.modalInitialiseBillIsShown}
               backdrop="static"
               keyboard={false}>
               <ModalHeader className="border-0">
@@ -602,11 +613,11 @@ class CustomerMenuUI extends React.Component {
 
 
 
-            <Modal className="modalMinWidth" 
-              centered size="lg" 
-              show={this.state.modalBillIsShown} 
-              onHide={this.handleModalBillClose} 
-              onExited={this.handleModalBillExited} 
+            <Modal className="modalMinWidth"
+              centered size="lg"
+              show={this.state.modalBillIsShown}
+              onHide={this.handleModalBillClose}
+              onExited={this.handleModalBillExited}
               backdrop={this.state.modalBillButtonDismissIsDisabled ? "static" : true}
               keyboard={this.state.modalBillButtonDismissIsDisabled ? false : true}>
               <ModalHeader className={this.state.billDetails ? "d-block m-0 p-0 border-0" : "d-none m-0 p-0 border-0"}>

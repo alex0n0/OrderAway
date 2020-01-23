@@ -12,6 +12,7 @@ class MenuSelector extends React.Component {
         this.state = {
             token: false,
             uid: undefined,
+            orderawaykey: undefined,
             restaurantId: undefined,
             sidebarCategoryOpen: false,
             menus: [],
@@ -48,17 +49,25 @@ class MenuSelector extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
 
         if (token) {
             this.setState({
                 ...this.state,
                 token: token[1],
-                uid: uid[1]
+                uid: uid[1],
+                orderawaykey: orderawaykey[1]
             });
-            axios.post("/api/allmenus", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+            axios.post("/api/allmenus", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
                     if (response.data.success === false) {
-                        this.props.history.push("/signin");
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
                     } else {
                         if (response.data.restaurant) {
                             this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle, response.data.restaurant.iconUrl);

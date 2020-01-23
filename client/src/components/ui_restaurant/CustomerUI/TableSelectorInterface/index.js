@@ -1,6 +1,8 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 
+import axios from 'axios';
+
 class CustomerTableSelectorUI extends React.Component {
     constructor(props) {
         super(props);
@@ -25,18 +27,42 @@ class CustomerTableSelectorUI extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
+        // console.log(orderawaykey);
         var uTableNumber = cookiesArr.find(curr => {
             return curr[0] === "U_TABLE_NUMBER";
         });
-        // console.log("token", token);
-        // console.log("id", uid);
-        // console.log("table number", uTableNumber);            
 
-        if (uTableNumber) {
-            this.props.history.push("/customer/menu");
-        } else if (!token || !uid) {
+        if (token && uid && orderawaykey) {
+            axios.post("/api/customer/redirect", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+                .then(response => {
+                    if (response.data.success === false) {
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
+                    } else {
+                        if (uTableNumber) {
+                            this.props.history.push("/customer/menu");
+                        }
+                    }
+                });
+        } else {
             this.props.history.push("/signin");
         }
+    }
+
+    handleButtonClickSignOut = () => {
+        document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "ORDERAWAYKEY=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        this.props.history.push("/signin");
+    
     }
 
     handleInputChangeTableNumber = (e) => {
@@ -76,10 +102,16 @@ class CustomerTableSelectorUI extends React.Component {
     handleButtonClickTableNumberCheck = () => {
         var tableNumber = parseInt(this.state.inputTableNumber.trim());
         if (tableNumber) {
-            console.log(tableNumber);
-            //axios
-            document.cookie = `U_TABLE_NUMBER=${tableNumber}`;
-            this.props.history.push("/customer/menu");
+            document.cookie = `U_TABLE_NUMBER=${tableNumber}; path=/customer;`;
+            var cookies = document.cookie;
+            var cookiesArr = cookies.split(";").map(curr => curr.trim());
+            cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+            var uTableNumber = cookiesArr.find(curr => {
+                return curr[0] === "U_TABLE_NUMBER";
+            });
+            if (uTableNumber) {
+                this.props.history.push("/customer/menu");
+            }
         }
     }
 
@@ -91,7 +123,7 @@ class CustomerTableSelectorUI extends React.Component {
                         <div className="col-12 col-md-6">
                             <div className="row flex-nowrap mb-3">
                                 <div className="col-12 text-right">
-                                    <button disabled className="btn btn-danger" onClick={this.handleButtonClickSignOut}>SIGN OUT</button>
+                                    <button className="btn btn-danger" onClick={this.handleButtonClickSignOut}>SIGN OUT</button>
                                 </div>
                             </div>
                             <div className="row mb-3">

@@ -15,6 +15,7 @@ class KitchenOrdersUI extends React.Component {
         this.state = {
             token: undefined,
             uid: undefined,
+            orderawaykey: undefined,
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 0,
             orders: [],
@@ -40,19 +41,28 @@ class KitchenOrdersUI extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
+
 
         if (token) {
             this.setState({
                 ...this.state,
                 token: token[1],
-                uid: uid[1]
+                uid: uid[1],
+                orderawaykey: orderawaykey[1]
             });
 
 
-            axios.post("/api/kitchen", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+            axios.post("/api/kitchen", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
                     if (response.data.success === false) {
-                        this.props.history.push("/signin");
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
                     } else {
                         if (response.data.restaurant) {
                             this.setState({
@@ -93,10 +103,14 @@ class KitchenOrdersUI extends React.Component {
             // });
 
             this.interval = setInterval(() => {
-                axios.post("/api/kitchen", { uid: this.state.uid }, { headers: { Authorization: "Bearer " + this.state.token } })
+                axios.post("/api/kitchen", { uid: this.state.uid, orderawaykey: this.state.orderawaykey }, { headers: { Authorization: "Bearer " + this.state.token } })
                     .then(response => {
                         if (response.data.success === false) {
-                            this.props.history.push("/signin");
+                            if (response.data.path) {
+                                this.props.history.push(response.data.path);
+                            } else {
+                                this.props.history.push("/signin");
+                            }
                         } else {
                             var tempOrders = response.data.orders;
                             tempOrders.forEach(curr => {

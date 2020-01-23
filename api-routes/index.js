@@ -13,7 +13,8 @@ let signup = function (req, res, next) {
         restaurantTitle: req.body.restaurantTitle,
         iconUrl: req.body.iconUrl,
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        operationsPassword: req.body.operationsPassword
     }
     db.Restaurant.create(createObj)
         .then(function (dbRestaurant) {
@@ -26,12 +27,16 @@ let signup = function (req, res, next) {
 module.exports = function (app) {
     // ////////////////////////////////////////////////////////////////////////////////////
     app.post("/api/general/signup", signup, login.tokenGenerate);
-    app.post("/api/general/processlogin", login.tokenGenerate);
+    app.post("/api/login", login.tokenGenerate);
+    app.post("/api/login/redirecttest", middleware.tokenCheck, middleware.streamCheck);
+    // app.post("/api/login/corporate", login.tokenGenerate);
+    // app.post("/api/login/kitchen", login.tokenGenerate);
+    // app.post("/api/login/customer", login.tokenGenerate);
 
 
     // ////////////////////////////////////////////////////////////////////////////////////
 
-    app.post("/api/allrevenue", middleware.tokenCheck, function (req, res) {
+    app.post("/api/allrevenue", middleware.tokenCheck, middleware.corporateStreamCheck, function (req, res) {
         var uid = req.body.uid;
         var responseObj = {
             restaurants: undefined,
@@ -53,7 +58,7 @@ module.exports = function (app) {
             });
     });
 
-    app.post("/api/allmenus", middleware.tokenCheck, function (req, res) {
+    app.post("/api/allmenus", middleware.tokenCheck, middleware.corporateStreamCheck, function (req, res) {
         var uid = req.body.uid;
         var responseObj = {
             restaurant: {},
@@ -177,7 +182,7 @@ module.exports = function (app) {
     });
 
     // /////////////////////////////////////////////////////////////////////////////////
-    app.get("/api/menubuilder/:id", middleware.tokenCheck, function (req, res) {
+    app.post("/api/menubuilder/:id", middleware.tokenCheck, middleware.corporateStreamCheck, function (req, res) {
         var responseObj = {
             menu: undefined,
             restaurant: undefined
@@ -217,7 +222,13 @@ module.exports = function (app) {
     });
     // /////////////////////////////////////////////////////////////////////////////////
 
-    app.post("/api/customer", middleware.tokenCheck, function (req, res) {
+    app.post("/api/customer/redirect", middleware.tokenCheck, middleware.customerStreamCheck, function(req, res) {
+        res.json({
+            success: true,
+        });
+    });
+
+    app.post("/api/customer", middleware.tokenCheck, middleware.customerStreamCheck, function (req, res) {
         var responseObj = {
             menu: {}
         };
@@ -298,10 +309,11 @@ module.exports = function (app) {
             });
     });
     // /////////////////////////////////////////////////////////////////////////////////
-    app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
+    app.post("/api/kitchen", middleware.tokenCheck, middleware.kitchenStreamCheck, function (req, res) {
+    // app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
         var currTime = moment();
 
-        var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+        // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
 
         var responseObj = {
@@ -331,10 +343,10 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    app.post("/api/kitchen/completed", middleware.tokenCheck, function (req, res) {
+    app.post("/api/kitchen/completed", middleware.tokenCheck, middleware.kitchenStreamCheck, function (req, res) {
         var currTime = moment();
 
-        var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
+        // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
 
         var responseObj = {
@@ -364,16 +376,6 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // app.get("/api/kitchen/:orderId", function (req, res) {
-
-    //     db.Order.findOne({ _id: req.params.orderId }).populate("menuItems")
-    //         .then(function (dbOrder) {
-    //             res.json(dbOrder);
-    //         })
-    //         .catch(function (err) {
-    //             res.json(err);
-    //         });
-    // });
     app.post("/api/kitchen/create", middleware.tokenCheck, function (req, res) {
         var menuItemObj = req.body.order;
         menuItemObj.isCompleted = false;

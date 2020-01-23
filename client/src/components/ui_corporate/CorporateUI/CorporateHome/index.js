@@ -2,8 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
-// import Pagination from 'react-bootstrap/Pagination'
-
 import '../../../css/corporate_home.css';
 
 class CorporateHomeUI extends React.Component {
@@ -13,6 +11,7 @@ class CorporateHomeUI extends React.Component {
         this.state = {
             token: false,
             uid: undefined,
+            orderawaykey: undefined,
             restaurantId: undefined,
             bills: []
         };
@@ -28,17 +27,25 @@ class CorporateHomeUI extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
 
         if (token) {
             this.setState({
                 ...this.state,
                 token: token[1],
-                uid: uid[1]
+                uid: uid[1],
+                orderawaykey: orderawaykey[1]
             });
-            axios.post("/api/allrevenue", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+            axios.post("/api/allrevenue", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
                     if (response.data.success === false) {
-                        this.props.history.push("/signin");
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
                     } else {
                         if (response.data.restaurant) {
                             this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle, response.data.restaurant.iconUrl);
@@ -133,12 +140,6 @@ class CorporateHomeUI extends React.Component {
                                     <div className="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row overflow-hidden px-2 mb-3">
                                         <h3 className="m-0 mr-3 text-nowrap">{moment().format("MMMM")} Sales</h3>
                                         <p className="m-0 font-12 color-black-06 text-nowrap">Showing 300 rows</p>
-                                        {/* <p className="m-0 mr-3">Show</p>
-                                        <select className="form-control" style={{ width: "100px" }}>
-                                            <option>20</option>
-                                            <option>30</option>
-                                            <option>All</option>
-                                        </select> */}
                                     </div>
 
                                     <table className="table table-borderless table-responsive-sm w-100 p-0">
@@ -160,31 +161,12 @@ class CorporateHomeUI extends React.Component {
                                                             </td>
                                                             <td className="text-nowrap text-right">${curr.subtotal.toFixed(2)}</td>
                                                         </tr>
-                                                        // <div
-                                                        //     className="mb-3 p-3 border-bottom"
-                                                        //     key={i}>
-                                                        //     <p className="m-0">{moment(curr.endTime, "X").format("YYYY-MM-DD hh:mm A")} | ${curr.subtotal.toFixed(2)}</p>
-                                                        // </div>
+                                                 
                                                     );
                                                 })
                                             }
                                         </tbody>
                                     </table>
-
-                                    {/* <p className="m-0 font-12 color-black-06 text-right">Showing 20 of 300 rows</p>
-                                    <div className="d-flex justify-content-center">
-                                        <Pagination>
-                                            <Pagination.Prev />
-                                            <Pagination.Item active>{1}</Pagination.Item>
-                                            <Pagination.Item>{2}</Pagination.Item>
-                                            <Pagination.Item>{3}</Pagination.Item>
-                                            <Pagination.Item>{4}</Pagination.Item>
-                                            <Pagination.Item>{5}</Pagination.Item>
-                                            <Pagination.Item>{6}</Pagination.Item>
-                                            <Pagination.Item>{7}</Pagination.Item>
-                                            <Pagination.Next />
-                                        </Pagination>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>

@@ -9,18 +9,19 @@ class SignUpUI extends React.Component {
             signupFormInputRestaurantTitle: "",
             signupFormInputEmail: "",
             signupFormInputPassword: "",
+            signupFormInputOperationsPassword: "",
             buttonFormSubmitIsDisabled: false
         };
 
         this.handleSignupFormRestaurantTitleChange.bind(this);
         this.handleSignupFormEmailChange.bind(this);
         this.handleSignupFormPasswordChange.bind(this);
+        this.handleSignupFormOperationsPasswordChange.bind(this);
         this.handleSignupFormSubmit.bind(this);
 
     }
 
     handleSignupFormRestaurantTitleChange = (e) => {
-        // e.preventDefault();
         this.setState({
             ...this.state,
             signupFormInputRestaurantTitle: e.currentTarget.value
@@ -28,17 +29,21 @@ class SignUpUI extends React.Component {
     }
 
     handleSignupFormEmailChange = (e) => {
-        // e.preventDefault();
         this.setState({
             ...this.state,
             signupFormInputEmail: e.currentTarget.value
         });
     }
     handleSignupFormPasswordChange = (e) => {
-        // e.preventDefault();
         this.setState({
             ...this.state,
             signupFormInputPassword: e.currentTarget.value
+        });
+    }
+    handleSignupFormOperationsPasswordChange = (e) => {
+        this.setState({
+            ...this.state,
+            signupFormInputOperationsPassword: e.currentTarget.value
         });
     }
 
@@ -51,7 +56,7 @@ class SignUpUI extends React.Component {
                 buttonFormSubmitIsDisabled: true
             });
 
-            let uploadObj = { restaurantTitle: this.state.signupFormInputRestaurantTitle.trim(), iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png", username: this.state.signupFormInputEmail.trim(), password: this.state.signupFormInputPassword }
+            let uploadObj = { restaurantTitle: this.state.signupFormInputRestaurantTitle.trim(), iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png", username: this.state.signupFormInputEmail.trim(), password: this.state.signupFormInputPassword, operationsPassword: this.state.signupFormInputOperationsPassword, stream: "corporate" }
 
             axios.post("/api/general/signup", uploadObj)
                 .then(response => {
@@ -61,7 +66,7 @@ class SignUpUI extends React.Component {
                         document.cookie = `U_ID=${response.data.uid}`;
                         this.props.history.push('/corporate/menu');
                     } else if (response.data.success === false) {
-                        console.log("fix your shit");                        
+                        console.log("wrong username or password");
                         this.setState({
                             ...this.state,
                             buttonFormSubmitIsDisabled: false,
@@ -79,7 +84,7 @@ class SignUpUI extends React.Component {
                     <div className="row justify-content-center">
                         <div className="col-12 col-md-6 py-5">
                             <h2>Sign Up</h2>
-                            <form>
+                            <form className="text-right">
                                 <input
                                     type="text" placeholder="Restaurant Name"
                                     className="form-control my-3"
@@ -92,6 +97,10 @@ class SignUpUI extends React.Component {
                                     type="password" placeholder="Password"
                                     className="form-control my-3"
                                     value={this.state.signupFormInputPassword} onChange={this.handleSignupFormPasswordChange} />
+                                <input
+                                    type="password" placeholder="Operations Password"
+                                    className="form-control my-3"
+                                    value={this.state.signupFormInputOperationsPassword} onChange={this.handleSignupFormOperationsPasswordChange} />
                                 <button
                                     className="btn btn-danger"
                                     disabled={this.state.buttonFormSubmitIsDisabled}

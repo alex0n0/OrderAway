@@ -15,6 +15,7 @@ class KitchenCompletedUI extends React.Component {
         this.state = {
             token: undefined,
             uid: undefined,
+            orderawaykey: undefined,
             sidebarmenu: sidebarmenu,
             sidebarMenuActiveIndex: 1,
             orders: [],
@@ -40,19 +41,28 @@ class KitchenCompletedUI extends React.Component {
         var uid = cookiesArr.find(curr => {
             return curr[0] === "U_ID";
         });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
 
         if (token) {
             this.setState({
                 ...this.state,
                 token: token[1],
-                uid: uid[1]
+                uid: uid[1],
+                orderawaykey: orderawaykey[1]
             });
 
 
-            axios.post("/api/kitchen/completed", { uid: uid[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+            axios.post("/api/kitchen/completed", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
                     if (response.data.success === false) {
-                        this.props.history.push("/signin");
+                        // this.props.history.push("/signin");
+                        if (response.data.path) {
+                            this.props.history.push(response.data.path);
+                        } else {
+                            this.props.history.push("/signin");
+                        }
                     } else {
                         if (response.data.restaurant) {
                             this.setState({
@@ -93,10 +103,14 @@ class KitchenCompletedUI extends React.Component {
             // });
 
             this.interval = setInterval(() => {
-                axios.post("/api/kitchen/completed", { uid: this.state.uid }, { headers: { Authorization: "Bearer " + this.state.token } })
+                axios.post("/api/kitchen/completed", { uid: this.state.uid, orderawaykey: this.state.orderawaykey  }, { headers: { Authorization: "Bearer " + this.state.token } })
                     .then(response => {
                         if (response.data.success === false) {
-                            this.props.history.push("/signin");
+                            if (response.data.path) {
+                                this.props.history.push(response.data.path);
+                            } else {
+                                this.props.history.push("/signin");
+                            }
                         } else {
                             var tempOrders = response.data.orders;
                             tempOrders.forEach(curr => {
@@ -127,44 +141,6 @@ class KitchenCompletedUI extends React.Component {
     }
 
 
-    handleClickDone = (orderItem) => {
-        // var tempOrders = [...this.state.orders];
-
-        // var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
-        //     return curr._id === orderItem._id;
-        // });
-        // tempOrders[orderItemToRemoveIndex].buttonDoneIsDisabled = true;
-        // this.setState({
-        //     ...this.state,
-        //     orders: tempOrders
-        // });
-
-        // axios.put("/api/kitchen/done", { orderId: orderItem._id }, { headers: { Authorization: "Bearer " + this.state.token } })
-        //     .then(response => {
-        //         var orderItemToRemoveIndex = tempOrders.findIndex(curr => {
-        //             return curr._id === orderItem._id;
-        //         });
-
-        //         if (response.data.order) {
-        //             if (orderItemToRemoveIndex !== -1) {
-        //                 tempOrders.splice(orderItemToRemoveIndex, 1);
-        //                 this.setState({
-        //                     ...this.state,
-        //                     orders: tempOrders
-        //                 });
-        //             }
-        //         } else {
-        //             if (orderItemToRemoveIndex !== -1) {
-        //                 tempOrders[orderItemToRemoveIndex].buttonDoneIsDisabled = false;
-        //                 this.setState({
-        //                     ...this.state,
-        //                     orders: tempOrders
-        //                 });
-        //             }
-        //         }
-        //     });
-    }
-
     handleSidebarOptionClick = (i) => {
         this.setState({
             ...this.state,
@@ -183,7 +159,7 @@ class KitchenCompletedUI extends React.Component {
                         {i === 0 && this.state.orders.length !== 1 ? (<p className="startIndicator startIndicator--oldest m-0 h-100">NEWEST</p>) : ""}
                         {i === this.state.orders.length - 1 && this.state.orders.length !== 1 ? (<p className="startIndicator startIndicator--newest m-0 h-100">OLDEST</p>) : ""}
 
-                        <OrderItem currTime={this.state.currTime} orderItem={curr} handleClickDone={() => { this.handleClickDone(curr) }} />
+                        <OrderItem currTime={this.state.currTime} orderItem={curr} />
                     </div>
                 )
             });

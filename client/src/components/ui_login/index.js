@@ -6,14 +6,29 @@ class LoginUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loginFormInputEmail: "",
-            loginFormInputPassword: "",
+            corporateLoginFormInputEmail: "",
+            corporateLoginFormInputPassword: "",
+
+            kitchenLoginFormInputEmail: "",
+            kitchenLoginFormInputPassword: "",
+
+            customerLoginFormInputEmail: "",
+            customerLoginFormInputPassword: "",
+
             buttonFormSubmitIsDisabled: false
         };
 
-        this.handleLoginFormEmailChange.bind(this);
-        this.handleLoginFormPasswordChange.bind(this);
-        this.handleLoginFormSubmit.bind(this);
+        this.handleCorporateLoginFormEmailChange.bind(this);
+        this.handleCorporateLoginFormPasswordChange.bind(this);
+        this.handleCorporateLoginFormSubmit.bind(this);
+
+        this.handleKitchenLoginFormEmailChange.bind(this);
+        this.handleKitchenLoginFormPasswordChange.bind(this);
+        this.handleKitchenLoginFormSubmit.bind(this);
+
+        this.handleCustomerLoginFormEmailChange.bind(this);
+        this.handleCustomerLoginFormPasswordChange.bind(this);
+        this.handleCustomerLoginFormSubmit.bind(this);
 
     }
 
@@ -24,54 +39,165 @@ class LoginUI extends React.Component {
         var token = cookiesArr.find(curr => {
             return curr[0] === "U_TKN";
         });
-        // var uid = cookiesArr.find(curr => {
-        //     return curr[0] === "U_ID";
-        // });
+        var uid = cookiesArr.find(curr => {
+            return curr[0] === "U_ID";
+        });
+        var orderawaykey = cookiesArr.find(curr => {
+            return curr[0] === "ORDERAWAYKEY";
+        });
 
         if (token) {
-            this.props.history.push("/corporate");
+            axios.post("/api/login/redirecttest", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.streamFound) {
+                        this.props.history.push(response.data.path);
+                    }
+                });
         }
     }
 
-    handleLoginFormEmailChange = (e) => {
-        // e.preventDefault();
+    // Corporate login functions
+    handleCorporateLoginFormEmailChange = (e) => {
         this.setState({
             ...this.state,
-            loginFormInputEmail: e.currentTarget.value
+            corporateLoginFormInputEmail: e.currentTarget.value
         });
     }
-    handleLoginFormPasswordChange = (e) => {
-        // e.preventDefault();
+    handleCorporateLoginFormPasswordChange = (e) => {
         this.setState({
             ...this.state,
-            loginFormInputPassword: e.currentTarget.value
+            corporateLoginFormInputPassword: e.currentTarget.value
         });
     }
 
-    handleLoginFormSubmit = (e) => {
+    handleCorporateLoginFormSubmit = (e) => {
         e.preventDefault();
 
-        if (this.state.loginFormInputEmail.trim().length > 0 && this.state.loginFormInputPassword.length > 0) {
+        if (this.state.corporateLoginFormInputEmail.trim().length > 0 && this.state.corporateLoginFormInputPassword.length > 0) {
             this.setState({
                 ...this.state,
                 buttonFormSubmitIsDisabled: true
             });
 
-            let uploadObj = { username: this.state.loginFormInputEmail.trim(), password: this.state.loginFormInputPassword }
+            let uploadObj = { username: this.state.corporateLoginFormInputEmail.trim().toLowerCase(), password: this.state.corporateLoginFormInputPassword, stream: "corporate" }
 
-            axios.post("/api/general/processlogin", uploadObj)
+            axios.post("/api/login", uploadObj)
                 .then(response => {
-                    // console.log(response.data);
+                    console.log(response.data);
                     if (response.data.success === true) {
                         document.cookie = `U_TKN=${response.data.token}; path=/`;
                         document.cookie = `U_ID=${response.data.uid}; path=/`;
+                        document.cookie = `ORDERAWAYKEY=${response.data.orderawaykey}; path=/`;
+
                         this.props.history.push('/corporate');
                     } else if (response.data.success === false) {
-                        console.log("fix your shit");
+                        console.log("wrong username or password");
                         this.setState({
                             ...this.state,
                             buttonFormSubmitIsDisabled: false,
-                            loginFormInputPassword: ""
+                            corporateLoginFormInputPassword: "",
+                            kitchenLoginFormInputPassword: "",
+                            customerLoginFormInputPassword: "",
+                        });
+                    }
+                });
+        }
+    }
+
+
+    // Kitchen login functions
+    handleKitchenLoginFormEmailChange = (e) => {
+        this.setState({
+            ...this.state,
+            kitchenLoginFormInputEmail: e.currentTarget.value
+        });
+    }
+    handleKitchenLoginFormPasswordChange = (e) => {
+        this.setState({
+            ...this.state,
+            kitchenLoginFormInputPassword: e.currentTarget.value
+        });
+    }
+
+    handleKitchenLoginFormSubmit = (e) => {
+        e.preventDefault();
+
+        if (this.state.kitchenLoginFormInputEmail.trim().length > 0 && this.state.kitchenLoginFormInputPassword.length > 0) {
+            this.setState({
+                ...this.state,
+                buttonFormSubmitIsDisabled: true
+            });
+
+            let uploadObj = { username: this.state.kitchenLoginFormInputEmail.trim().toLowerCase(), password: this.state.kitchenLoginFormInputPassword, stream: "kitchen" }
+
+            axios.post("/api/login", uploadObj)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.success === true) {
+                        document.cookie = `U_TKN=${response.data.token}; path=/`;
+                        document.cookie = `U_ID=${response.data.uid}; path=/`;
+                        document.cookie = `ORDERAWAYKEY=${response.data.orderawaykey}; path=/`;
+                        this.props.history.push('/kitchen');
+                    } else if (response.data.success === false) {
+                        console.log("wrong username or password");
+                        this.setState({
+                            ...this.state,
+                            buttonFormSubmitIsDisabled: false,
+                            corporateLoginFormInputPassword: "",
+                            kitchenLoginFormInputPassword: "",
+                            customerLoginFormInputPassword: "",
+                        });
+                    }
+                });
+        }
+    }
+
+
+
+
+
+    // Customer login functions
+    handleCustomerLoginFormEmailChange = (e) => {
+        this.setState({
+            ...this.state,
+            customerLoginFormInputEmail: e.currentTarget.value
+        });
+    }
+    handleCustomerLoginFormPasswordChange = (e) => {
+        this.setState({
+            ...this.state,
+            customerLoginFormInputPassword: e.currentTarget.value
+        });
+    }
+
+    handleCustomerLoginFormSubmit = (e) => {
+        e.preventDefault();
+
+        if (this.state.customerLoginFormInputEmail.trim().length > 0 && this.state.customerLoginFormInputPassword.length > 0) {
+            this.setState({
+                ...this.state,
+                buttonFormSubmitIsDisabled: true
+            });
+
+            let uploadObj = { username: this.state.customerLoginFormInputEmail.trim().toLowerCase(), password: this.state.customerLoginFormInputPassword, stream: "customer" }
+
+            axios.post("/api/login", uploadObj)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.success === true) {
+                        document.cookie = `U_TKN=${response.data.token}; path=/`;
+                        document.cookie = `U_ID=${response.data.uid}; path=/`;
+                        document.cookie = `ORDERAWAYKEY=${response.data.orderawaykey}; path=/`;
+                        this.props.history.push('/customer');
+                    } else if (response.data.success === false) {
+                        console.log("wrong username or password");
+                        this.setState({
+                            ...this.state,
+                            buttonFormSubmitIsDisabled: false,
+                            corporateLoginFormInputPassword: "",
+                            kitchenLoginFormInputPassword: "",
+                            customerLoginFormInputPassword: "",
                         });
                     }
                 });
@@ -82,25 +208,68 @@ class LoginUI extends React.Component {
         return (
             <>
                 <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-md-6 py-5">
-                            <h2>Sign In</h2>
-                            <form>
-                                <input
-                                    type="text" placeholder="email"
-                                    className="form-control my-3"
-                                    value={this.state.loginFormInputEmail} onChange={this.handleLoginFormEmailChange} />
-                                <input
-                                    type="password" placeholder="password"
-                                    className="form-control my-3"
-                                    value={this.state.loginFormInputPassword} onChange={this.handleLoginFormPasswordChange} />
-                                <button
-                                    className="btn btn-danger"
-                                    disabled={this.state.buttonFormSubmitIsDisabled}
-                                    onClick={this.handleLoginFormSubmit}>
-                                    SIGN IN
-                                </button>
-                            </form>
+                    <h2>Sign In</h2>
+                    <div className="row">
+                        <div className="col-12 col-sm-6">
+                            <div className="bg-secondary p-3">
+                                <p>Corporate</p>
+                                <form className="text-right">
+                                    <input
+                                        type="text" placeholder="email"
+                                        className="form-control my-3"
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                    <input
+                                        type="password" placeholder="password"
+                                        className="form-control my-3"
+                                        value={this.state.corporateLoginFormInputPassword} onChange={this.handleCorporateLoginFormPasswordChange} />
+                                    <button
+                                        className="btn btn-danger"
+                                        disabled={this.state.buttonFormSubmitIsDisabled}
+                                        onClick={this.handleCorporateLoginFormSubmit}>
+                                        SIGN IN
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div className="col-12 col-sm-6">
+                            <div className="bg-primary p-3">
+                                <p>Operations - Kitchen</p>
+                                <form className="text-right">
+                                    <input
+                                        type="text" placeholder="email"
+                                        className="form-control my-3"
+                                        value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
+                                    <input
+                                        type="password" placeholder="password"
+                                        className="form-control my-3"
+                                        value={this.state.kitchenLoginFormInputPassword} onChange={this.handleKitchenLoginFormPasswordChange} />
+                                    <button
+                                        className="btn btn-danger"
+                                        disabled={this.state.buttonFormSubmitIsDisabled}
+                                        onClick={this.handleKitchenLoginFormSubmit}>
+                                        SIGN IN
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="bg-success p-3">
+                                <p>Operations - Customer</p>
+                                <form className="text-right">
+                                    <input
+                                        type="text" placeholder="email"
+                                        className="form-control my-3"
+                                        value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
+                                    <input
+                                        type="password" placeholder="password"
+                                        className="form-control my-3"
+                                        value={this.state.customerLoginFormInputPassword} onChange={this.handleCustomerLoginFormPasswordChange} />
+                                    <button
+                                        className="btn btn-danger"
+                                        disabled={this.state.buttonFormSubmitIsDisabled}
+                                        onClick={this.handleCustomerLoginFormSubmit}>
+                                        SIGN IN
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
