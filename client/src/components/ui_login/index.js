@@ -84,7 +84,6 @@ class LoginUI extends React.Component {
 
             axios.post("/api/login", uploadObj)
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.success === true) {
                         document.cookie = `U_TKN=${response.data.token}; path=/`;
                         document.cookie = `U_ID=${response.data.uid}; path=/`;
@@ -133,7 +132,6 @@ class LoginUI extends React.Component {
 
             axios.post("/api/login", uploadObj)
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.success === true) {
                         document.cookie = `U_TKN=${response.data.token}; path=/`;
                         document.cookie = `U_ID=${response.data.uid}; path=/`;
@@ -184,7 +182,6 @@ class LoginUI extends React.Component {
 
             axios.post("/api/login", uploadObj)
                 .then(response => {
-                    console.log(response.data);
                     if (response.data.success === true) {
                         document.cookie = `U_TKN=${response.data.token}; path=/`;
                         document.cookie = `U_ID=${response.data.uid}; path=/`;

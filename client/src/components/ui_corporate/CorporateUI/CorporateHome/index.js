@@ -90,7 +90,7 @@ class CorporateHomeUI extends React.Component {
             if (curr.endTime >= currMonth) {
                 currMonthRevenue += curr.subtotal;
             }
-            if (curr.endTime >= prevMonth && curr.endTime <= currMonth ) {
+            if (curr.endTime >= prevMonth && curr.endTime <= currMonth) {
                 prevMonthRevenue += curr.subtotal;
             }
         });
@@ -139,7 +139,7 @@ class CorporateHomeUI extends React.Component {
 
                                     <div className="d-flex justify-content-between align-items-sm-center flex-column flex-sm-row overflow-hidden px-2 mb-3">
                                         <h3 className="m-0 mr-3 text-nowrap">{moment().format("MMMM")} Sales</h3>
-                                        <p className="m-0 font-12 color-black-06 text-nowrap">Showing 300 rows</p>
+                                        <p className="m-0 font-12 color-black-06 text-nowrap">Showing {currMonthBills.length} row{currMonthBills.length === 1 ? "" : "s"}</p>
                                     </div>
 
                                     <table className="table table-borderless table-responsive-sm w-100 p-0">
@@ -161,7 +161,7 @@ class CorporateHomeUI extends React.Component {
                                                             </td>
                                                             <td className="text-nowrap text-right">${curr.subtotal.toFixed(2)}</td>
                                                         </tr>
-                                                 
+
                                                     );
                                                 })
                                             }

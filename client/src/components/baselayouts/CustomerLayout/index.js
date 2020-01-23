@@ -1,9 +1,9 @@
 import React from 'react';
 import '../../css/baselayouts_customer.css';
 
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownToggle from 'react-bootstrap/DropdownToggle';
-import DropdownMenu from 'react-bootstrap/DropdownMenu';
+// import Dropdown from 'react-bootstrap/Dropdown';
+// import DropdownToggle from 'react-bootstrap/DropdownToggle';
+// import DropdownMenu from 'react-bootstrap/DropdownMenu';
 // import DropdownItem from 'react-bootstrap/DropdownItem';
 
 class CustomerLayout extends React.Component {
@@ -72,10 +72,9 @@ class CustomerLayout extends React.Component {
                         <p className="m-0 mr-3 font-24 color-white"><b>Table&nbsp;{this.props.tableNumber}</b></p>
                         <div className="h-100 px-0 px-sm-4 py-3 mr-4 color-white">
                         </div>
-                        {/* <button className="button--transparent h-100 px-4">
-                            <i className="material-icons">language</i>
-                        </button> */}
-                        <Dropdown className="h-100 ml-auto">
+
+
+                        {/* <Dropdown className="h-100 ml-auto">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center px-2">
                                     <i className="material-icons">more_vert</i>
@@ -83,20 +82,19 @@ class CustomerLayout extends React.Component {
                             </DropdownToggle>
 
                             <DropdownMenu alignRight={true}>
-                                {/* <Dropdown.Divider /> */}
                                 <div className="px-2 mb-2">
                                     <input type="text" className="form-control" placeholder="PIN" />
                                 </div>
                                 <div className="px-2">
                                     <button
                                         className="btn btn-success btn-block"
-                                        onClick={this.handleButtonClickSignOut}>
+                                        // onClick={this.handleButtonClickSignOut}
+                                        >
                                         Sign out
                                     </button>
                                 </div>
-                                {/* <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem> */}
-                            </DropdownMenu>
-                        </Dropdown>
+                            </DropdownMenu> 
+                        </Dropdown>*/}
 
                     </div>
                 </header>

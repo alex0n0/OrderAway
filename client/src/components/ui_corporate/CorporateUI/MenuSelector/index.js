@@ -316,6 +316,14 @@ class MenuSelector extends React.Component {
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-3"
                         key={i}
                     >
+                        <button
+                            className={buttonClassName}
+                            style={{ wordBreak: "break-all" }}
+                            onClick={() => { this.handleMenuOptionClick(curr, i) }}
+                        >
+                            <p className="m-0 position-relative text-left" style={{ zIndex: 9 }}>{curr.menuTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
+                            <div className="background"></div>
+                        </button>
                         <p className="font-12 color-black-04 m-0"><i>
                             {curr.updatedAt ?
                                 "Updated: " + moment(curr.updatedAt, "X").format("D MMM YYYY") + " at " + moment(curr.updatedAt, "X").format("h:mm A")
@@ -326,14 +334,6 @@ class MenuSelector extends React.Component {
                                     "Created: ?"
                             }
                         </i></p>
-                        <button
-                            className={buttonClassName}
-                            style={{ wordBreak: "break-all" }}
-                            onClick={() => { this.handleMenuOptionClick(curr, i) }}
-                        >
-                            <p className="m-0 position-relative text-left" style={{ zIndex: 9 }}>{curr.menuTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
-                            <div className="background"></div>
-                        </button>
                     </div>
                 );
             });

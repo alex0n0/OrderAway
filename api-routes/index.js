@@ -230,11 +230,13 @@ module.exports = function (app) {
 
     app.post("/api/customer", middleware.tokenCheck, middleware.customerStreamCheck, function (req, res) {
         var responseObj = {
+            restaurant: {},
             menu: {}
         };
 
         db.Restaurant.findOne({ _id: req.body.uid })
             .then(function (dbRestaurant) {
+                responseObj.restaurant = dbRestaurant;
                 return db.Menu.findOne({ restaurantId: dbRestaurant._id, isPublished: true });
             })
             .then(function (dbMenu) {
@@ -308,6 +310,8 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
+
+    app.post("/api/customer/signout", middleware.tokenCheck, login.tokenGenerate);
     // /////////////////////////////////////////////////////////////////////////////////
     app.post("/api/kitchen", middleware.tokenCheck, middleware.kitchenStreamCheck, function (req, res) {
     // app.post("/api/kitchen", middleware.tokenCheck, function (req, res) {
