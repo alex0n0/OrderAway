@@ -102,14 +102,13 @@
 }
 
 .menuselector .main-content-content button.button--transparent {
-  border: 3px solid transparent;
+  border: 5px solid transparent;
   position: relative;
   overflow: hidden;
 }
 
 .menuselector .main-content-content button.button--transparent.active {
-  border-color: #03a1eb !important;
-  background-color: #03a1eb !important;
+  border-color: #3ec2ff !important;
 }
 
 .menuselector .main-content-content button.button--transparent.active .background {
@@ -125,7 +124,7 @@
 
 .menuselector .main-content-content button.button--transparent.published {
   background-color: transparent !important;
-  border-color: #a826e4;
+  border-color: #bd45f4;
 }
 
 .menuselector .main-content-content button.button--transparent.published .background {

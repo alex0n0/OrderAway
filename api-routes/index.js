@@ -197,7 +197,7 @@ module.exports = function (app) {
             })
             .then(function (dbRestaurant) {
                 if (dbRestaurant) {
-                    responseObj.restaurant = { restaurantTitle: dbRestaurant.restaurantTitle };
+                    responseObj.restaurant = { restaurantTitle: dbRestaurant.restaurantTitle, iconUrl: dbRestaurant.iconUrl };
                 }
 
                 res.json(responseObj);
@@ -319,7 +319,7 @@ module.exports = function (app) {
 
         // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
-
+        console.log(last24Hours.format());
         var responseObj = {
             orders: []
         }
@@ -352,6 +352,7 @@ module.exports = function (app) {
 
         // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
+        console.log(last24Hours.format());
 
         var responseObj = {
             orders: []

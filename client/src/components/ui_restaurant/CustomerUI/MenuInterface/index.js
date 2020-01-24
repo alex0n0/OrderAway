@@ -39,8 +39,8 @@ class CustomerMenuUI extends React.Component {
       modalInitialiseBillIsShown: true,
       modalInitialiseBillButtonInitialiseIsDisabled: true,
       modalInitialiseBillSignOutIsShown: false,
-      modalInitialiseBillSignOutPassword: "",
-
+      modalInitialiseBillSignOutButtonIsDisabled: true,
+      modalInitialiseBillSignOutInputPassword: "",
 
       modalBillIsShown: false,
       modalBillButtonDismissIsDisabled: false,
@@ -51,13 +51,13 @@ class CustomerMenuUI extends React.Component {
     }
 
     this.handleInputChangeSignOutPassword.bind(this);
+    this.handleButtonClickToggleSignOut.bind(this);
   }
 
 
   // socket;
 
   componentDidMount() {
-    console.log("hello");
     // this.socket = socketIOClient("localhost:5000");
     var cookies = document.cookie;
     var cookiesArr = cookies.split(";").map(curr => curr.trim());
@@ -279,7 +279,8 @@ class CustomerMenuUI extends React.Component {
     } else {
       this.setState({
         ...this.state,
-        modalInitialiseBillButtonInitialiseIsDisabled: true
+        modalInitialiseBillButtonInitialiseIsDisabled: true,
+        modalInitialiseBillSignOutButtonIsDisabled: true
       });
       axios.post("/api/customer/bill/create", { uid: this.state.uid, tableNumber: this.state.tableNumber }, { headers: { Authorization: "Bearer " + this.state.token } })
         .then(response => {
@@ -299,7 +300,8 @@ class CustomerMenuUI extends React.Component {
             } else {
               this.setState({
                 ...this.state,
-                modalInitialiseBillButtonInitialiseIsDisabled: false
+                modalInitialiseBillButtonInitialiseIsDisabled: false,
+                modalInitialiseBillSignOutButtonIsDisabled: false
               });
             }
           }
@@ -406,25 +408,40 @@ class CustomerMenuUI extends React.Component {
       modalInitialiseBillSignOutIsShown: !modalInitialiseBillSignOutIsShown
     });
   }
-  handleButtonClickSignOut = () => {
-    axios.post("/api/customer/signout", { username: this.state.restaurantUsername, password: this.state.modalInitialiseBillSignOutPassword, stream: "customer", orderawaykey: this.state.orderawaykey }, { headers: { Authorization: "Bearer " + this.state.token } })
-      .then(response => {
-        if (response.data.success === false) {
-
-        } else {
-          document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          document.cookie = "ORDERAWAYKEY=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-          this.props.history.push("/signin");
-        }
+  handleButtonClickSignOut = (e) => {
+    e.preventDefault();
+    var password = this.state.modalInitialiseBillSignOutInputPassword;
+    if (password.length > 0) {
+      this.setState({
+        modalInitialiseBillSignOutButtonIsDisabled: true,
+        modalInitialiseBillButtonInitialiseIsDisabled: true
       });
+      axios.post("/api/customer/signout", { username: this.state.restaurantUsername, password: this.state.modalInitialiseBillSignOutInputPassword, stream: "customer", orderawaykey: this.state.orderawaykey }, { headers: { Authorization: "Bearer " + this.state.token } })
+        .then(response => {
+          if (response.data.success === false) {
+            console.log("wrong password");
+            this.setState({
+              ...this.state,
+              modalInitialiseBillSignOutButtonIsDisabled: false,
+              modalInitialiseBillButtonInitialiseIsDisabled: false,
+              modalInitialiseBillSignOutInputPassword: ""
+            });
+
+          } else {
+            document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "ORDERAWAYKEY=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "U_CURR_BILL=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "U_TABLE_NUMBER=; path=/customer; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            this.props.history.push("/signin");
+          }
+        });
+    }
   }
   handleInputChangeSignOutPassword = (e) => {
     this.setState({
       ...this.state,
-      modalInitialiseBillSignOutPassword: e.currentTarget.value
+      modalInitialiseBillSignOutInputPassword: e.currentTarget.value
     });
   }
 
@@ -603,21 +620,19 @@ class CustomerMenuUI extends React.Component {
               show={this.state.modalInitialiseBillIsShown}
               backdrop="static"
               keyboard={false}>
-              <ModalHeader className="border-0">
-                <div className="row w-100">
-                  <div className="col-12 col-lg-6 ml-auto d-flex justify-content-end">
+              <ModalBody className="p-0 bg-transparent">
+                <div className="d-flex px-3 justify-content-end">
+                  <form className="d-flex w-100">
                     <input
                       type="password"
-                      placeholder="Customer Password"
-                      className={this.state.modalInitialiseBillSignOutIsShown ? "form-control mr-3 h-100" : "d-none"}
-                      value={this.state.modalInitialiseBillSignOutPassword}
+                      placeholder="Password"
+                      className={this.state.modalInitialiseBillSignOutIsShown ? "form-control h-100 w-100 rounded-0" : "d-none"}
+                      value={this.state.modalInitialiseBillSignOutInputPassword}
                       onChange={this.handleInputChangeSignOutPassword} />
-                    <button className={this.state.modalInitialiseBillSignOutIsShown ? "btn btn-danger text-nowrap" : "d-none"} onClick={this.handleButtonClickSignOut}>SIGN OUT</button>
-                    <button className="button--transparent color-white py-2 px-3" onClick={this.handleButtonClickToggleSignOut}><i className="material-icons">more_vert</i></button>
-                  </div>
+                    <button className={this.state.modalInitialiseBillSignOutIsShown ? "btn btn-danger text-nowrap rounded-0" : "d-none"} onClick={this.handleButtonClickSignOut}>SIGN OUT</button>
+                  </form>
+                  <button type="submit" className="button--transparent color-white py-2 px-3" onClick={this.handleButtonClickToggleSignOut}><i className="material-icons">more_vert</i></button>
                 </div>
-              </ModalHeader>
-              <ModalBody className="p-0 bg-transparent">
                 <div className="px-3 px-lg-5 my-5 py-5 d-flex justify-content-center">
                   <button
                     className="button--transparent button--dev py-2 py-5 px-5 color-white rounded-pill font-24 color-black"

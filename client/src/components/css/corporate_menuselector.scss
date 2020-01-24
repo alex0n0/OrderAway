@@ -115,12 +115,13 @@ $break-xl: 1200px;
         padding-top: 120px;
 
         button.button--transparent {
-            border: 3px solid transparent;
+            border: 5px solid transparent;
             position: relative;
             overflow: hidden;
             &.active {
-                border-color: rgb(3, 161, 235) !important;
-                background-color: rgb(3, 161, 235) !important;
+                // border-color: rgb(3, 161, 235) !important;
+                border-color: rgb(62, 194, 255) !important;
+                // background-color: rgb(3, 161, 235) !important;
                 .background {
                     position: absolute;
                     top: 50%;
@@ -140,7 +141,8 @@ $break-xl: 1200px;
             }
             &.published {
                 background-color: transparent !important;
-                border-color: rgb(168, 38, 228);
+                // border-color: rgb(168, 38, 228);
+                border-color: rgb(189, 69, 244);
                 .background {
                     position: absolute;
                     top: 50%;

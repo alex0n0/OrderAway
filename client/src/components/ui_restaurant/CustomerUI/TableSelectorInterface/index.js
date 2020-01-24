@@ -103,15 +103,17 @@ class CustomerTableSelectorUI extends React.Component {
         var tableNumber = parseInt(this.state.inputTableNumber.trim());
         if (tableNumber) {
             document.cookie = `U_TABLE_NUMBER=${tableNumber}; path=/customer;`;
-            var cookies = document.cookie;
-            var cookiesArr = cookies.split(";").map(curr => curr.trim());
-            cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
-            var uTableNumber = cookiesArr.find(curr => {
-                return curr[0] === "U_TABLE_NUMBER";
-            });
-            if (uTableNumber) {
-                this.props.history.push("/customer/menu");
-            }
+            window.location.reload();
+            // var cookies = document.cookie;
+            // var cookiesArr = cookies.split(";").map(curr => curr.trim());
+            // cookiesArr = cookiesArr.map(curr => curr.split("=").map(curr => curr.trim()));
+            // var uTableNumber = cookiesArr.find(curr => {
+            //     return curr[0] === "U_TABLE_NUMBER";
+            // });
+            // console.log(uTableNumber);
+            // if (uTableNumber) {
+            //     this.props.history.push("/customer/menu");
+            // }
         }
     }
 

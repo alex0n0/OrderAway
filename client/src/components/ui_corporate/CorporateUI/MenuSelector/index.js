@@ -292,23 +292,23 @@ class MenuSelector extends React.Component {
 
         if (this.state.menus.length !== 0) {
             menusArr = this.state.menus.map((curr, i) => {
-                var buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09";
+                var buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09";
                 if (this.state.menuActive && this.state.menuPublished) {
                     if (curr._id === this.state.menuActive._id && curr._id === this.state.menuPublished._id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published active";
+                        buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09 published active";
                     }
                     else if (curr._id === this.state.menuPublished._id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
+                        buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
                     } else if (curr._id === this.state.menuActive._id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
+                        buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
                     }
                 } else if (this.state.menuPublished) {
                     if (curr._id === this.state.menuPublished._id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
+                        buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09 published";
                     }
                 } else if (this.state.menuActive) {
                     if (curr._id === this.state.menuActive._id) {
-                        buttonClassName = "button--transparent justify-content-start rounded bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
+                        buttonClassName = "button--transparent justify-content-start bg-secondary w-100 px-3 py-4 font-14 color-white-09 active";
                     }
                 }
 
@@ -324,7 +324,7 @@ class MenuSelector extends React.Component {
                             <p className="m-0 position-relative text-left" style={{ zIndex: 9 }}>{curr.menuTitle.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')}</p>
                             <div className="background"></div>
                         </button>
-                        <p className="font-12 color-black-04 m-0"><i>
+                        <p className="font-12 color-black-04 m-0 mt-2"><i>
                             {curr.updatedAt ?
                                 "Updated: " + moment(curr.updatedAt, "X").format("D MMM YYYY") + " at " + moment(curr.updatedAt, "X").format("h:mm A")
                                 :

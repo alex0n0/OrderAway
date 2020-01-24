@@ -66,6 +66,7 @@ class MenuBuilder extends React.Component {
             var id = window.location.pathname.substring(idStartIndex);
             axios.post("/api/menubuilder/" + id, { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
                 .then(response => {
+                    console.log();
                     if (response.data.success === false) {
                         if (response.data.path) {
                             this.props.history.push(response.data.path);
@@ -74,7 +75,7 @@ class MenuBuilder extends React.Component {
                         }
                     } else {
                         if (response.data.restaurant) {
-                            this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle);
+                            this.props.liftRestuarantTitle(response.data.restaurant.restaurantTitle, response.data.restaurant.iconUrl);
                         }
     
                         if (response.data.menu) {

@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+
 class LoginUI extends React.Component {
 
     constructor(props) {
@@ -122,13 +125,15 @@ class LoginUI extends React.Component {
     handleKitchenLoginFormSubmit = (e) => {
         e.preventDefault();
 
-        if (this.state.kitchenLoginFormInputEmail.trim().length > 0 && this.state.kitchenLoginFormInputPassword.length > 0) {
+        // if (this.state.kitchenLoginFormInputEmail.trim().length > 0 && this.state.kitchenLoginFormInputPassword.length > 0) {
+        if (this.state.corporateLoginFormInputEmail.trim().length > 0 && this.state.kitchenLoginFormInputPassword.length > 0) {
             this.setState({
                 ...this.state,
                 buttonFormSubmitIsDisabled: true
             });
 
-            let uploadObj = { username: this.state.kitchenLoginFormInputEmail.trim().toLowerCase(), password: this.state.kitchenLoginFormInputPassword, stream: "kitchen" }
+            // let uploadObj = { username: this.state.kitchenLoginFormInputEmail.trim().toLowerCase(), password: this.state.kitchenLoginFormInputPassword, stream: "kitchen" }
+            let uploadObj = { username: this.state.corporateLoginFormInputEmail.trim().toLowerCase(), password: this.state.kitchenLoginFormInputPassword, stream: "kitchen" }
 
             axios.post("/api/login", uploadObj)
                 .then(response => {
@@ -172,13 +177,15 @@ class LoginUI extends React.Component {
     handleCustomerLoginFormSubmit = (e) => {
         e.preventDefault();
 
-        if (this.state.customerLoginFormInputEmail.trim().length > 0 && this.state.customerLoginFormInputPassword.length > 0) {
+        // if (this.state.customerLoginFormInputEmail.trim().length > 0 && this.state.customerLoginFormInputPassword.length > 0) {
+        if (this.state.corporateLoginFormInputEmail.trim().length > 0 && this.state.customerLoginFormInputPassword.length > 0) {
             this.setState({
                 ...this.state,
                 buttonFormSubmitIsDisabled: true
             });
 
-            let uploadObj = { username: this.state.customerLoginFormInputEmail.trim().toLowerCase(), password: this.state.customerLoginFormInputPassword, stream: "customer" }
+            // let uploadObj = { username: this.state.customerLoginFormInputEmail.trim().toLowerCase(), password: this.state.customerLoginFormInputPassword, stream: "customer" }
+            let uploadObj = { username: this.state.corporateLoginFormInputEmail.trim().toLowerCase(), password: this.state.customerLoginFormInputPassword, stream: "customer" }
 
             axios.post("/api/login", uploadObj)
                 .then(response => {
@@ -206,7 +213,94 @@ class LoginUI extends React.Component {
             <>
                 <div className="container">
                     <h2>Sign In</h2>
-                    <div className="row">
+                    <Tabs defaultActiveKey="corporate" transition={false} className="tabs--login">
+                        <Tab eventKey="corporate" title="Corporate">
+                            <div className="border border-top-0 p-3">
+                                <p>Business Details &amp; Menu Manager</p>
+                                <form>
+                                    <label htmlFor="corporateEmail" className="small">Email</label>
+                                    <input
+                                        id="corporateEmail"
+                                        type="text" placeholder="Email"
+                                        className="form-control mb-3"
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                    <label htmlFor="corporatePassword" className="small">Corporate Password</label>
+                                    <input
+                                        id="corporatePassword"
+                                        type="password" placeholder="Password"
+                                        className="form-control mb-3"
+                                        value={this.state.corporateLoginFormInputPassword} onChange={this.handleCorporateLoginFormPasswordChange} />
+                                    <div className="d-flex">
+                                        <button
+                                            className="btn btn-danger ml-auto"
+                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                            onClick={this.handleCorporateLoginFormSubmit}>
+                                            SIGN IN
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </Tab>
+                        <Tab eventKey="kitchen" title="Kitchen">
+                            <div className="border border-top-0 p-3">
+                                <p>Current &amp; Past Orders</p>
+                                <form>
+                                    <label htmlFor="kitchenEmail" className="small">Email</label>
+                                    <input
+                                        id="kitchenEmail"
+                                        type="text" placeholder="Email"
+                                        className="form-control mb-3"
+                                        // value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                    <label htmlFor="kitchenPassword" className="small">Operations Password</label>
+                                    <input
+                                        id="kitchenPassword"
+                                        type="password" placeholder="Password"
+                                        className="form-control mb-3"
+                                        value={this.state.kitchenLoginFormInputPassword} onChange={this.handleKitchenLoginFormPasswordChange} />
+                                    <div className="d-flex">
+                                        <button
+                                            className="btn btn-danger ml-auto"
+                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                            onClick={this.handleKitchenLoginFormSubmit}>
+                                            SIGN IN
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </Tab>
+                        <Tab eventKey="customer" title="Customer">
+                            <div className="border border-top-0 p-3">
+                                <p>Table-Side Ordering Interface</p>
+
+                                <form>
+                                    <label htmlFor="customerEmail" className="small">Email</label>
+                                    <input
+                                        id="customerEmail"
+                                        type="text" placeholder="Email"
+                                        className="form-control mb-3"
+                                        // value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                    <label htmlFor="customerPassword" className="small">Operations Password</label>
+                                    <input
+                                        id="customerPassword"
+                                        type="password" placeholder="Password"
+                                        className="form-control mb-3"
+                                        value={this.state.customerLoginFormInputPassword} onChange={this.handleCustomerLoginFormPasswordChange} />
+
+                                    <div className="d-flex">
+                                        <button
+                                            className="btn btn-danger ml-auto"
+                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                            onClick={this.handleCustomerLoginFormSubmit}>
+                                            SIGN IN
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </Tab>
+                    </Tabs>
+                    {/* <div className="row">
                         <div className="col-12 col-sm-6">
                             <div className="bg-secondary p-3">
                                 <p>Corporate</p>
@@ -235,7 +329,8 @@ class LoginUI extends React.Component {
                                     <input
                                         type="text" placeholder="email"
                                         className="form-control my-3"
-                                        value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
+                                        // value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
                                     <input
                                         type="password" placeholder="password"
                                         className="form-control my-3"
@@ -254,7 +349,8 @@ class LoginUI extends React.Component {
                                     <input
                                         type="text" placeholder="email"
                                         className="form-control my-3"
-                                        value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
+                                        // value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
+                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
                                     <input
                                         type="password" placeholder="password"
                                         className="form-control my-3"
@@ -268,7 +364,7 @@ class LoginUI extends React.Component {
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </>
         );

@@ -115,3 +115,16 @@
 .dropdown-menu {
     border-radius: 0px;
 }
+
+
+.nav.nav-tabs .nav-item.nav-link:focus {
+    outline: none;
+    box-shadow: none;
+}
+.tabs--login.nav.nav-tabs .nav-item.nav-link {
+    color: black;
+    border-radius: 0px;
+}
+.tabs--login.nav.nav-tabs .nav-item.nav-link.active {
+    color: red;
+}

@@ -34,6 +34,7 @@ class CorporateUIComponent extends React.Component {
     }
 
     setRestaurantTitle = (title, url) => {
+        console.log(url);
         this.setState({
             ...this.state,
             restaurant: {
