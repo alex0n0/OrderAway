@@ -9,7 +9,7 @@ class HomePageUI extends React.Component {
             <div className="homepage">
                 <header className="flex-grow-0 flex-shrink-0">
                     <div className="imagecontainer">
-                        <img src={"https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"} alt="bg" height="auto" width="100%" />
+                        {/* <img src={"https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"} alt="bg" /> */}
                     </div>
                     <div className="buttonbar py-3">
                         <div className="container d-flex align-items-center">
@@ -35,23 +35,23 @@ class HomePageUI extends React.Component {
 
                 <main className="flex-grow-1 flex-shrink-1">
                     <div>
-                        <div className="container py-5 mt-5 mb-5">
+                        <div className="container py-5 mb-5">
                             <div className="row">
                                 <div className="col-12 col-md-4">
                                     <div className="position-relative" style={{ width: "100%", paddingTop: "100%" }}>
-                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", top: "50%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translate(-50%, -50%)" }}></div>
+                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", bottom: "10%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translateX(-50%)" }}></div>
                                     </div>
                                     <div className="text-center">Increase Efficiency</div>
                                 </div>
                                 <div className="col-12 col-md-4">
                                     <div className="position-relative" style={{ width: "100%", paddingTop: "100%" }}>
-                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", top: "50%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translate(-50%, -50%)" }}></div>
+                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", bottom: "10%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translateX(-50%)" }}></div>
                                     </div>
                                     <div className="text-center">Focus On Customer Service</div>
                                 </div>
                                 <div className="col-12 col-md-4">
                                     <div className="position-relative" style={{ width: "100%", paddingTop: "100%" }}>
-                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", top: "50%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translate(-50%, -50%)" }}></div>
+                                        <div className="position-absolute rounded-circle bg-white" style={{ height: "80%", width: "80%", bottom: "10%", left: "50%", maxHeight: "300px", maxWidth: "300px", transform: "translateX(-50%)" }}></div>
                                     </div>
                                     <div className="text-center">Pass Orders to the Kitchen Instantly</div>
                                 </div>
