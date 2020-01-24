@@ -498,7 +498,8 @@ class MenuBuilder extends React.Component {
         if (menuItemImageUrl.length > 0) {
             menuItem.imageUrl = menuItemImageUrl;
         } else {
-            menuItem.imageUrl = "https://media.giphy.com/media/42veFaIwEoPETh9gNB/giphy.gif";
+            // menuItem.imageUrl = "https://media.giphy.com/media/42veFaIwEoPETh9gNB/giphy.gif";
+            menuItem.imageUrl = "https://cdn2.iconfinder.com/data/icons/travel-181/64/17-travel-512.png";
             menuItem.imageOrientationlandscape = true;
         }
 

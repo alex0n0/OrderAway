@@ -4,6 +4,10 @@ import axios from 'axios';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
+import { Link } from 'react-router-dom';
+
+import "../css/homepage.css";
+
 class LoginUI extends React.Component {
 
     constructor(props) {
@@ -210,97 +214,118 @@ class LoginUI extends React.Component {
 
     render() {
         return (
-            <>
-                <div className="container">
-                    <h2>Sign In</h2>
-                    <Tabs defaultActiveKey="corporate" transition={false} className="tabs--login">
-                        <Tab eventKey="corporate" title="Corporate">
-                            <div className="border border-top-0 p-3">
-                                <p>Business Details &amp; Menu Manager</p>
-                                <form>
-                                    <label htmlFor="corporateEmail" className="small">Email</label>
-                                    <input
-                                        id="corporateEmail"
-                                        type="text" placeholder="Email"
-                                        className="form-control mb-3"
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <label htmlFor="corporatePassword" className="small">Corporate Password</label>
-                                    <input
-                                        id="corporatePassword"
-                                        type="password" placeholder="Password"
-                                        className="form-control mb-3"
-                                        value={this.state.corporateLoginFormInputPassword} onChange={this.handleCorporateLoginFormPasswordChange} />
-                                    <div className="d-flex">
-                                        <button
-                                            className="btn btn-danger ml-auto"
-                                            disabled={this.state.buttonFormSubmitIsDisabled}
-                                            onClick={this.handleCorporateLoginFormSubmit}>
-                                            SIGN IN
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </Tab>
-                        <Tab eventKey="kitchen" title="Kitchen">
-                            <div className="border border-top-0 p-3">
-                                <p>Current &amp; Past Orders</p>
-                                <form>
-                                    <label htmlFor="kitchenEmail" className="small">Email</label>
-                                    <input
-                                        id="kitchenEmail"
-                                        type="text" placeholder="Email"
-                                        className="form-control mb-3"
-                                        // value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <label htmlFor="kitchenPassword" className="small">Operations Password</label>
-                                    <input
-                                        id="kitchenPassword"
-                                        type="password" placeholder="Password"
-                                        className="form-control mb-3"
-                                        value={this.state.kitchenLoginFormInputPassword} onChange={this.handleKitchenLoginFormPasswordChange} />
-                                    <div className="d-flex">
-                                        <button
-                                            className="btn btn-danger ml-auto"
-                                            disabled={this.state.buttonFormSubmitIsDisabled}
-                                            onClick={this.handleKitchenLoginFormSubmit}>
-                                            SIGN IN
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </Tab>
-                        <Tab eventKey="customer" title="Customer">
-                            <div className="border border-top-0 p-3">
-                                <p>Table-Side Ordering Interface</p>
+            <div className="homepage">
+                <header className="flex-grow-0 flex-shrink-0">
+                    <div className="buttonbar py-3">
+                        <div className="container d-flex align-items-center">
+                            <Link to="/" className="mr-auto" style={{ textDecoration: "none", color: "black" }}>
+                                <p className="m-0 font-24"><span className="text-primary">Order</span>Away</p>
+                            </Link>
 
-                                <form>
-                                    <label htmlFor="customerEmail" className="small">Email</label>
-                                    <input
-                                        id="customerEmail"
-                                        type="text" placeholder="Email"
-                                        className="form-control mb-3"
-                                        // value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <label htmlFor="customerPassword" className="small">Operations Password</label>
-                                    <input
-                                        id="customerPassword"
-                                        type="password" placeholder="Password"
-                                        className="form-control mb-3"
-                                        value={this.state.customerLoginFormInputPassword} onChange={this.handleCustomerLoginFormPasswordChange} />
-
-                                    <div className="d-flex">
-                                        <button
-                                            className="btn btn-danger ml-auto"
-                                            disabled={this.state.buttonFormSubmitIsDisabled}
-                                            onClick={this.handleCustomerLoginFormSubmit}>
-                                            SIGN IN
-                                        </button>
-                                    </div>
-                                </form>
+                            <div className="ml-3">
+                                <Link to="/signup" className="mr-3">
+                                    <button className="btn btn-outline-dark">Sign Up</button>
+                                </Link>
                             </div>
-                        </Tab>
-                    </Tabs>
-                    {/* <div className="row">
+                        </div>
+                    </div>
+                </header>
+
+                <main className="flex-grow-1 flex-shrink-1">
+                    <div>
+                        <div className="container">
+                            <div className="row justify-content-center">
+                                <div className="col-12 col-md-6 py-5">
+
+                                    <h2 className="mb-3">Sign In</h2>
+                                    <Tabs defaultActiveKey="corporate" transition={false} className="tabs--login">
+                                        <Tab eventKey="corporate" title="Corporate">
+                                            <div className="border border-top-0 p-3 bg-secondary color-white-09">
+                                                <p>Business Details &amp; Menu Manager</p>
+                                                <form>
+                                                    <label htmlFor="corporateEmail" className="small">Email</label>
+                                                    <input
+                                                        id="corporateEmail"
+                                                        type="text" placeholder="Email"
+                                                        className="form-control mb-3"
+                                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                                    <label htmlFor="corporatePassword" className="small">Corporate Password</label>
+                                                    <input
+                                                        id="corporatePassword"
+                                                        type="password" placeholder="Password"
+                                                        className="form-control mb-3"
+                                                        value={this.state.corporateLoginFormInputPassword} onChange={this.handleCorporateLoginFormPasswordChange} />
+                                                    <div className="d-flex">
+                                                        <button
+                                                            className="btn btn-danger ml-auto"
+                                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                                            onClick={this.handleCorporateLoginFormSubmit}>
+                                                            SIGN IN
+                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </Tab>
+                                        <Tab eventKey="kitchen" title="Kitchen">
+                                            <div className="border border-top-0 p-3 bg-secondary color-white-09">
+                                                <p>Current &amp; Past Orders</p>
+                                                <form>
+                                                    <label htmlFor="kitchenEmail" className="small">Email</label>
+                                                    <input
+                                                        id="kitchenEmail"
+                                                        type="text" placeholder="Email"
+                                                        className="form-control mb-3"
+                                                        // value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
+                                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                                    <label htmlFor="kitchenPassword" className="small">Operations Password</label>
+                                                    <input
+                                                        id="kitchenPassword"
+                                                        type="password" placeholder="Password"
+                                                        className="form-control mb-3"
+                                                        value={this.state.kitchenLoginFormInputPassword} onChange={this.handleKitchenLoginFormPasswordChange} />
+                                                    <div className="d-flex">
+                                                        <button
+                                                            className="btn btn-danger ml-auto"
+                                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                                            onClick={this.handleKitchenLoginFormSubmit}>
+                                                            SIGN IN
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </Tab>
+                                        <Tab eventKey="customer" title="Customer">
+                                            <div className="border border-top-0 p-3 bg-secondary color-white-09">
+                                                <p>Table-Side Ordering Interface</p>
+
+                                                <form>
+                                                    <label htmlFor="customerEmail" className="small">Email</label>
+                                                    <input
+                                                        id="customerEmail"
+                                                        type="text" placeholder="Email"
+                                                        className="form-control mb-3"
+                                                        // value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
+                                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
+                                                    <label htmlFor="customerPassword" className="small">Operations Password</label>
+                                                    <input
+                                                        id="customerPassword"
+                                                        type="password" placeholder="Password"
+                                                        className="form-control mb-3"
+                                                        value={this.state.customerLoginFormInputPassword} onChange={this.handleCustomerLoginFormPasswordChange} />
+
+                                                    <div className="d-flex">
+                                                        <button
+                                                            className="btn btn-danger ml-auto"
+                                                            disabled={this.state.buttonFormSubmitIsDisabled}
+                                                            onClick={this.handleCustomerLoginFormSubmit}>
+                                                            SIGN IN
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </Tab>
+                                    </Tabs>
+                                    {/* <div className="row">
                         <div className="col-12 col-sm-6">
                             <div className="bg-secondary p-3">
                                 <p>Corporate</p>
@@ -365,8 +390,26 @@ class LoginUI extends React.Component {
                             </div>
                         </div>
                     </div> */}
-                </div>
-            </>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer className="flex-grow-0 flex-shrink-0 bg-dark color-white-06">
+                    <div className="container py-5 my-5">
+                        <div className="row">
+                            <div className="col-12 col-md-4">
+                                <div className="d-flex align-items-center mb-2 text-nowrap">
+                                    <i className="material-icons mr-3">phone</i><p className="m-0">1234 5678</p>
+                                </div>
+                                <div className="d-flex align-items-center text-nowrap">
+                                    <i className="material-icons mr-3">mail</i><p className="m-0">orderaway@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         );
     }
 }

@@ -67,7 +67,14 @@ class CustomerLayout extends React.Component {
                             <i className="material-icons">menu</i>
                         </button>
                         <div className="h-100 px-0 px-sm-4 py-3 mr-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="100%" width="auto" />
+                            {/* <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png" alt="restaurant logo" height="100%" width="auto" /> */}
+                            {
+                                this.props.iconUrl ? 
+                                    (<img src={this.props.iconUrl} alt="restaurant logo" height="100%" width="auto" />)
+                                    :
+                                    ""
+                            }
+                            
                         </div>
                         <p className="m-0 mr-3 font-24 color-white"><b>Table&nbsp;{this.props.tableNumber}</b></p>
                         <div className="h-100 px-0 px-sm-4 py-3 mr-4 color-white">

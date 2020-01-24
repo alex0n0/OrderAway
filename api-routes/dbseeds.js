@@ -4,16 +4,15 @@ const moment = require("moment");
 
 const uuidv4 = require("uuid/v4");
 
-
+const bcrypt = require("bcrypt");
 
 
 var objRestaurant1 = {
     restaurantTitle: "KFC",
-    // iconUrl: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/63f1fa19-6c94-43b4-ba7e-e5d2ff356331/dd81xm1-dae0fbc8-bef8-4ed5-a9c6-776aa07e08aa.png/v1/fill/w_1280,h_1268,strp/luigi_icon_by_usanintendo_dd81xm1-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI2OCIsInBhdGgiOiJcL2ZcLzYzZjFmYTE5LTZjOTQtNDNiNC1iYTdlLWU1ZDJmZjM1NjMzMVwvZGQ4MXhtMS1kYWUwZmJjOC1iZWY4LTRlZDUtYTljNi03NzZhYTA3ZTA4YWEucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.x7XOCPDpDOITnhVGZlPgX0zn2IG2r26_4FTNjpEq3dU",
-    iconUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/220px-KFC_logo.svg.png",
-    username: "kfc@gmail.com",
-    password: "Asdf1234",
-    operationsPassword: "DDD123"
+    iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ4DBeUQNl89XWVNiNiJJHIEvfNVQEnAbYn8eecxqVxdZmtK-y5",
+    username: "tomato@gmail.com",
+    password: bcrypt.hashSync("Asdf1234", 10),
+    operationsPassword: bcrypt.hashSync("DDD123", 10)
 }
 var objRestaurant1Menu1 = {
     restaurantId: undefined,
@@ -199,8 +198,8 @@ var objRestaurant2 = {
     restaurantTitle: "hungry jacks",
     iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Hungry_Jack%27s.svg/1200px-Hungry_Jack%27s.svg.png",
     username: "hungryjacks@gmail.com",
-    password: "Asdf1234",
-    operationsPassword: "DDD123"
+    password: bcrypt.hashSync("Asdf1234", 10),
+    operationsPassword: bcrypt.hashSync("DDD123", 10)
 }
 var objRestaurant2Menu1 = {
     restaurantId: undefined,
@@ -261,8 +260,8 @@ var objRestaurant3 = {
     restaurantTitle: "mcdonalds",
     iconUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/200px-McDonald%27s_Golden_Arches.svg.png",
     username: "mcdonalds@gmail.com",
-    password: "Asdf1234",
-    operationsPassword: "DDD123"
+    password: bcrypt.hashSync("Asdf1234", 10),
+    operationsPassword: bcrypt.hashSync("DDD123", 10)
 }
 
 objRestaurant1Menu1Category1.menuItems = arrRestaurant1Menu1Category1MenuItems;

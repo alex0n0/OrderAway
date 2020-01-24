@@ -4,18 +4,24 @@ const db = require("../db");
 
 var login = require("./tokengenerate.js");
 let middleware = require('./tokencheck.js');
-
+const bcrypt = require("bcrypt");
 
 
 
 let signup = function (req, res, next) {
+    var password = req.body.password;
+    var operationsPassword = req.body.operationsPassword;
     var createObj = {
         restaurantTitle: req.body.restaurantTitle,
         iconUrl: req.body.iconUrl,
-        username: req.body.username,
-        password: req.body.password,
-        operationsPassword: req.body.operationsPassword
+        username: req.body.username.toLowerCase(),
     }
+
+    let hashPassword = bcrypt.hashSync(password, 10);
+    let hashOperationsPassword = bcrypt.hashSync(operationsPassword, 10);
+    createObj.password = hashPassword;
+    createObj.operationsPassword = hashOperationsPassword;
+
     db.Restaurant.create(createObj)
         .then(function (dbRestaurant) {
             next();
@@ -319,7 +325,6 @@ module.exports = function (app) {
 
         // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
-        console.log(last24Hours.format());
         var responseObj = {
             orders: []
         }
@@ -352,7 +357,6 @@ module.exports = function (app) {
 
         // var todayStart = moment(currTime.format("YYYY-MM-DD") + " 0:00", "YYYY-MM-DD HH:mm");
         var last24Hours = currTime.subtract(24, "hours");
-        console.log(last24Hours.format());
 
         var responseObj = {
             orders: []

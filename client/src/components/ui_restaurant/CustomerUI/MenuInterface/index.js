@@ -25,6 +25,7 @@ class CustomerMenuUI extends React.Component {
       uCurrBill: undefined,
       restaurantId: undefined,
       restaurantUsername: undefined,
+      restaurantIconUrl: undefined,
       menuTitle: undefined,
       tableNumber: 1,
       menu: [],
@@ -113,6 +114,7 @@ class CustomerMenuUI extends React.Component {
                   ...this.state,
                   restaurantId: response.data.menu.restaurantId,
                   restaurantUsername: response.data.restaurant.username,
+                  restaurantIconUrl: response.data.restaurant.iconUrl,
                   menuTitle: response.data.menu.menuTitle,
                   menu: response.data.menu.categories,
                   sidebarMenuActiveIndex: response.data.menu.categories.length === 0 ? -1 : 0
@@ -518,7 +520,7 @@ class CustomerMenuUI extends React.Component {
     return (
       <>
         {/* <Route exact path="/customer"> */}
-        <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} handleButtonClickBillModalOpen={this.handleButtonClickBillModalOpen} tableNumber={this.state.tableNumber}>
+        <CustomerLayout menu={this.state.menu} sidebarMenuActiveIndex={this.state.sidebarMenuActiveIndex} handleSidebarOptionClick={this.handleSidebarOptionClick} history={this.props.history} handleButtonClickBillModalOpen={this.handleButtonClickBillModalOpen} tableNumber={this.state.tableNumber} iconUrl={this.state.restaurantIconUrl}>
           <div className="container-fluid py-3">
             <div className="row">
               {menuItemsArr}

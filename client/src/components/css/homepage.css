@@ -1,0 +1,35 @@
+.homepage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+}
+
+.homepage header {
+  position: relative;
+  z-index: 1;
+}
+
+.homepage header .imagecontainer {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: -1;
+  max-width: 1500px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+}
+
+.homepage header .imagecontainer img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  filter: brightness(50%);
+}
+
+.homepage header .buttonbar {
+  background-color: rgba(255, 255, 255, 0.9);
+}

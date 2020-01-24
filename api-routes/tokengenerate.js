@@ -1,13 +1,12 @@
 let jwt = require('jsonwebtoken');
 const config = require('./config.js');
-
+const bcrypt = require("bcrypt");
 const loginstreams = require("./loginstreamkeys.js");
 
 const db = require("../db");
 let tokenGenerate = (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    // For the given username fetch user from DB
     let dbUsername;
     let dbPassword;
 
@@ -29,7 +28,6 @@ let tokenGenerate = (req, res) => {
 
     db.Restaurant.findOne({ username: req.body.username })
         .then(function (dbRestaurant) {
-            console.log(dbRestaurant);
             dbUsername = dbRestaurant.username;
             if (req.body.stream === "corporate") {
                 dbPassword = dbRestaurant.password;
@@ -37,18 +35,15 @@ let tokenGenerate = (req, res) => {
                 dbPassword = dbRestaurant.operationsPassword;
             }
 
-            console.log(dbUsername, dbPassword);
-
-
             if (dbUsername && dbPassword) {
-                if (username === dbUsername && password === dbPassword) {
+                // if (username === dbUsername && password === dbPassword) {
+                if (username === dbUsername && bcrypt.compareSync(password, dbPassword)) {
                     let token = jwt.sign({ username: username },
                         config.secret,
                         {
-                            expiresIn: '24h' // expires in 24 hours
+                            expiresIn: '24h'
                         }
                     );
-                    // return the JWT token for the future API calls
                     var responseObj = {
                         success: true,
                         message: 'Authentication successful!',
@@ -56,7 +51,6 @@ let tokenGenerate = (req, res) => {
                         uid: dbRestaurant._id
                     }
                     responseObj.orderawaykey = orderawaykey;
-                    console.log(responseObj);
                     res.json(responseObj);
                 } else {
                     res.json({

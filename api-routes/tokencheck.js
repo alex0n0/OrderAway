@@ -14,29 +14,20 @@ function tokenCheck(req, res, next) {
 
   if (token) {
     if (token.startsWith('Bearer ')) {
-      // Remove Bearer from string
       token = token.slice(7, token.length);
     }
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
-        // console.log(false);
-        // next();
-        // return false;
         return res.json({
           success: false,
           message: 'Token is not valid'
         });
       } else {
-        // console.log(true);
         req.decoded = decoded;
         next();
       }
     });
   } else {
-    // console.log(false);
-    // next();
-
-    // return false;
     return res.json({
       success: false,
       message: 'Auth token is not supplied'

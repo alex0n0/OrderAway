@@ -28,7 +28,8 @@ class CorporateLayout extends React.Component {
             <>
                 <header className={this.props.darkTheme ? "corporate header-navigation shadow--basic darkTheme" : "corporate header-navigation shadow--basic"}>
                     <div className="container-fluid pageMinWidth h-100 p-0 d-flex align-items-center flex-nowrap">
-                        <button className="button--transparent h-100 px-4 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></button>
+                        {/* <button className="button--transparent h-100 px-4 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></button> */}
+                        <p className="px-4 m-0 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></p>
 
                         
                         <Dropdown className="h-100">
@@ -39,7 +40,7 @@ class CorporateLayout extends React.Component {
                                         style={{ height: "48px", width: "48px" }}>
                                         {
                                             this.props.restaurant.iconUrl ?
-                                                (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="auto" width="70%" />)
+                                                (<img src={this.props.restaurant.iconUrl} alt="restaurant logo" height="110%" width="auto" />)
                                                 :
                                                 ""
                                         }
@@ -54,7 +55,7 @@ class CorporateLayout extends React.Component {
 
                             <DropdownMenu alignRight={true} >
                                 {/* <DropdownItem onClick={this.handleButtonClickSignOut}>Settings</DropdownItem> */}
-                                <Dropdown.Divider />
+                                {/* <Dropdown.Divider /> */}
                                 <DropdownItem onClick={this.handleButtonClickSignOut}>Sign out</DropdownItem>
                                 {/* <button 
                                     className="button--transparent border w-100 h-100 py-2 px-4 justify-content-start text-truncate"
