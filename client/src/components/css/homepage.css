@@ -31,3 +31,8 @@
 .homepage header .buttonbar {
   background-color: rgba(255, 255, 255, 0.9);
 }
+
+.homepage main .homepage-icon {
+  font-size: 85px;
+  color: #e1e1e1;
+}

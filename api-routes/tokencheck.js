@@ -89,21 +89,33 @@ function kitchenStreamCheck(req, res, next) {
     message: undefined,
     path: undefined
   }
-  if (req.body.orderawaykey === loginstreams.kitchen) {
+  if (req.body.orderawaykey === loginstreams.kitchen || req.body.orderawaykey === loginstreams.corporate) {
     next();
   } else {
     responseObj.success = false;
     responseObj.message = "Stream mismatch";
     switch (req.body.orderawaykey) {
-      case loginstreams.corporate:
-        responseObj.path = "/corporate";
-        break;
       case loginstreams.customer:
         responseObj.path = "/customer";
         break;
     }
     return res.json(responseObj);
   }
+  // if (req.body.orderawaykey === loginstreams.kitchen) {
+  //   next();
+  // } else {
+  //   responseObj.success = false;
+  //   responseObj.message = "Stream mismatch";
+  //   switch (req.body.orderawaykey) {
+  //     case loginstreams.corporate:
+  //       responseObj.path = "/corporate";
+  //       break;
+  //     case loginstreams.customer:
+  //       responseObj.path = "/customer";
+  //       break;
+  //   }
+  //   return res.json(responseObj);
+  // }
 }
 function customerStreamCheck(req, res, next) {
   var responseObj = {
@@ -111,21 +123,36 @@ function customerStreamCheck(req, res, next) {
     message: undefined,
     path: undefined
   }
-  if (req.body.orderawaykey === loginstreams.customer) {
+  if (req.body.orderawaykey === loginstreams.customer || req.body.orderawaykey === loginstreams.corporate) {
     next();
   } else {
     responseObj.success = false;
     responseObj.message = "Stream mismatch";
     switch (req.body.orderawaykey) {
-      case loginstreams.corporate:
-        responseObj.path = "/corporate";
-        break;
+      // case loginstreams.corporate:
+      //   responseObj.path = "/corporate";
+      //   break;
       case loginstreams.kitchen:
         responseObj.path = "/kitchen";
         break;
     }
     return res.json(responseObj);
   }
+  // if (req.body.orderawaykey === loginstreams.customer) {
+  //   next();
+  // } else {
+  //   responseObj.success = false;
+  //   responseObj.message = "Stream mismatch";
+  //   switch (req.body.orderawaykey) {
+  //     case loginstreams.corporate:
+  //       responseObj.path = "/corporate";
+  //       break;
+  //     case loginstreams.kitchen:
+  //       responseObj.path = "/kitchen";
+  //       break;
+  //   }
+  //   return res.json(responseObj);
+  // }
 }
 
 module.exports = {

@@ -215,23 +215,23 @@ class LoginUI extends React.Component {
     render() {
         return (
             <div className="homepage">
-                <header className="flex-grow-0 flex-shrink-0">
-                    <div className="buttonbar py-3">
+                <header className="flex-grow-0 flex-shrink-0 pageMinWidth">
+                    <div className="buttonbar py-3 pageMinWidth">
                         <div className="container d-flex align-items-center">
                             <Link to="/" className="mr-auto" style={{ textDecoration: "none", color: "black" }}>
                                 <p className="m-0 font-24"><span className="text-primary">Order</span>Away</p>
                             </Link>
 
                             <div className="ml-3">
-                                <Link to="/signup" className="mr-3">
-                                    <button className="btn btn-outline-dark">Sign Up</button>
+                                <Link to="/signup">
+                                    <button className="btn btn-dark">Sign Up</button>
                                 </Link>
                             </div>
                         </div>
                     </div>
                 </header>
 
-                <main className="flex-grow-1 flex-shrink-1">
+                <main className="flex-grow-1 flex-shrink-1 pageMinWidth">
                     <div>
                         <div className="container">
                             <div className="row justify-content-center">
@@ -261,7 +261,7 @@ class LoginUI extends React.Component {
                                                             disabled={this.state.buttonFormSubmitIsDisabled}
                                                             onClick={this.handleCorporateLoginFormSubmit}>
                                                             SIGN IN
-                                        </button>
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -325,77 +325,12 @@ class LoginUI extends React.Component {
                                             </div>
                                         </Tab>
                                     </Tabs>
-                                    {/* <div className="row">
-                        <div className="col-12 col-sm-6">
-                            <div className="bg-secondary p-3">
-                                <p>Corporate</p>
-                                <form className="text-right">
-                                    <input
-                                        type="text" placeholder="email"
-                                        className="form-control my-3"
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <input
-                                        type="password" placeholder="password"
-                                        className="form-control my-3"
-                                        value={this.state.corporateLoginFormInputPassword} onChange={this.handleCorporateLoginFormPasswordChange} />
-                                    <button
-                                        className="btn btn-danger"
-                                        disabled={this.state.buttonFormSubmitIsDisabled}
-                                        onClick={this.handleCorporateLoginFormSubmit}>
-                                        SIGN IN
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        <div className="col-12 col-sm-6">
-                            <div className="bg-primary p-3">
-                                <p>Operations - Kitchen</p>
-                                <form className="text-right">
-                                    <input
-                                        type="text" placeholder="email"
-                                        className="form-control my-3"
-                                        // value={this.state.kitchenLoginFormInputEmail} onChange={this.handleKitchenLoginFormEmailChange} />
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <input
-                                        type="password" placeholder="password"
-                                        className="form-control my-3"
-                                        value={this.state.kitchenLoginFormInputPassword} onChange={this.handleKitchenLoginFormPasswordChange} />
-                                    <button
-                                        className="btn btn-danger"
-                                        disabled={this.state.buttonFormSubmitIsDisabled}
-                                        onClick={this.handleKitchenLoginFormSubmit}>
-                                        SIGN IN
-                                    </button>
-                                </form>
-                            </div>
-                            <div className="bg-success p-3">
-                                <p>Operations - Customer</p>
-                                <form className="text-right">
-                                    <input
-                                        type="text" placeholder="email"
-                                        className="form-control my-3"
-                                        // value={this.state.customerLoginFormInputEmail} onChange={this.handleCustomerLoginFormEmailChange} />
-                                        value={this.state.corporateLoginFormInputEmail} onChange={this.handleCorporateLoginFormEmailChange} />
-                                    <input
-                                        type="password" placeholder="password"
-                                        className="form-control my-3"
-                                        value={this.state.customerLoginFormInputPassword} onChange={this.handleCustomerLoginFormPasswordChange} />
-                                    <button
-                                        className="btn btn-danger"
-                                        disabled={this.state.buttonFormSubmitIsDisabled}
-                                        onClick={this.handleCustomerLoginFormSubmit}>
-                                        SIGN IN
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </main>
-                <footer className="flex-grow-0 flex-shrink-0 bg-dark color-white-06">
+                <footer className="flex-grow-0 flex-shrink-0 bg-dark color-white-06 pageMinWidth">
                     <div className="container py-5 my-5">
                         <div className="row">
                             <div className="col-12 col-md-4">

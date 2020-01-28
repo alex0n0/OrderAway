@@ -8,9 +8,9 @@ const bcrypt = require("bcrypt");
 
 
 var objRestaurant1 = {
-    restaurantTitle: "KFC",
+    restaurantTitle: "Demo",
     iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ4DBeUQNl89XWVNiNiJJHIEvfNVQEnAbYn8eecxqVxdZmtK-y5",
-    username: "tomato@gmail.com",
+    username: "demo@gmail.com",
     password: bcrypt.hashSync("Asdf1234", 10),
     operationsPassword: bcrypt.hashSync("DDD123", 10)
 }

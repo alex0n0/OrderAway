@@ -86,7 +86,7 @@ class SignUpUI extends React.Component {
     render() {
         return (
             <div className="homepage">
-                <header className="flex-grow-0 flex-shrink-0">
+                <header className="flex-grow-0 flex-shrink-0 pageMinWidth">
                     <div className="buttonbar py-3">
                         <div className="container d-flex align-items-center">
                             <Link to="/" className="mr-auto" style={{ textDecoration: "none", color: "black" }}>
@@ -94,7 +94,7 @@ class SignUpUI extends React.Component {
                             </Link>
 
                             <div className="ml-3">
-                                <Link to="/signin" className="mr-3">
+                                <Link to="/signin">
                                     <button className="btn btn-outline-dark">Sign In</button>
                                 </Link>
                             </div>
@@ -102,7 +102,7 @@ class SignUpUI extends React.Component {
                     </div>
                 </header>
 
-                <main className="flex-grow-1 flex-shrink-1">
+                <main className="flex-grow-1 flex-shrink-1 pageMinWidth">
                     <div>
                         <div className="container">
                             <div className="row justify-content-center">
@@ -137,7 +137,7 @@ class SignUpUI extends React.Component {
                         </div>
                     </div>
                 </main>
-                <footer className="flex-grow-0 flex-shrink-0 bg-dark color-white-06">
+                <footer className="flex-grow-0 flex-shrink-0 bg-dark color-white-06 pageMinWidth">
                     <div className="container py-5 my-5">
                         <div className="row">
                             <div className="col-12 col-md-4">

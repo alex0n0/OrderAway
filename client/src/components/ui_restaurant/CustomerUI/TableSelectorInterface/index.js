@@ -123,7 +123,7 @@ class CustomerTableSelectorUI extends React.Component {
         return (
             <div className="homepage">
                 <header className="flex-grow-0 flex-shrink-0">
-                    <div className="buttonbar py-3">
+                    <div className="buttonbar py-3 pageMinWidth">
                         <div className="container d-flex align-items-center">
                             {/* <Link to="/" className="mr-auto" style={{ textDecoration: "none", color: "black" }}>
                                 <p className="m-0 font-24"><span className="text-primary">Order</span>Away</p>

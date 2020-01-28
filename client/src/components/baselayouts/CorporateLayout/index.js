@@ -31,7 +31,7 @@ class CorporateLayout extends React.Component {
                         {/* <button className="button--transparent h-100 px-4 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></button> */}
                         <p className="px-4 m-0 mr-auto font-24"><span className="text-primary">Order</span><span>Away</span></p>
 
-                        
+
                         <Dropdown className="h-100">
                             <DropdownToggle id="dropdown-basic" className="bg-transparent h-100 border-0 rounded-0 shadow-none">
                                 <div className="h-100 d-flex align-items-center justify-content-center">
@@ -85,14 +85,27 @@ class CorporateLayout extends React.Component {
                             })
                         }
                     </div>
-                    {/* <div className="mt-5">
-                        <Link to="/customer/table" target="_blank">
-                            <button className="button--transparent w-100 flex-column py-3 pb-4">
-                                <i className="material-icons">restaurant</i>
-                                <p className="m-0 font-12">Customer Screen</p>
-                            </button>
-                        </Link>
-                    </div> */}
+                    <div className="mt-5">
+                        {
+                            this.props.sidebarlinks ?
+                                this.props.sidebarlinks.map((curr, i) => {
+                                    return (
+                                        <Link
+                                            to={curr.url ? curr.url : "/"}
+                                            target={"_blank"}
+                                            style={{ textDecoration: "none" }}
+                                            key={i}>
+                                            <button className="button--transparent w-100 flex-column py-3 border-top border-bottom">
+                                                <i className="material-icons">{curr.icon}</i>
+                                                <p className="m-0 font-12">{curr.title}</p>
+                                            </button>
+                                        </Link>
+                                    );
+                                })
+                                :
+                                ""
+                        }
+                    </div>
                 </section>
                 <div className="overflowWrapper">
                     <main className={this.props.darkTheme ? "corporate main-content pageMinWidth darkTheme" : "corporate main-content pageMinWidth"}>

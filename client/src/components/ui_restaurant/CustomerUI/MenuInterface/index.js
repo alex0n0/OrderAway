@@ -102,13 +102,13 @@ class CustomerMenuUI extends React.Component {
         axios.post("/api/customer", { uid: uid[1], orderawaykey: orderawaykey[1] }, { headers: { Authorization: "Bearer " + token[1] } })
           .then(response => {
             if (response.data.success === false) {
-              // this.props.history.push("/signin");
               if (response.data.path) {
                 this.props.history.push(response.data.path);
               } else {
                 this.props.history.push("/signin");
               }
             } else {
+
               if (response.data.menu.categories) {
                 this.setState({
                   ...this.state,
@@ -136,6 +136,13 @@ class CustomerMenuUI extends React.Component {
                     modalInitialiseBillButtonInitialiseIsDisabled: false
                   });
                 }
+              } else {
+                this.setState({
+                  ...this.state,
+                  restaurantId: response.data.restaurant._id,
+                  restaurantUsername: response.data.restaurant.username,
+                  restaurantIconUrl: response.data.restaurant.iconUrl
+                });
               }
             }
           });
@@ -418,17 +425,25 @@ class CustomerMenuUI extends React.Component {
         modalInitialiseBillSignOutButtonIsDisabled: true,
         modalInitialiseBillButtonInitialiseIsDisabled: true
       });
-      axios.post("/api/customer/signout", { username: this.state.restaurantUsername, password: this.state.modalInitialiseBillSignOutInputPassword, stream: "customer", orderawaykey: this.state.orderawaykey }, { headers: { Authorization: "Bearer " + this.state.token } })
+      var uploadObj = { username: this.state.restaurantUsername, password: this.state.modalInitialiseBillSignOutInputPassword, stream: "customer", orderawaykey: this.state.orderawaykey }
+      axios.post("/api/customer/signout", uploadObj, { headers: { Authorization: "Bearer " + this.state.token } })
         .then(response => {
           if (response.data.success === false) {
-            console.log("wrong password");
-            this.setState({
-              ...this.state,
-              modalInitialiseBillSignOutButtonIsDisabled: false,
-              modalInitialiseBillButtonInitialiseIsDisabled: false,
-              modalInitialiseBillSignOutInputPassword: ""
-            });
+            if (this.state.menu.length > 0) {
+              this.setState({
+                ...this.state,
+                modalInitialiseBillSignOutButtonIsDisabled: false,
+                modalInitialiseBillButtonInitialiseIsDisabled: false,
+                modalInitialiseBillSignOutInputPassword: ""
+              });
+            } else {
+              this.setState({
+                ...this.state,
+                modalInitialiseBillSignOutButtonIsDisabled: false,
+                modalInitialiseBillSignOutInputPassword: ""
+              });
 
+            }
           } else {
             document.cookie = "U_TKN=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
             document.cookie = "U_ID=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
