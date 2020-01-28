@@ -4,6 +4,15 @@ App is a SaaS for restaurants to sign up for accounts and access table side orde
 
 [Click here](https://beanstalk03.herokuapp.com/) for an interactive demo.
 
+**Table-Side Ordering Interface**
+![screenshot 1](/client/public/screenshot_orderaway1.png)
+
+**Kitchen Interface**
+![screenshot 2](/client/public/screenshot_orderaway2.png)
+
+**Menu Builder Interface**
+![screenshot 3](/client/public/screenshot_orderaway3.png)
+
 ## Features
 
 - Responsive React application
