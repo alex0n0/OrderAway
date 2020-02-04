@@ -242,6 +242,13 @@ class LoginUI extends React.Component {
                                         <Tab eventKey="corporate" title="Corporate">
                                             <div className="border border-top-0 p-3 bg-secondary color-white-09">
                                                 <p>Business Details &amp; Menu Manager</p>
+                                                <div className="d-flex mb-3">
+                                                    <div className="bg-light text-dark p-3 font-12">
+                                                        <p className="m-0">Demo account</p>
+                                                        <p className="m-0">username: demo@gmail.com</p>
+                                                        <p className="m-0">password: Asdf1234</p>
+                                                    </div>
+                                                </div>
                                                 <form>
                                                     <label htmlFor="corporateEmail" className="small">Email</label>
                                                     <input
@@ -269,6 +276,14 @@ class LoginUI extends React.Component {
                                         <Tab eventKey="kitchen" title="Kitchen">
                                             <div className="border border-top-0 p-3 bg-secondary color-white-09">
                                                 <p>Current &amp; Past Orders</p>
+                                                <div className="d-flex mb-3">
+                                                    <div className="bg-light text-dark p-3 font-12">
+                                                        <p className="m-0">Demo account</p>
+                                                        <p className="m-0">username: demo@gmail.com</p>
+                                                        <p className="m-0">password: DDD123</p>
+                                                    </div>
+                                                </div>
+
                                                 <form>
                                                     <label htmlFor="kitchenEmail" className="small">Email</label>
                                                     <input
@@ -297,7 +312,13 @@ class LoginUI extends React.Component {
                                         <Tab eventKey="customer" title="Customer">
                                             <div className="border border-top-0 p-3 bg-secondary color-white-09">
                                                 <p>Table-Side Ordering Interface</p>
-
+                                                <div className="d-flex mb-3">
+                                                    <div className="bg-light text-dark p-3 font-12">
+                                                        <p className="m-0">Demo account</p>
+                                                        <p className="m-0">username: demo@gmail.com</p>
+                                                        <p className="m-0">password: DDD123</p>
+                                                    </div>
+                                                </div>
                                                 <form>
                                                     <label htmlFor="customerEmail" className="small">Email</label>
                                                     <input
