@@ -56,6 +56,7 @@ class CorporateHomeUI extends React.Component {
                                 restaurantId: response.data.restaurant._id,
                                 bills: response.data.bills
                             });
+                            console.log(response.data.bills);
                         } else {
                             this.setState({
                                 ...this.state,
@@ -78,6 +79,7 @@ class CorporateHomeUI extends React.Component {
         var prevMonthRevenue = 0;
 
         var tempBills = this.state.bills;
+        var currWeek = parseInt(moment(moment().subtract(parseInt(moment().format("d")) - 1, "days").format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm").format("X"));
         var currMonth = parseInt(moment(moment().format("YYYY-MM") + "-01 00:00", "YYYY-MM-DD HH:mm").format("X"));
         var prevMonth = parseInt(moment(currMonth, "X").subtract(1, "months").format("X"));
 
@@ -86,7 +88,9 @@ class CorporateHomeUI extends React.Component {
         });
 
         tempBills.forEach(curr => {
-            currWeekRevenue += curr.subtotal;
+            if (curr.endTime >= currWeek) {
+                currWeekRevenue += curr.subtotal;
+            }
             if (curr.endTime >= currMonth) {
                 currMonthRevenue += curr.subtotal;
             }
@@ -105,7 +109,7 @@ class CorporateHomeUI extends React.Component {
                             <div className="col-12 col-sm-6 col-lg-4 mb-3">
                                 <div className="bg-white p-3 d-flex flex-column h-100 align-items-center">
                                     <p className="m-0 font-30">${currWeekRevenue.toFixed(2)}</p>
-                                    <p className="m-0"><b>This Week</b></p>
+                                    <p className="m-0"><b className="text-nowrap">This Week</b>&nbsp;<b className="text-nowrap">(From Monday)</b></p>
                                 </div>
                             </div>
                             <div className="col-12 col-sm-6 col-lg-4 mb-3">
