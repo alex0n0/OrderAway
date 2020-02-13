@@ -13,6 +13,13 @@ import KitchenCompletedUI from './components/ui_restaurant/KitchenUI/Completed';
 
 import axios from 'axios';
 
+import ReactGA from 'react-ga';
+
+initializeReactGA();
+function initializeReactGA() {
+  ReactGA.initialize('UA-158346678-1');
+  ReactGA.pageview('/signup');
+}
 
 class App extends React.Component {
 

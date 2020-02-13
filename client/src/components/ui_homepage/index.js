@@ -1,8 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 import "../css/homepage.css";
 class HomePageUI extends React.Component {
+
+    GATestClick = () => {
+        console.log("click");
+        ReactGA.event({
+            category: 'User',
+            action: 'Tester Click - Homepage'
+        });
+    }
 
     render() {
         return (
@@ -115,7 +124,7 @@ class HomePageUI extends React.Component {
                                     <i className="material-icons mr-3">phone</i><p className="m-0">1234 5678</p>
                                 </div>
                                 <div className="d-flex align-items-center text-nowrap">
-                                    <i className="material-icons mr-3">mail</i><p className="m-0">orderaway@gmail.com</p>
+                                    <i className="material-icons mr-3">mail</i><p className="m-0">orderaway@gmail.com</p><button className="button--transparent button--invisible" onClick={this.GATestClick}>asdf</button>
                                 </div>
                             </div>
                         </div>

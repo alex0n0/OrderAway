@@ -73,6 +73,14 @@
     outline: none;
 }
 
+.button--transparent.button--invisible {
+    color: transparent;
+}
+.button--transparent.button--invisible:hover {
+    color: black;
+    background-color: cyan;
+}
+
 .shadow--basic {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
