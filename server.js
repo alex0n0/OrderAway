@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -44,11 +45,8 @@ require("./api-routes")(app);
 
 
 
-
-// mongoose.connect("mongodb://localhost/zzzbcsproj3", { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
-mongoose.connect("mongodb://heroku_2ll1xfxt:ul869hll9r420tu5cr89olql87@ds047468.mlab.com:47468/heroku_2ll1xfxt", { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true });
-
-
+console.log(process.env.MONGO_USERNAME);
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@orderaway.pqnlx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true });
 
 
 const PORT = process.env.PORT || 5000;
