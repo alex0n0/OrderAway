@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import axios from 'axios';
-// import socketIOClient from 'socket.io-client';
 
 import CorporateLayout from '../../baselayouts/CorporateLayout';
 import OrderItem from '../../elements/orderitem/Kitchen';
@@ -28,7 +27,6 @@ class KitchenUI extends React.Component {
     }
 
     interval;
-    // socket;
 
     componentDidMount() {
         var cookies = document.cookie;
@@ -73,24 +71,6 @@ class KitchenUI extends React.Component {
                         });
                     }
                 });
-
-            // this.socket = socketIOClient("localhost:5000");
-            // this.socket.on("orderzzzzz", data => {
-            //     console.log(data);
-            //     // if (data.orderId) {
-            //     //     axios.get("/api/kitchen/" + data.orderId)
-            //     //         .then(response => {
-            //     //             response.data.buttonDoneIsDisabled = false;
-            //     //             var tempOrders = [...this.state.orders];
-            //     //             tempOrders.push(response.data);
-
-            //     //             this.setState({
-            //     //                 ...this.state,
-            //     //                 orders: tempOrders
-            //     //             });
-            //     //         });
-            //     // }
-            // });
 
             this.interval = setInterval(() => {
                 axios.post("/api/kitchen", { uid: this.state.uid }, { headers: { Authorization: "Bearer " + this.state.token } })
